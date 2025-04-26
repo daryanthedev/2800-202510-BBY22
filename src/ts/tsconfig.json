@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowImportingTsExtensions": false,
     "noEmit": false,
-    "outDir": "../../dist/js",
+    "outDir": "../../dist/js"
   },
   "include": ["./**/*.ts", "./**/*.d.ts"],
   "extends": "../../tsconfig.base.json"

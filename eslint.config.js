@@ -1,39 +1,39 @@
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  eslint.configs.recommended,
-  tseslint.configs.recommendedTypeChecked,
-  tseslint.configs.strictTypeChecked,
-  tseslint.configs.stylisticTypeChecked,
-  {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-        allowDefaultProject: true,
-      },
+    eslint.configs.recommended,
+    tseslint.configs.recommendedTypeChecked,
+    tseslint.configs.strictTypeChecked,
+    tseslint.configs.stylisticTypeChecked,
+    {
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                allowDefaultProject: true,
+            },
+        },
+        rules: {
+            // Example custom rules
+            "no-unused-vars": "warn",
+            "semi": ["warn", "always"],
+            "quotes": ["warn", "double"],
+            "indent": ["warn", 4],
+            "comma-dangle": ["warn", "always-multiline"],
+            "no-multiple-empty-lines": ["warn", { max: 1, maxEOF: 0 }],
+            "space-before-function-paren": ["warn", "never"],
+            "object-curly-spacing": ["warn", "always"],
+            "array-bracket-spacing": ["warn", "never"],
+            "no-trailing-spaces": "warn",
+            "eol-last": ["warn", "always"],
+            "curly": ["error", "all"],
+            "eqeqeq": ["error", "always"],
+            "arrow-spacing": ["warn", { before: true, after: true }],
+            "arrow-parens": ["warn", "as-needed"],
+            "template-curly-spacing": ["warn", "never"],
+            "no-useless-call": "warn",
+            "no-duplicate-imports": "warn",
+        },
     },
-    rules: {
-      // Example custom rules
-      'no-unused-vars': 'warn',
-      'semi': ['warn', 'always'],
-      'quotes': ['warn', 'double'],
-      'indent': ['warn', 4],
-      'comma-dangle': ['warn', 'always-multiline'],
-      'no-multiple-empty-lines': ['warn', { max: 1, maxEOF: 0 }],
-      'space-before-function-paren': ['warn', 'never'],
-      'object-curly-spacing': ['warn', 'always'],
-      'array-bracket-spacing': ['warn', 'never'],
-      'no-trailing-spaces': 'warn',
-      'eol-last': ['warn', 'always'],
-      'curly': ['error', 'all'],
-      'eqeqeq': ['error', 'always'],
-      'arrow-spacing': ['warn', { before: true, after: true }],
-      'arrow-parens': ['warn', 'as-needed'],
-      'template-curly-spacing': ['warn', 'never'],
-      'no-useless-call': 'warn',
-      'no-duplicate-imports': 'warn',
-    },
-  },
 );

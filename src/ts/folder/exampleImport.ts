@@ -1,5 +1,5 @@
 // Define a new type (a function that returns a string)
-type myType = () => String;
+type myType = () => string;
 
 // Declare a variable of type myType
 const module: myType = () => "Hello world!";

@@ -4,16 +4,16 @@
  */
 const config = {
     printWidth: 140,
-    arrowParens: 'avoid',
-    endOfLine: 'auto',
+    arrowParens: "avoid",
+    endOfLine: "auto",
     overrides: [
         {
-            files: ['*.js', '*.ts'],
+            files: ["*.js", "*.ts"],
             options: {
                 tabWidth: 4,
-            }
-        }
-    ]
+            },
+        },
+    ],
 };
-  
+
 export default config;
