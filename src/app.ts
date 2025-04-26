@@ -2,6 +2,9 @@ import express, { Response } from 'express';
 import path from 'path';
 import fs from 'fs';
 
+// Load .env file
+import 'dotenv/config';
+
 const APP = express();
 const PORT = process.env.PORT || 3000;
 
