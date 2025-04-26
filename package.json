@@ -10,20 +10,31 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rimraf ./dist/js && concurrently \"tsc --watch -p ./src/ts/tsconfig.json\" \"nodemon\"",
     "build": "rimraf ./dist && tsc -p ./src/tsconfig.json && tsc -p ./src/ts/tsconfig.json",
-    "start": "node ./dist/src/app.js"
+    "start": "node ./dist/src/app.js",
+    "format": "prettier --write --ignore-unknown --plugin=prettier-plugin-ejs \"./{src,views,public}/**/*\" && npm run lint:fix",
+    "lint": "eslint ./**/* --ignore-pattern ./{dist,node_modules}/**/*",
+    "lint:fix": "eslint ./**/* --ignore-pattern ./{dist,node_modules}/**/* --fix"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/express-session": "^1.18.1",
     "@types/node": "^22.15.2",
+    "@typescript-eslint/eslint-plugin": "^8.31.0",
+    "@typescript-eslint/parser": "^8.31.0",
     "concurrently": "^9.1.2",
+    "eslint": "^9.25.1",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "prettier-plugin-ejs": "^1.0.3",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.2.2",
+    "typescript-eslint": "^8.31.0"
+  },
+  "dependencies": {
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "express-session": "^1.18.1",
-    "nodemon": "^3.1.10",
-    "rimraf": "^6.0.1",
-    "tsx": "^4.19.3",
-    "typescript": "^5.2.2"
+    "express-session": "^1.18.1"
   }
 }
