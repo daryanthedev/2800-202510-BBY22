@@ -45,12 +45,20 @@ To get started with the app locally, follow these steps:
    npm install
    ```
 
-4. To build for production:
+## Usage:
+
+To start the app in development mode:
+   ```bash
+   npm run dev
+   ```
+
+To use the app in production:
+1. Build the app:
    ```bash
    npm run build
    ```
 
-5. To start the app locally:
+2. Start the built code:
    ```bash
    npm run start
    ```
