@@ -1,0 +1,6 @@
+{
+    "watch": ["src"],
+    "ignore": ["ts/**/*"],
+    "ext": "ts,ejs",
+    "exec": "tsc -p ./src/tsconfig.json --noEmit && tsx ./src/app.ts"
+}
