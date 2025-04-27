@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
+    "outDir": "../dist/src"
+  },
+  "include": ["./**/*.ts", "./**/*.d.ts"],
+  "exclude": ["./ts/**/*"],
+  "extends": "../tsconfig.base.json"
+}
