@@ -26,7 +26,7 @@ const NODE_SESSION_SECRET =
 // If the dist folder is one folder up we are in dev mode, but if it is two folders up then we are in build mode
 const IS_DEV = fs.existsSync(path.join(import.meta.dirname, "../dist"));
 const PUBLIC_ROOT = IS_DEV ? path.join(import.meta.dirname, "../public") : path.join(import.meta.dirname, "../../public");
-const JS_ROOT = IS_DEV ? path.join(import.meta.dirname, "../dist/") : path.join(import.meta.dirname, "../");
+const DIST_PUBLIC_ROOT = IS_DEV ? path.join(import.meta.dirname, "../dist/public") : path.join(import.meta.dirname, "../public");
 
 APP.set("view engine", "ejs");
 
@@ -39,7 +39,7 @@ APP.use(
 );
 
 // Use the Typescript that was compiled to JS in the dist folder
-APP.all("/js/{*a}", express.static(JS_ROOT));
+APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
 
 // Example route to test sessions and EJS rendering
 APP.get("/test", (req: Request, res: Response) => {

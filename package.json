@@ -8,7 +8,7 @@
   "author": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "rimraf ./dist/js && concurrently \"tsc --watch -p ./src/ts/tsconfig.json\" \"nodemon\"",
+    "dev": "rimraf ./dist/public/js && concurrently \"tsc --watch -p ./src/ts/tsconfig.json\" \"nodemon\"",
     "build": "rimraf ./dist && tsc -p ./src/tsconfig.json && tsc -p ./src/ts/tsconfig.json",
     "start": "node ./dist/src/app.js",
     "format": "prettier --write --ignore-unknown --plugin=prettier-plugin-ejs \"./{src,views,public}/**/*\" && npm run lint:fix",
