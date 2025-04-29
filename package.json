@@ -12,8 +12,8 @@
     "build": "rimraf ./dist && tsc -p ./src/tsconfig.json && tsc -p ./src/ts/tsconfig.json",
     "start": "node ./dist/src/app.js",
     "format": "prettier --write --ignore-unknown --plugin=prettier-plugin-ejs \"./{src,views,public}/**/*\" && npm run lint:fix",
-    "lint": "eslint --cache ./**/* --ignore-pattern ./{dist,node_modules}/**/*",
-    "lint:fix": "eslint --cache ./**/* --ignore-pattern ./{dist,node_modules}/**/* --fix"
+    "lint": "eslint --cache \"./**/*\" --ignore-pattern \"./{dist,node_modules}/**/*\"",
+    "lint:fix": "eslint --cache \"./**/*\" --ignore-pattern \"./{dist,node_modules}/**/*\" --fix"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
