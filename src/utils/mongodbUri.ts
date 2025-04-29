@@ -10,5 +10,8 @@ if (process.env.MONGODB_PASSWORD === undefined) {
 if (process.env.MONGODB_HOST === undefined) {
     throw new Error("MONGODB_HOST environment variable not defined.");
 }
+if (process.env.MONGODB_DBNAME === undefined) {
+    throw new Error("MONGODB_DBNAME environment variable not defined.");
+}
 
-export default `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/?retryWrites=true`;
+export default `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DBNAME}?retryWrites=true`;
