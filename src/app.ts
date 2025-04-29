@@ -1,9 +1,6 @@
 import express, { Request, Response } from "express";
 import "dotenv/config"; // Load .env file
 
-import path from "path";
-import fs from "fs";
-
 import sessionMiddleware from "./utils/sessionMiddleware";
 import database from "./utils/databaseConnection";
 
@@ -25,9 +22,9 @@ const PORT = process.env.PORT ?? "3000";
 
 // Check if the server is running in dev mode or build mode
 // If the dist folder is one folder up we are in dev mode, but if it is two folders up then we are in build mode
-const IS_DEV = fs.existsSync(path.join(import.meta.dirname, "../dist"));
-const PUBLIC_ROOT = IS_DEV ? path.join(import.meta.dirname, "../public") : path.join(import.meta.dirname, "../../public");
-const DIST_PUBLIC_ROOT = IS_DEV ? path.join(import.meta.dirname, "../dist/public") : path.join(import.meta.dirname, "../public");
+
+import getFolders from "./utils/folders";
+const { PUBLIC_ROOT, DIST_PUBLIC_ROOT } = getFolders(import.meta.dirname);
 
 APP.set("view engine", "ejs");
 
