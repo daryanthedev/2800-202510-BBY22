@@ -5,6 +5,13 @@ import path from "path";
 import fs from "fs";
 
 import sessionMiddleware from "./utils/sessionMiddleware";
+import database from "./utils/databaseConnection";
+
+if (process.env.MONGODB_DBNAME === undefined) {
+    throw new Error("MONGODB_DBNAME environment variable not defined.");
+}
+
+const MONGODB_DATABASE = database.db(process.env.MONGODB_DBNAME);
 
 // Add custom types to the session object
 declare module "express-session" {
@@ -16,12 +23,6 @@ declare module "express-session" {
 const APP = express();
 const PORT = process.env.PORT ?? "3000";
 
-    }
-    }
-    }
-})();
-*/
-
 // Check if the server is running in dev mode or build mode
 // If the dist folder is one folder up we are in dev mode, but if it is two folders up then we are in build mode
 const IS_DEV = fs.existsSync(path.join(import.meta.dirname, "../dist"));
@@ -30,11 +31,15 @@ const DIST_PUBLIC_ROOT = IS_DEV ? path.join(import.meta.dirname, "../dist/public
 
 APP.set("view engine", "ejs");
 
+APP.use(express.urlencoded({ extended: true }));
 
 APP.use(sessionMiddleware());
 
 // Use the Typescript that was compiled to JS in the dist folder
 APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
+
+import setupRegister from "./routes/register";
+setupRegister(APP, MONGODB_DATABASE);
 
 // Example route to test sessions and EJS rendering
 APP.get("/test", (req: Request, res: Response) => {
