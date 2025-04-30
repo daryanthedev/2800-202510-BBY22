@@ -7,15 +7,18 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    Login
-    <form id="loginForm">
-      <input name="usernameEmail" type="text" placeholder="Username/Email" />
-      <input name="password" type="password" placeholder="Password" />
+    Currently logged in user:
+    <%- currentUser %>
+    <br />
+    Logout
+    <form id="logoutForm">
       <button>Submit</button>
     </form>
     <script type="module">
-      import formSend from "/js/formSend.js";
-      formSend("/api/login", document.getElementById("loginForm"));
+      document.getElementById("logoutForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        fetch("/api/logout", { method: "POST" });
+      })
     </script>
   </body>
 </html>
