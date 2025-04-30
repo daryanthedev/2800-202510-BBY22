@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
-import hashPassword from "../utils/hashPassword";
+import * as hash from "../utils/hash";
 
 interface RegisterData {
     username: string;
@@ -25,7 +25,7 @@ export default (app: Express, database: Db) => {
     app.post("/register", async (req: Request, res: Response) => {
         if (isRegisterData(req.body)) {
             const { username, email, password } = req.body;
-            const passwordHash = await hashPassword(password);
+            const passwordHash = await hash.hash(password);
             database
                 .collection("users")
                 .insertOne({

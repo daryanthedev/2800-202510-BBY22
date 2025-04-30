@@ -14,4 +14,15 @@ const SALT_ROUNDS = (() => {
     return PARSED_SALT_ROUNDS;
 })();
 
-export default (password: string) => bcrypt.hash(password, SALT_ROUNDS);
+function hash(password: string) {
+    return bcrypt.hash(password, SALT_ROUNDS);
+}
+
+function compare(plaintext: string, hashed: string) {
+    return bcrypt.compare(plaintext, hashed);
+}
+
+export {
+    hash,
+    compare,
+};

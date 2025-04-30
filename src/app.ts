@@ -13,7 +13,8 @@ const MONGODB_DATABASE = database.db(process.env.MONGODB_DBNAME);
 // Add custom types to the session object
 declare module "express-session" {
     interface SessionData {
-        views: number | undefined;
+        views: number;
+        loggedInUserId: string;
     }
 }
 
@@ -37,6 +38,9 @@ APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
 
 import setupRegister from "./routes/register";
 setupRegister(APP, MONGODB_DATABASE);
+
+import setupLogin from "./routes/login";
+setupLogin(APP, MONGODB_DATABASE);
 
 // Example route to test sessions and EJS rendering
 APP.get("/test", (req: Request, res: Response) => {
