@@ -2,17 +2,17 @@ import { Express, Request, Response } from "express";
 import { Db, ObjectId } from "mongodb";
 
 import * as hash from "../utils/hash";
-import { isUsersSchema } from "../schema";
+import { isUsersSchema, isUsername, isEmail, isPassword, Username, Email, Password } from "../schema";
 
 // The login API endpoint takes either a UsernameLogin or EmailLogin
 interface UsernameLogin {
-    username: string;
-    password: string;
+    username: Username;
+    password: Password;
 }
 
 interface EmailLogin {
-    email: string;
-    password: string;
+    email: Email;
+    password: Password;
 }
 
 function isUsernameLogin(data: unknown): data is UsernameLogin {
@@ -21,7 +21,8 @@ function isUsernameLogin(data: unknown): data is UsernameLogin {
     }
 
     const obj = data as Record<string, unknown>;
-    return typeof obj.username === "string" && typeof obj.password === "string";
+    return typeof obj.username === "string" && typeof obj.password === "string"
+        && isUsername(obj.username) && isPassword(obj.password);
 }
 
 function isEmailLogin(data: unknown): data is EmailLogin {
@@ -30,7 +31,8 @@ function isEmailLogin(data: unknown): data is EmailLogin {
     }
 
     const obj = data as Record<string, unknown>;
-    return typeof obj.email === "string" && typeof obj.password === "string";
+    return typeof obj.email === "string" && typeof obj.password === "string"
+        && isEmail(obj.email) && isPassword(obj.password);
 }
 
 export default (app: Express, database: Db) => {
@@ -59,7 +61,7 @@ export default (app: Express, database: Db) => {
                     username,
                 });
             if(!isUsersSchema(user)) {
-                res.status(500).send();
+                res.status(500).send("Internal server error.");
                 console.error(`Error: Couldn't find user with name "${username}".`);
                 return;
             }
@@ -75,7 +77,7 @@ export default (app: Express, database: Db) => {
                     email,
                 });
             if(!isUsersSchema(user)) {
-                res.status(500).send();
+                res.status(500).send("Internal server error.");
                 console.error(`Error: Couldn't find user with email "${email}".`);
                 return;
             }
@@ -84,7 +86,7 @@ export default (app: Express, database: Db) => {
                 res.send();
             }
         } else {
-            res.status(400).send();
+            res.status(400).send("Invalid data.");
             return;
         }
     });
