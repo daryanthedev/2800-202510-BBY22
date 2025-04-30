@@ -1,8 +1,7 @@
 import { Express } from "express";
-import { Db } from "mongodb";
 
-export default async (app: Express, database: Db) => {
+export default async (app: Express) => {
     (await import("./register.js")).default(app);
     (await import("./login.js")).default(app);
-    (await import("./logout.js")).default(app, database);
+    (await import("./logout.js")).default(app);
 };
