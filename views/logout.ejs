@@ -15,10 +15,8 @@
       <button>Submit</button>
     </form>
     <script type="module">
-      document.getElementById("logoutForm").addEventListener("submit", (event) => {
-        event.preventDefault();
-        fetch("/api/logout", { method: "POST" });
-      })
+      import formSend from "/js/formSend.js";
+      formSend("/api/logout", document.getElementById("logoutForm"), "/");
     </script>
   </body>
 </html>
