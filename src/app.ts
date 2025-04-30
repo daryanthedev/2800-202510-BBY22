@@ -1,10 +1,8 @@
-import express, { Request, Response } from "express";
+import express, { Response } from "express";
 import "dotenv/config"; // Load .env file
 
 import sessionMiddleware from "./utils/sessionMiddleware.js";
 import database from "./utils/databaseConnection.js";
-import { isUsersSchema } from "./schema.js";
-import { ObjectId } from "mongodb";
 
 if (process.env.MONGODB_DBNAME === undefined) {
     throw new Error("MONGODB_DBNAME environment variable not defined.");
@@ -41,45 +39,7 @@ APP.use(sessionMiddleware());
 APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
 
 await (await import("./api/index.js")).default(APP, MONGODB_DATABASE);
-await (await import("./routes/index.js")).default(APP);
-
-// Example route to test sessions and EJS rendering
-APP.get("/test", async (req: Request, res: Response) => {
-    // Define the type of the data that will be passed to the EJS template (for type safety)
-    interface TestData {
-        currentUser: string;
-        body: string;
-        views: number;
-    }
-
-    // We have to verify that views is defined, otherwise ts will throw an error
-    if (req.session.views) {
-        req.session.views++;
-    } else {
-        req.session.views = 1;
-    }
-
-    let username = "";
-    if (req.session.loggedInUserId !== undefined) {
-        const user = await MONGODB_DATABASE.collection("users").findOne({ _id: new ObjectId(req.session.loggedInUserId) });
-        if (!isUsersSchema(user)) {
-            res.status(500).send();
-            console.error(`Error: Couldn't find user with id "${req.session.loggedInUserId}".`);
-            return;
-        }
-        username = user.username;
-    } else {
-        username = "None";
-    }
-
-    // Render the EJS template with the data
-    // We have to use the `satisfies` operator to make sure that the data passed to the template is of the correct type
-    res.render("test.ejs", {
-        currentUser: username,
-        body: "Rendered using EJS!!!",
-        views: req.session.views,
-    } satisfies TestData);
-});
+await (await import("./routes/index.js")).default(APP, MONGODB_DATABASE);
 
 // Use static middleware to serve static files from the public folder
 APP.use(express.static(PUBLIC_ROOT));
