@@ -31,6 +31,8 @@ APP.set("view engine", "ejs");
 
 APP.use(express.urlencoded({ extended: true }));
 
+APP.use(express.json({ type: "application/json" }));
+
 APP.use(sessionMiddleware());
 
 // Use the Typescript that was compiled to JS in the dist folder

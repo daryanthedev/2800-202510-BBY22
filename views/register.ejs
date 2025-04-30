@@ -8,11 +8,15 @@
   </head>
   <body>
     Register
-    <form action="/api/register" method="post">
+    <form id="registerForm">
       <input name="username" type="text" placeholder="Username" />
       <input name="email" type="email" placeholder="Email" />
       <input name="password" type="password" placeholder="Password" />
       <button>Submit</button>
     </form>
+    <script type="module">
+      import formSend from "/js/formSend.js";
+      formSend("/api/register", document.getElementById("registerForm"));
+    </script>
   </body>
 </html>

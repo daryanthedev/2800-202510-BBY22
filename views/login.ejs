@@ -10,11 +10,15 @@
     Currently logged in user: <%- currentUser %>
     <br>
     Login
-    <form action="/api/login" method="post">
+    <form id="loginForm">
       <input name="username" type="text" placeholder="Username" />
       <input name="email" type="email" placeholder="Email" />
       <input name="password" type="password" placeholder="Password" />
       <button>Submit</button>
     </form>
+    <script type="module">
+      import formSend from "/js/formSend.js";
+      formSend("/api/login", document.getElementById("loginForm"));
+    </script>
   </body>
 </html>
