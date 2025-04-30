@@ -11,7 +11,7 @@ async function send(url: string, data: FormData) {
         method: "POST",
         body: JSON.stringify(obj),
     });
-};
+}
 
 function formSend(url: string, formElem: HTMLFormElement) {
     formElem.addEventListener("submit", (event: SubmitEvent) => {

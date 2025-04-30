@@ -22,7 +22,4 @@ function compare(plaintext: string, hashed: string) {
     return bcrypt.compare(plaintext, hashed);
 }
 
-export {
-    hash,
-    compare,
-};
+export { hash, compare };

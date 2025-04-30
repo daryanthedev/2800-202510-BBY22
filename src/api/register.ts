@@ -16,8 +16,14 @@ function isRegisterData(data: unknown): data is RegisterData {
     }
 
     const obj = data as Record<string, unknown>;
-    return typeof obj.username === "string" && typeof obj.email === "string" && typeof obj.password === "string"
-        && isUsername(obj.username) && isEmail(obj.email) && isPassword(obj.password);
+    return (
+        typeof obj.username === "string" &&
+        typeof obj.email === "string" &&
+        typeof obj.password === "string" &&
+        isUsername(obj.username) &&
+        isEmail(obj.email) &&
+        isPassword(obj.password)
+    );
 }
 
 export default (app: Express, database: Db) => {
@@ -29,7 +35,7 @@ export default (app: Express, database: Db) => {
     app.post("/api/register", async (req: Request, res: Response) => {
         if (isRegisterData(req.body)) {
             const { username, email, password } = req.body;
-            if(await emailNotUsed(email)){
+            if (await emailNotUsed(email)) {
                 const passwordHash = await hash.hash(password);
                 database
                     .collection("users")

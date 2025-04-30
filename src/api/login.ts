@@ -15,35 +15,35 @@ function isLoginData(data: unknown): data is LoginData {
     }
 
     const obj = data as Record<string, unknown>;
-    return typeof obj.usernameEmail === "string" && typeof obj.password === "string"
-        && (isUsername(obj.usernameEmail) || isEmail(obj.usernameEmail)) && isPassword(obj.password);
+    return (
+        typeof obj.usernameEmail === "string" &&
+        typeof obj.password === "string" &&
+        (isUsername(obj.usernameEmail) || isEmail(obj.usernameEmail)) &&
+        isPassword(obj.password)
+    );
 }
 
 export default (app: Express, database: Db) => {
     app.post("/api/login", async (req: Request, res: Response) => {
         if (isLoginData(req.body)) {
             const { usernameEmail, password } = req.body;
-            if(isEmail(usernameEmail)) {
-                const user = await database
-                    .collection("users")
-                    .findOne({
-                        email: usernameEmail,
-                    });
-                if(isUsersSchema(user)) {
-                    if(await hash.compare(password, user.passwordHash)) {
+            if (isEmail(usernameEmail)) {
+                const user = await database.collection("users").findOne({
+                    email: usernameEmail,
+                });
+                if (isUsersSchema(user)) {
+                    if (await hash.compare(password, user.passwordHash)) {
                         req.session.loggedInUserId = user._id.toHexString();
                         res.send();
                     }
                     return;
                 }
             }
-            const user = await database
-                .collection("users")
-                .findOne({
-                    username: usernameEmail,
-                });
-            if(isUsersSchema(user)) {
-                if(await hash.compare(password, user.passwordHash)) {
+            const user = await database.collection("users").findOne({
+                username: usernameEmail,
+            });
+            if (isUsersSchema(user)) {
+                if (await hash.compare(password, user.passwordHash)) {
                     req.session.loggedInUserId = user._id.toHexString();
                     res.send();
                     return;

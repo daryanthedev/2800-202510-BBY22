@@ -6,9 +6,9 @@ import { isUsersSchema } from "../schema.js";
 export default (app: Express, database: Db) => {
     app.get("/login", async (req: Request, res: Response) => {
         let username = "";
-        if(req.session.loggedInUserId !== undefined) {
+        if (req.session.loggedInUserId !== undefined) {
             const user = await database.collection("users").findOne({ _id: new ObjectId(req.session.loggedInUserId) });
-            if(!isUsersSchema(user)) {
+            if (!isUsersSchema(user)) {
                 res.status(500).send();
                 console.error(`Error: Couldn't find user with id "${req.session.loggedInUserId}".`);
                 return;
