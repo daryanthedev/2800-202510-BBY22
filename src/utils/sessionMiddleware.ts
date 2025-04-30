@@ -1,7 +1,7 @@
 import MongoStore from "connect-mongo";
 import session from "express-session";
 
-import mongodbUri from "./mongodbUri";
+import mongodbUri from "./mongodbUri.js";
 
 // Load the session secret from the environment variable or throw an error if not defined
 const NODE_SESSION_SECRET =

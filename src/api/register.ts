@@ -1,8 +1,8 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
 
-import * as hash from "../utils/hash";
-import { isUsername, isEmail, isPassword, Username, Email, Password } from "../schema";
+import * as hash from "../utils/hash.js";
+import { isUsername, isEmail, isPassword, Username, Email, Password } from "../schema.js";
 
 interface RegisterData {
     username: Username;

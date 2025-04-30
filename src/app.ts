@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import "dotenv/config"; // Load .env file
 
-import sessionMiddleware from "./utils/sessionMiddleware";
-import database from "./utils/databaseConnection";
+import sessionMiddleware from "./utils/sessionMiddleware.js";
+import database from "./utils/databaseConnection.js";
 
 if (process.env.MONGODB_DBNAME === undefined) {
     throw new Error("MONGODB_DBNAME environment variable not defined.");
@@ -24,7 +24,7 @@ const PORT = process.env.PORT ?? "3000";
 // Check if the server is running in dev mode or build mode
 // If the dist folder is one folder up we are in dev mode, but if it is two folders up then we are in build mode
 
-import getFolders from "./utils/folders";
+import getFolders from "./utils/folders.js";
 const { PUBLIC_ROOT, DIST_PUBLIC_ROOT } = getFolders(import.meta.dirname);
 
 APP.set("view engine", "ejs");
@@ -36,8 +36,8 @@ APP.use(sessionMiddleware());
 // Use the Typescript that was compiled to JS in the dist folder
 APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
 
-await (await import("./api")).default(APP, MONGODB_DATABASE);
-await (await import("./routes")).default(APP, MONGODB_DATABASE);
+await (await import("./api/index.js")).default(APP, MONGODB_DATABASE);
+await (await import("./routes/index.js")).default(APP, MONGODB_DATABASE);
 
 // Example route to test sessions and EJS rendering
 APP.get("/test", (req: Request, res: Response) => {

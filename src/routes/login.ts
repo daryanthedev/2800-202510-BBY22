@@ -1,7 +1,7 @@
 import { Express, Request, Response } from "express";
 import { Db, ObjectId } from "mongodb";
 
-import { isUsersSchema } from "../schema";
+import { isUsersSchema } from "../schema.js";
 
 export default (app: Express, database: Db) => {
     app.get("/login", async (req: Request, res: Response) => {
