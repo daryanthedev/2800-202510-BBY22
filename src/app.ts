@@ -36,11 +36,8 @@ APP.use(sessionMiddleware());
 // Use the Typescript that was compiled to JS in the dist folder
 APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
 
-import setupRegister from "./routes/register";
-setupRegister(APP, MONGODB_DATABASE);
-
-import setupLogin from "./routes/login";
-setupLogin(APP, MONGODB_DATABASE);
+await (await import("./api")).default(APP, MONGODB_DATABASE);
+await (await import("./routes")).default(APP, MONGODB_DATABASE);
 
 // Example route to test sessions and EJS rendering
 APP.get("/test", (req: Request, res: Response) => {
