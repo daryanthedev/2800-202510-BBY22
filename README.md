@@ -2,6 +2,16 @@
 
 QuietQuest is a web app designed to help introverts build their social confidence in a quiet, low-pressure way. By providing daily, gentle challenges, QuietQuest empowers users to grow at their own pace and regain confidence on their own terms.
 
+## About Us
+Team Name: BBY-22
+
+Team Members: 
+- Angelo Santos
+- Nick Nepomuceno
+- Andrew Hwang
+- Giorgio Donatelli
+- Daryan Worya
+
 ## Problem
 
 Many people, especially introverts, find it difficult to build their social confidence, particularly in a post-COVID-19 world. The growing tech culture driven by social media often discourages real-world interaction, and there are few tools available to support personal growth in a private and reflective manner.
