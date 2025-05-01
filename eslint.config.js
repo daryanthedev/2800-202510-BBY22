@@ -17,6 +17,7 @@ export default tseslint.config(
         rules: {
             // Example custom rules
             "no-unused-vars": "warn",
+            "@typescript-eslint/no-duplicate-type-constituents": "off",
             "semi": ["warn", "always"],
             "quotes": ["warn", "double"],
             "indent": ["warn", 4],
