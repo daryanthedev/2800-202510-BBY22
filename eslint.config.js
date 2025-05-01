@@ -16,14 +16,26 @@ export default tseslint.config(
         },
         rules: {
             // Example custom rules
-            "no-unused-vars": "warn",
             "@typescript-eslint/no-duplicate-type-constituents": "off",
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    "argsIgnorePattern": "^_",
+                    "varsIgnorePattern": "^_",
+                    "caughtErrorsIgnorePattern": "^_",
+                },
+            ],
             "semi": ["warn", "always"],
             "quotes": ["warn", "double"],
             "indent": ["warn", 4],
             "comma-dangle": ["warn", "always-multiline"],
             "no-multiple-empty-lines": ["warn", { max: 1, maxEOF: 0 }],
-            "space-before-function-paren": ["warn", "never"],
+            "space-before-function-paren": ["warn", {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "always",
+            }],
             "object-curly-spacing": ["warn", "always"],
             "array-bracket-spacing": ["warn", "never"],
             "no-trailing-spaces": "warn",

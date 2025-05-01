@@ -45,7 +45,7 @@ await (await import("./routes/index.js")).default(APP, MONGODB_DATABASE);
 APP.use(express.static(PUBLIC_ROOT));
 
 // Serve a 404 page for any other routes
-APP.get("/{*a}", (_, res: Response) => {
+APP.use((_, res: Response) => {
     res.status(404).send("404");
 });
 
