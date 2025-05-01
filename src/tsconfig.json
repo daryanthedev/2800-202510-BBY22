@@ -2,7 +2,9 @@
   "compilerOptions": {
     "allowImportingTsExtensions": false,
     "noEmit": false,
-    "outDir": "../dist/src"
+    "outDir": "../dist/src",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext"
   },
   "include": ["./**/*.ts", "./**/*.d.ts"],
   "exclude": ["./ts/**/*"],

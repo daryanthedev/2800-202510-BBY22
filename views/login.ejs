@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a href="/">Back</a>
+    <br />
+    Login
+    <form id="loginForm">
+      <input name="usernameEmail" type="text" placeholder="Username/Email" />
+      <input name="password" type="password" placeholder="Password" />
+      <button>Submit</button>
+    </form>
+    <script type="module">
+      import formSend from "/js/formSend.js";
+      formSend("/api/login", document.getElementById("loginForm"), "/");
+    </script>
+  </body>
+</html>
