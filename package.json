@@ -8,7 +8,7 @@
   "author": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "rimraf ./dist/public/js && concurrently \"tsc --watch -p ./src/ts/tsconfig.json\" \"nodemon\"",
+    "dev": "rimraf ./dist && concurrently \"tsc --watch -p ./src/ts/tsconfig.json\" \"nodemon\"",
     "build": "rimraf ./dist && tsc -p ./src/tsconfig.json && tsc -p ./src/ts/tsconfig.json",
     "start": "node ./dist/src/app.js",
     "format": "prettier --write --ignore-unknown --plugin=prettier-plugin-ejs \"./{src,views,public}/**/*\" && npm run lint:fix",
@@ -16,6 +16,7 @@
     "lint:fix": "eslint --cache \"./**/*\" --ignore-pattern \"./{dist,node_modules}/**/*\" --fix"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
     "@types/express-session": "^1.18.1",
     "@types/node": "^22.15.2",
@@ -32,10 +33,12 @@
     "typescript-eslint": "^8.31.0"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "express-session": "^1.18.1"
+    "express-session": "^1.18.1",
+    "joi": "^17.13.3"
   }
 }
