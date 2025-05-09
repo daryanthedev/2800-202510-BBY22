@@ -6,8 +6,10 @@
     <form id="loginForm">
       <input name="usernameEmail" type="text" placeholder="Username/Email" />
       <input name="password" type="password" placeholder="Password" />
-      <button>Submit</button>
+      <button>Login</button>
     </form>
+    <p>OR</p>
+    <button href="/register">Register</button>
     <script type="module">
       import formSend from "/js/formSend.js";
       formSend("/api/login", document.getElementById("loginForm"), "/");
