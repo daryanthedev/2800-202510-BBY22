@@ -25,7 +25,6 @@ function isWeatherResponse(data: unknown): data is WeatherResponse {
 
 function getWeather(): Promise<WeatherResponse> {
     return new Promise((resolve, reject) => {
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         navigator.geolocation.getCurrentPosition(async position => {
             const response = await fetch("/api/weather", {
                 headers: {
@@ -37,8 +36,7 @@ function getWeather(): Promise<WeatherResponse> {
                     longitude: position.coords.longitude,
                 }),
             });
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const json = await response.json();
+            const json = await response.json() as unknown;
             if(isWeatherResponse(json)) {
                 resolve(json);
             } else {
