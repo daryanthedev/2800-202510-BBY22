@@ -8,7 +8,8 @@ interface WeatherResponse {
 }
 
 function isWeatherResponse(data: unknown): data is WeatherResponse {
-    return typeof data === "object" &&
+    return (
+        typeof data === "object" &&
         data !== null &&
         "location" in data &&
         "temp" in data &&
@@ -20,7 +21,8 @@ function isWeatherResponse(data: unknown): data is WeatherResponse {
         "main" in data.weather &&
         "description" in data.weather &&
         typeof data.weather.main === "string" &&
-        typeof data.weather.description === "string";
+        typeof data.weather.description === "string"
+    );
 }
 
 function getWeather(): Promise<WeatherResponse> {
@@ -39,7 +41,7 @@ function getWeather(): Promise<WeatherResponse> {
             });
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const json = await response.json();
-            if(isWeatherResponse(json)) {
+            if (isWeatherResponse(json)) {
                 resolve(json);
             } else {
                 reject(new Error("Invalid response from server when getting weather data."));
