@@ -103,10 +103,23 @@
       </div>
       <div class="features-section-child-container">
         <!-- Features Text and Image 3 -->
-        <h3 class="features-text">🧭 Adaptive World Map</h3>
-        <p class="features-text">Progress through zones (like the Forest of Fatigue or Cliffs of Comparison) with each
-          task you complete, revealing lore and rewards as you grow.</p>
+        <h3 class="features-text">☁️ Dynamic Weather Widget</h3>
+        <p class="features-text">Stay mindful of your environment with our real-time weather widget. This feature adapts
+          to your location, displaying current conditions and offering gentle suggestions—like cozy tasks for rainy days
+          or movement goals for sunny afternoons.</p>
         <img href="./images/Feature3.png" alt="Feature"></a>
+        <div class="weather-widget">
+          <div class="weather-widget-child-container">
+            <div class="weather-icon">
+              <img id="weather-icon" src="/weather-icons/Cloudy.svg" alt="Weather Icon">
+            </div>
+            <div class="weather-info">
+              <div id="weather-city">Loading...</div>
+              <div id="weather-temp">--°C</div>
+              <div id="weather-desc"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Div Container for the About Us Page-->
@@ -173,6 +186,10 @@
       </div>
     </div>
     <script src="js/script.js" type="module"></script>
+    <script type="module">
+      import { updateWeather } from './js/weatherWidget.js';
+      // Already initialized via DOMContentLoaded
+    </script>
   </body>
 
   </html>
