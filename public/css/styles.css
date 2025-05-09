@@ -1,8 +1,65 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Combo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Combo&display=swap');
+
+.welcome-message-parent-container,
+.overview-section-parent-container,
+.features-section-parent-container,
+.about-us-parent-container {
+    padding: 6rem 0;       /* Internal spacing (top/bottom) */
+    margin-top: 12rem;
+    margin-bottom: 12rem;   /* Extra space BETWEEN sections */
+}
+
+.contact-page-parent-container {
+    padding: 6rem 0;       /* No extra margin on last section */
+}
+
+.button {
+    padding: 0.5em 1em;
+    background-color: #ECB779;
+    color: #102128; /* Black text for contrast */
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Afacad', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+  
+.button:hover {
+    background-color: #d5a55e; /* Slightly darker gold for hover effect */
+}
+
+.button-container {
+    display: inline-block; /* Shrink-wrap to button size */
+    width: auto;          /* Prevents stretching */
+}
+
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+  
+body {
+    background-color: #BCDA94;
+    font-family: 'Afacad', sans-serif;
+}
+
+.logo-text {
+    font-family: 'Combo', cursive;
+    font-size: 36px;
+}
 
 .navbar-parent-container {
     display: flex;
     width: 100%;
+    background-color: #426F8A;
+    color: #F7F1E6;
 }
 
 .navbar-left-side-label-parent-container {
@@ -22,6 +79,11 @@
     text-align: center;
 }
 
+.welcome-to-quietquest {
+    font-family: 'Combo', cursive;
+    font-size: 36px;
+}
+
 .overview-section-parent-container {
     display: flex;
     flex-direction: column;
@@ -29,6 +91,8 @@
 
 .overview-section-title {
     text-align: center;
+    font-family: 'Combo', cursive;
+    font-size: 36px;
 }
 
 .overview-section-child-container {
@@ -44,6 +108,8 @@
 
 .features-section-title {
     text-align: center;
+    font-family: 'Combo', cursive;
+    font-size: 36px;
 }
 
 .features-section-child-container {
@@ -58,6 +124,12 @@
 
 .about-us-title {
     text-align: center;
+    font-family: 'Combo', cursive;
+    font-size: 36px;
+}
+
+.profile-title {
+    font-size: 28px;
 }
 
 .about-us-child-container {
@@ -79,4 +151,61 @@
     display: flex;
     justify-content: flex-end;
     width: 100%;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+        margin-left: auto; /* Push to right */
+    }
+
+    .nav-links-container {
+        display: none;
+        width: 100%;
+    }
+
+    .overview-section-child-container {
+        display: flex;
+        flex-direction: column;
+        padding: 6rem 0;
+    }
+    
+    .overview-text {
+        margin-bottom: 6rem;
+    }
+
+    .features-section-child-container {
+        display: flex;
+        flex-direction: column;
+        padding: 6rem 0;
+        text-align: center;   
+    }
+
+    .features-text {
+        margin-bottom: 6rem;
+    }
+
+    .about-us-child-container {
+        display: flex;
+        flex-direction: column;
+        padding: 6rem 0;
+        text-align: center;
+    }
+
+    .team-profile-picture {
+        margin-bottom: 6rem;
+    }
+
+    .contact-page-parent-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .contact-page-child-container {
+        flex-direction: column;
+    }
+
+    .contact-page-child-container2 {
+        flex-direction: row;
+    }
 }
