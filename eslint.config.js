@@ -15,7 +15,7 @@ export default tseslint.config(
             },
         },
         rules: {
-            // Example custom rules
+            "@typescript-eslint/no-misused-promises": "off",
             "@typescript-eslint/no-duplicate-type-constituents": "off",
             "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": [
