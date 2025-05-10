@@ -2,7 +2,7 @@ import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
 
 import * as hash from "../utils/hash.js";
-import { isUsername, isEmail, isPassword, Username, Email, Password } from "../schema.js";
+import { isUsername, isEmail, isPassword, Username, Email, Password, UsersSchema } from "../schema.js";
 
 interface RegisterData {
     username: Username;
@@ -43,7 +43,8 @@ export default (app: Express, database: Db) => {
                         username,
                         email,
                         passwordHash,
-                    })
+                        lastStreakDate: null,
+                    } satisfies UsersSchema)
                     .then(() => {
                         res.send();
                     })

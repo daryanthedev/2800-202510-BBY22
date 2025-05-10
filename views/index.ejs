@@ -1,199 +1,183 @@
-<!doctype html>
-<html lang="en">
+<%- include('partials/header') %>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QuestQuest 🌿</title>
-  <link rel="stylesheet" href="css/styles.css" />
-</head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-parent-container">
+        <!-- QuietQuest Logo -->
+        <a class="navbar-quietquest-logo" href="#top-of-page">
+          <!-- <img src="/images/QuietQuest.jpg" alt="QuietQuest"> -->
+          <b class="logo-text">🌿 QuietQuest</b>
+        </a>
 
-<body>
-  <!-- <a href="/register">Register</a><br />
-  <a href="/login">Login</a><br />
-  <a href="/logout">Logout</a><br />
-  You are currently logged in as:
-  <%- currentUser %>
-    <br />
-    <%- body %>
-      <br />
-      You have viewed this page
-      <%- views %>
-        times. -->
+        <!-- Hamburger Button (Mobile Only) -->
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+          ☰
+        </button>
 
-        <!-- Navbar -->
-        <nav class="navbar">
-          <div class="navbar-parent-container">
-
-            <!-- QuietQuest Logo -->
-            <a class="navbar-quietquest-logo" href="#top-of-page">
-              <img src="/images/QuietQuest.jpg" alt="QuietQuest">
-              <b>QuietQuest</b>
-            </a>
-
-            <!-- Left Side: Overview, Features, About Us and Contact -->
-            <ul class="navbar-left-side-label-parent-container">
-              <li class="navbar-left-side-label-child-container">
-                <a class="navbar-left-side-labels" href="#overview">Overview</a>
-              </li>
-              <li class="navbar-left-side-label-child-container">
-                <a class="navbar-left-side-labels" href="#features">Features</a>
-              </li>
-              <li class="navbar-left-side-label-child-container">
-                <a class="navbar-left-side-labels" href="#about">About Us</a>
-              </li>
-              <li class="navbar-left-side-label-child-container">
-                <a class="navbar-left-side-labels" href="#contact">Contact</a>
-              </li>
-            </ul>
-
-            <!-- Right Side: Login / Sign Up -->
-            <div class="navbar-right-side-label-parent-container">
-              <a href="/register">Login / Sign Up</a>
+        <!-- Left Side: Overview, Features, About Us and Contact -->
+        <div class="nav-links-container">
+          <ul class="navbar-left-side-label-parent-container">
+            <li class="navbar-left-side-label-child-container">
+              <a class="navbar-left-side-labels" href="#overview">Getting Started</a>
+            </li>
+            <li class="navbar-left-side-label-child-container">
+              <a class="navbar-left-side-labels" href="#features">Features</a>
+            </li>
+            <li class="navbar-left-side-label-child-container">
+              <a class="navbar-left-side-labels" href="#about">About Us</a>
+            </li>
+            <li class="navbar-left-side-label-child-container">
+              <a class="navbar-left-side-labels" href="#contact">Contact</a>
+            </li>
+          </ul>
+          <!-- Right Side: Login / Sign Up -->
+          <div class="navbar-right-side-label-parent-container">
+            <div class="button-container">
+              <a href="/login" class="button">Login / Sign Up</a>
             </div>
-
-          </div>
-        </nav>
-
-        <!-- Welcome to QuietQuest -->
-        <div class="welcome-message-parent-container">
-
-          <!-- Welcome Message -->
-          <h1 class="welcome-to-quietquest">Welcome to QuietQuest</h1>
-
-          <!-- Subheading for Welcome Message -->
-          <h2 class="welcome-message-subheading">Improves self-confidence :D</h2>
-
-          <!-- Login / Sign Up -->
-          <a href="/register">Login / Sign Up</a>
-
-          <!-- QuietQuest Background Image -->
-          <a href="./images/QuietQuest.jpg" alt="QuietQuest"></a>
-        </div>
-
-        <!-- Change this later -->
-        <!-- Allows User to Scroll to the Top When Clicking the Logo Button -->
-        <div id="top-of-page"></div>
-
-        <!-- Div Container for Overview Section -->
-        <div class="overview-section-parent-container" id="overview">
-
-          <!-- Overview Title -->
-          <h2 class="overview-section-title">Overview</h2>
-
-          <div class="overview-section-child-container">
-            <!-- Overview Text and Image 1 -->
-            <h3 class="overview-text">QuietQuest is a...</h3>
-            <img href="./images/Inspiration1.png" alt="inspiration">
-
-          </div>
-          <div class="overview-section-child-container">
-            <!-- Overview Text and Image 2 -->
-            <h3 class="overview-text">QuietQuest is a...</h3>
-            <img href="./images/Inspiration2.png" alt="inspiration">
-          </div>
-
-          <div class="overview-section-child-container">
-            <!-- Overview Text and Image 3 -->
-            <h3 class="overview-text">QuietQuest is a...</h3>
-            <img href="./images/Inspiration3.png" alt="inspiration">
           </div>
         </div>
-
-        <!-- Div Container for Features Section -->
-        <div class="features-section-parent-container" id="features">
-
-          <!-- Features Title -->
-          <h2 class="features-section-title">Features</h2>
-
-          <div class="features-section-child-container">
-            <!-- Features Text and Image 1 -->
-            <h3 class="features-text">Feature 1...</h3>
-            <img href="./images/Feature1.png" alt="Feature"></a>
-          </div>
-          <div class="features-section-child-container">
-
-            <!-- Features Text and Image 2 -->
-            <h3 class="features-text">Feature 2...</h3>
-            <img href="./images/Feature2.png" alt="Feature"></a>
-          </div>
-          <div class="features-section-child-container">
-
-            <!-- Features Text and Image 3 -->
-            <h3 class="features-text">Feature 3...</h3>
-            <img href="./images/Feature3.png" alt="Feature"></a>
-          </div>
+      </div>
+    </nav>
+    <!-- Welcome to QuietQuest -->
+    <div class="welcome-message-parent-container">
+      <!-- Welcome Message -->
+      <h1 class="welcome-to-quietquest">Conquer your day, one quest at a time.</h1>
+      <!-- Subheading for Welcome Message -->
+      <h2 class="welcome-message-subheading">Gamify your habits, battle procrastination, and find clarity through daily
+        action.</h2>
+      <!-- Login / Sign Up -->
+      <div class="button-container">
+        <a href="/login" class="button">Try now!</a>
+      </div>
+      <!-- QuietQuest Background Image -->
+      <a href="./images/QuietQuest.jpg" alt="QuietQuest"></a>
+    </div>
+    <!-- Change this later -->
+    <!-- Allows User to Scroll to the Top When Clicking the Logo Button -->
+    <div id="top-of-page"></div>
+    <!-- Div Container for Overview Section -->
+    <div class="overview-section-parent-container" id="overview">
+      <!-- Overview Title -->
+      <h2 class="overview-section-title">Getting Started</h2>
+      <div class="overview-section-child-container">
+        <!-- Overview Text and Image 1 -->
+        <h3 class="overview-text">🧭 Step 1: Begin Your Daily Quest</h3>
+        <p class="overview-text">Each day, QuietQuest gives you a personalized task or self-care challenge designed to
+          build healthy habits and mindfulness.</p>
+        <img href="./images/Inspiration1.png" alt="inspiration">
+      </div>
+      <div class="overview-section-child-container">
+        <!-- Overview Text and Image 2 -->
+        <h3 class="overview-text">🐉 Step 2: Face a Monster</h3>
+        <p class="overview-text">Each day, you’ll encounter a themed monster—like Bed-Rot or Interrorgator. Choose how
+          to “fight” based on your real-world action and earn rewards.</p>
+        <img href="./images/Inspiration2.png" alt="inspiration">
+      </div>
+      <div class="overview-section-child-container">
+        <!-- Overview Text and Image 3 -->
+        <h3 class="overview-text">✨ Step 3: Earn Gold & Build Your Streak</h3>
+        <p class="overview-text">Keep your streak alive by logging in daily. Defeating monsters grants gold, which you
+          can use to unlock items, upgrade your profile, and power up your quests.</p>
+        <img href="./images/Inspiration3.png" alt="inspiration">
+      </div>
+    </div>
+    <!-- Div Container for Features Section -->
+    <div class="features-section-parent-container" id="features">
+      <!-- Features Title -->
+      <h2 class="features-section-title">Features</h2>
+      <div class="features-section-child-container">
+        <!-- Features Text and Image 1 -->
+        <h3 class="features-text">🛡️ Personalized Hero Paths</h3>
+        <p class="features-text">Choose your self-help focus—like productivity, mindfulness, or energy—and get tasks and
+          monsters tailored to your path.</p>
+        <img href="./images/Feature1.png" alt="Feature"></a>
+      </div>
+      <div class="features-section-child-container">
+        <!-- Features Text and Image 2 -->
+        <h3 class="features-text">👥 Community Quests</h3>
+        <p class="features-text">Team up with friends or others on similar journeys. Join seasonal events to slay bigger
+          monsters and unlock rare items.</p>
+        <img href="./images/Feature2.png" alt="Feature"></a>
+      </div>
+      <div class="features-section-child-container">
+        <!-- Features Text and Image 3 -->
+        <h3 class="features-text">☁️ Dynamic Weather Widget</h3>
+        <p class="features-text">Stay mindful of your environment with our real-time weather widget. This feature adapts
+          to your location, displaying current conditions and offering gentle suggestions—like cozy tasks for rainy days
+          or movement goals for sunny afternoons.</p>
+        <img href="./images/Feature3.png" alt="Feature"></a>
+        <%- include('partials/weatherWidget') %>
+      </div>
+    </div>
+    <!-- Div Container for the About Us Page-->
+    <div class="about-us-parent-container" id="about">
+      <!-- About Us title-->
+      <h2 class="about-us-title">About Us</h2>
+      <!-- Nick Nepomuceno -->
+      <div class="about-us-child-container">
+        <img class="team-profile-picture" src="./images/nick.jpg" alt="Nick's profile image">
+        <div class="about-us-child-container2">
+          <h3 class="profile-title">Nick Nepomuceno</h3>
+          <p class="profile-description">Lead Project Manager</p>
+          <p>Nick is an ambitious CST student with great leadership skills.</p>
         </div>
-
-        <!-- Div Container for the About Us Page-->
-        <div class="about-us-parent-container" id="about">
-
-          <!-- About Us title-->
-          <h2 class="about-us-title">About Us</h2>
-
-          <!-- Nick Nepomuceno -->
-          <div class="about-us-child-container">
-            <img class="team-profile-picture" src="./images/nick.jpg" alt="Nick's profile image">
-            <div class="about-us-child-container2">
-              <h3 class="profile-title">Nick Nepomuceno</h3>
-              <p class="profile-description">Project Manager Main</p>
-              <p>Nick is...</p>
-            </div>
-          </div>
-
-          <!-- Angelo Santos -->
-          <div class="about-us-child-container">
-            <img class="team-profile-picture" src="./images/angelo.jpg" alt="Angelo's profile image">
-            <div class="about-us-child-container2">
-              <h3 class="profile-title">Angelo Santos</h3>
-              <p class="profile-description">Co-Project Manager - Co-Designer</p>
-              <p>Angelo is is...</p>
-            </div>
-          </div>
-
-          <!-- Andrew Hwang -->
-          <div class="about-us-child-container">
-            <img class="team-profile-picture" src="./images/andrew.jpg" alt="Andrew's profile image">
-            <div class="about-us-child-container2">
-              <h3 class="profile-title">Andrew Hwang</h3>
-              <p class="profile-description">Lead Designer</p>
-              <p>Andrew is...</p>
-            </div>
-          </div>
-
-          <!-- Daryan Worya -->
-          <div class="about-us-child-container">
-            <img class="team-profile-picture" src="./images/daryan.jpg" alt="Daryan's profile image">
-            <div class="about-us-child-container2">
-              <h3 class="profile-title">Daryan Worya</h3>
-              <p class="profile-description">Co-Designer - Co-Backend</p>
-              <p>Daryan is...</p>
-            </div>
-          </div>
-
-          <!-- Giorgio Donatelli -->
-          <div class="about-us-child-container">
-            <img class="team-profile-picture" src="./images/giorgio.jpg" alt="Giorgio's profile image">
-            <div class="about-us-child-container2">
-              <h3 class="profile-title">Giorgio Donatelli</h3>
-              <p class="profile-description">Lead Backend</p>
-              <p>Giorgio is...</p>
-            </div>
-          </div>
-
+      </div>
+      <!-- Angelo Santos -->
+      <div class="about-us-child-container">
+        <img class="team-profile-picture" src="./images/angelo.jpg" alt="Angelo's profile image">
+        <div class="about-us-child-container2">
+          <h3 class="profile-title">Angelo Santos</h3>
+          <p class="profile-description">Project Co-Manager & Co-Designer</p>
+          <p>Angelo is perceptive CST student with great leadership skills and a good eye for design.</p>
         </div>
-
-        <div class="contact-page-parent-container" id="contact">
-
-          <div class="contact-page-child-container">
-            <button type="button" class="social-media-logo">Continue with Google</button>
-            <button type="button" class="social-media-logo">Continue with
-              Facebook</button>
-            <button type="button" class="social-media-logo">Continue with Twitter</button>
-          </div>
+      </div>
+      <!-- Andrew Hwang -->
+      <div class="about-us-child-container">
+        <img class="team-profile-picture" src="./images/andrew.jpg" alt="Andrew's profile image">
+        <div class="about-us-child-container2">
+          <h3 class="profile-title">Andrew Hwang</h3>
+          <p class="profile-description">Lead Designer</p>
+          <p>Andrew is a create CST student who thinks outside the box when crafting user-focused solutions.</p>
         </div>
+      </div>
+      <!-- Daryan Worya -->
+      <div class="about-us-child-container">
+        <img class="team-profile-picture" src="./images/daryan.jpg" alt="Daryan's profile image">
+        <div class="about-us-child-container2">
+          <h3 class="profile-title">Daryan Worya</h3>
+          <p class="profile-description">Co-Designer & Co-Backend Developer</p>
+          <p>Daryan is an innovative CST student with a create eye for design.</p>
+        </div>
+      </div>
+      <!-- Giorgio Donatelli -->
+      <div class="about-us-child-container">
+        <img class="team-profile-picture" src="./images/giorgio.jpg" alt="Giorgio's profile image">
+        <div class="about-us-child-container2">
+          <h3 class="profile-title">Giorgio Donatelli</h3>
+          <p class="profile-description">Lead Backend Developer</p>
+          <p>Giorgio is an knowledgable CST student with great knowledge of backend code.</p>
+        </div>
+      </div>
+    </div>
+    <div class="contact-page-parent-container" id="contact">
+      <div class="contact-page-child-container">
+        <a class="footer-text" href="">Report a bug</a>
+        <a class="footer-text" href="">Feedback</a>
+        <a class="footer-text" href="">Join our Discord/Community</a>
+        <div class="contact-page-child-container2">
+          <button type="button" class="social-media-logo">Continue with Google</button>
+          <button type="button" class="social-media-logo">Continue with
+            Facebook</button>
+          <button type="button" class="social-media-logo">Continue with Twitter</button>
+        </div>
+      </div>
+    </div>
 
-        <script src="js/script.js" type="module"></script>
-</body>
+    <script src="js/script.js" type="module"></script>
+    <script src="js/weatherWidget.js" type="module"></script>
 
-</html>
+  </body>
+
+  </html>
