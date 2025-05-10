@@ -108,18 +108,7 @@
           to your location, displaying current conditions and offering gentle suggestions—like cozy tasks for rainy days
           or movement goals for sunny afternoons.</p>
         <img href="./images/Feature3.png" alt="Feature"></a>
-        <div class="weather-widget">
-          <div class="weather-widget-child-container">
-            <div class="weather-icon">
-              <img id="weather-icon" src="/weather-icons/Cloudy.svg" alt="Weather Icon">
-            </div>
-            <div class="weather-info">
-              <div id="weather-city">Loading...</div>
-              <div id="weather-temp">--°C</div>
-              <div id="weather-desc"></div>
-            </div>
-          </div>
-        </div>
+        <%- include('partials/weatherWidget') %>
       </div>
     </div>
     <!-- Div Container for the About Us Page-->
@@ -185,11 +174,10 @@
         </div>
       </div>
     </div>
+
     <script src="js/script.js" type="module"></script>
-    <script type="module">
-      import { updateWeather } from './js/weatherWidget.js';
-      // Already initialized via DOMContentLoaded
-    </script>
+    <script src="js/weatherWidget.js" type="module"></script>
+
   </body>
 
   </html>
