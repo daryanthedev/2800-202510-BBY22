@@ -8,7 +8,8 @@ interface WeatherResponse {
 }
 
 function isWeatherResponse(data: unknown): data is WeatherResponse {
-    return typeof data === "object" &&
+    return (
+        typeof data === "object" &&
         data !== null &&
         "location" in data &&
         "temp" in data &&
@@ -20,7 +21,8 @@ function isWeatherResponse(data: unknown): data is WeatherResponse {
         "main" in data.weather &&
         "description" in data.weather &&
         typeof data.weather.main === "string" &&
-        typeof data.weather.description === "string";
+        typeof data.weather.description === "string"
+    );
 }
 
 function getWeather(): Promise<WeatherResponse> {
