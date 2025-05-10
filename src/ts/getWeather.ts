@@ -24,8 +24,11 @@ function isWeatherResponse(data: unknown): data is WeatherResponse {
 }
 
 function getWeather(): Promise<WeatherResponse> {
+    console.log("2");
     return new Promise((resolve, reject) => {
+        console.log("3");
         navigator.geolocation.getCurrentPosition(async position => {
+            console.log("4");
             const response = await fetch("/api/weather", {
                 headers: {
                     "Content-type": "application/json",

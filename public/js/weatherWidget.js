@@ -1,7 +1,6 @@
 // Make sure getWeather.js is compiled from getWeather.ts and available
-import getWeather from './js/getWeather.js';
+import getWeather from './getWeather.js';
 
-// Simple icon mapping (you can expand this)
 const iconMap = {
   'Clear': 'Sunny.svg',
   'Clouds': 'Cloudy.svg',
@@ -13,6 +12,7 @@ const iconMap = {
 async function updateWeather() {
   try {
     const weather = await getWeather();
+    console.log("1");
     
     // Update the DOM
     document.getElementById('weather-city').textContent = weather.location;
@@ -30,5 +30,7 @@ async function updateWeather() {
   }
 }
 
+updateWeather();
+
 // Initialize when page loads
-document.addEventListener('DOMContentLoaded', updateWeather);
+// document.addEventListener('DOMContentLoaded', updateWeather);
