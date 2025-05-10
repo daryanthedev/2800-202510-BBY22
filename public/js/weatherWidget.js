@@ -12,7 +12,6 @@ const iconMap = {
 async function updateWeather() {
   try {
     const weather = await getWeather();
-    console.log("1");
     
     // Update the DOM
     document.getElementById('weather-city').textContent = weather.location;
