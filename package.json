@@ -8,8 +8,8 @@
   "author": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "rimraf ./dist && concurrently \"tsc --watch -p ./src/ts/tsconfig.json\" \"nodemon\" \"npx @tailwindcss/cli -i ./tailwind/index.css -o ./dist/public/tailwind.css --watch\"",
-    "build": "rimraf ./dist && tsc -p ./src/tsconfig.json && tsc -p ./src/ts/tsconfig.json && npx @tailwindcss/cli -i ./tailwind/index.css -o ./dist/public/tailwind.css --minify",
+    "dev": "rimraf ./dist && concurrently \"tsc --watch -p ./ts/tsconfig.json\" \"nodemon\" \"npx @tailwindcss/cli -i ./tailwind/index.css -o ./dist/public/tailwind.css --watch\"",
+    "build": "rimraf ./dist && tsc -p ./src/tsconfig.json && tsc -p ./ts/tsconfig.json && npx @tailwindcss/cli -i ./tailwind/index.css -o ./dist/public/tailwind.css --minify",
     "start": "node ./dist/src/app.js",
     "format": "prettier --write --ignore-unknown --plugin=prettier-plugin-ejs \"./{src,views,public}/**/*\" && npm run lint:fix",
     "lint": "eslint --cache \"./**/*\" --ignore-pattern \"./{dist,node_modules}/**/*\"",
