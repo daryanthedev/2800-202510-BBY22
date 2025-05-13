@@ -14,24 +14,26 @@
   import getWeather from "/js/getWeather.js";
 
   const iconMap = {
-    'Clear': 'Sunny.svg',
-    'Clouds': 'Cloudy.svg',
-    'Rain': 'Rainy.svg',
-    'Snow': 'Snowy.svg',
-    'Thunderstorm': 'Thunder.svg'
+    Clear: "Sunny.svg",
+    Clouds: "Cloudy.svg",
+    Rain: "Rainy.svg",
+    Snow: "Snowy.svg",
+    Thunderstorm: "Thunder.svg",
   };
 
-  getWeather().then((weather) => {
-    document.getElementById('weather-city').textContent = weather.location;
-    document.getElementById('weather-temp').textContent = `${Math.round(weather.temp)}°C`;
-    document.getElementById('weather-desc').textContent = weather.weather.description;
+  getWeather()
+    .then(weather => {
+      document.getElementById("weather-city").textContent = weather.location;
+      document.getElementById("weather-temp").textContent = `${Math.round(weather.temp)}°C`;
+      document.getElementById("weather-desc").textContent = weather.weather.description;
 
-    const iconName = iconMap[weather.weather.main] ?? 'Cloudy.svg';
-    document.getElementById('weather-icon').src = `/weatherIcons/${iconName}`;
-  }).catch(() => {
-    document.getElementById('weather-city').textContent = "Unavailable";
-    document.getElementById('weather-temp').textContent = "";
-    document.getElementById('weather-desc').textContent = "";
-    document.getElementById('weather-icon').src = `/weatherIcons/Cloudy.svg`;
-  });
+      const iconName = iconMap[weather.weather.main] ?? "Cloudy.svg";
+      document.getElementById("weather-icon").src = `/weatherIcons/${iconName}`;
+    })
+    .catch(() => {
+      document.getElementById("weather-city").textContent = "Unavailable";
+      document.getElementById("weather-temp").textContent = "";
+      document.getElementById("weather-desc").textContent = "";
+      document.getElementById("weather-icon").src = `/weatherIcons/Cloudy.svg`;
+    });
 </script>
