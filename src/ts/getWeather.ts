@@ -7,6 +7,10 @@ interface WeatherResponse {
     };
 }
 
+function capitalize(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function isWeatherResponse(data: unknown): data is WeatherResponse {
     return (
         typeof data === "object" &&
@@ -40,10 +44,13 @@ function getWeather(): Promise<WeatherResponse> {
             });
             const json = await response.json() as unknown;
             if(isWeatherResponse(json)) {
+                json.weather.description = capitalize(json.weather.description);
                 resolve(json);
             } else {
                 reject(new Error("Invalid response from server when getting weather data."));
             }
+        }, err => {
+            reject(new Error(err.message));
         });
     });
 }
