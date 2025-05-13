@@ -6,4 +6,5 @@ export default async (app: Express, database: Db) => {
     (await import("./register.js")).default(app);
     (await import("./login.js")).default(app);
     (await import("./logout.js")).default(app);
+    (await import("./about.js")).default(app);
 };

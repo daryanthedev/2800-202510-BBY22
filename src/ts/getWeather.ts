@@ -31,27 +31,30 @@ function isWeatherResponse(data: unknown): data is WeatherResponse {
 
 function getWeather(): Promise<WeatherResponse> {
     return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(async position => {
-            const response = await fetch("/api/weather", {
-                headers: {
-                    "Content-type": "application/json",
-                },
-                method: "POST",
-                body: JSON.stringify({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                }),
-            });
-            const json = await response.json() as unknown;
-            if(isWeatherResponse(json)) {
-                json.weather.description = capitalize(json.weather.description);
-                resolve(json);
-            } else {
-                reject(new Error("Invalid response from server when getting weather data."));
-            }
-        }, err => {
-            reject(new Error(err.message));
-        });
+        navigator.geolocation.getCurrentPosition(
+            async position => {
+                const response = await fetch("/api/weather", {
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                    }),
+                });
+                const json = (await response.json()) as unknown;
+                if (isWeatherResponse(json)) {
+                    json.weather.description = capitalize(json.weather.description);
+                    resolve(json);
+                } else {
+                    reject(new Error("Invalid response from server when getting weather data."));
+                }
+            },
+            err => {
+                reject(new Error(err.message));
+            },
+        );
     });
 }
 
