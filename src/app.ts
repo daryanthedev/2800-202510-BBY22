@@ -3,6 +3,7 @@ import "dotenv/config"; // Load .env file
 
 import sessionMiddleware from "./middleware/session.js";
 import database from "./utils/databaseConnection.js";
+import loadRoutes from "./utils/loadRoutes.js";
 
 if (process.env.MONGODB_DBNAME === undefined) {
     throw new Error("MONGODB_DBNAME environment variable not defined.");
@@ -38,8 +39,7 @@ APP.use(sessionMiddleware());
 // Use the Typescript that was compiled to JS in the dist folder
 APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
 
-await (await import("./api/index.js")).default(APP, MONGODB_DATABASE);
-await (await import("./routes/index.js")).default(APP, MONGODB_DATABASE);
+await Promise.all([loadRoutes("./src/api", APP, MONGODB_DATABASE), loadRoutes("./src/routes", APP, MONGODB_DATABASE)]);
 
 // Use static middleware to serve static files from the public folder
 APP.use(express.static(PUBLIC_ROOT));
