@@ -1,5 +1,5 @@
 import { Express, Request, Response } from "express";
-import { isUsersSchema } from "../schema.js";
+import { isUsersSchema } from "../../schema.js";
 import { Db, ObjectId } from "mongodb";
 
 export default (app: Express, database: Db) => {
@@ -27,27 +27,6 @@ export default (app: Express, database: Db) => {
             })
             .catch((err: unknown) => {
                 console.error("Error getting user from database:", err);
-                res.status(500).send("Internal server error.");
-            });
-    });
-    app.post("/api/streak/continue", (req: Request, res: Response) => {
-        database
-            .collection("users")
-            .updateOne(
-                {
-                    _id: new ObjectId(req.session.loggedInUserId),
-                },
-                {
-                    $set: {
-                        lastStreakDate: new Date(),
-                    },
-                },
-            )
-            .then(() => {
-                res.send();
-            })
-            .catch((err: unknown) => {
-                console.error("Error inserting user into database:", err);
                 res.status(500).send("Internal server error.");
             });
     });
