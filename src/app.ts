@@ -37,7 +37,7 @@ APP.use(express.json({ type: "application/json" }));
 APP.use(sessionMiddleware());
 
 // Use the Typescript that was compiled to JS in the dist folder
-APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
+APP.use(express.static(DIST_PUBLIC_ROOT));
 
 await Promise.all([loadRoutes("./src/api", APP, MONGODB_DATABASE), loadRoutes("./src/routes", APP, MONGODB_DATABASE)]);
 
