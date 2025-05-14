@@ -3,182 +3,199 @@
   <head>
     <%- include('partials/header') %>
     <title>Quiet Quest</title>
+    <!-- Add these to your header partial -->
+    <link href="https://fonts.googleapis.com/css2?family=Afacad:wght@100..1000&family=Combo&display=swap" rel="stylesheet">
   </head>
-  <body>
+  <body class="bg-quietquest-green font-afacad">
     <!-- Navbar -->
-    <nav class="navbar">
-      <div class="navbar-parent-container">
+    <nav class="flex w-full bg-quietquest-blue text-quietquest-cream">
+      <div class="w-full flex">
         <!-- QuietQuest Logo -->
-        <a class="navbar-quietquest-logo" href="#top-of-page">
-          <!-- <img src="/images/QuietQuest.jpg" alt="QuietQuest"> -->
-          <b class="logo-text">🌿 QuietQuest</b>
+        <a class="flex items-center" href="#top-of-page">
+          <b class="font-combo text-3xl">🌿 QuietQuest</b>
         </a>
 
         <!-- Hamburger Button (Mobile Only) -->
-        <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+        <button class="md:hidden ml-auto text-2xl" aria-label="Toggle menu">☰</button>
 
         <!-- Left Side: Overview, Features, About Us and Contact -->
-        <div class="nav-links-container">
-          <ul class="navbar-left-side-label-parent-container">
-            <li class="navbar-left-side-label-child-container">
-              <a class="navbar-left-side-labels" href="#overview">Getting Started</a>
+        <div class="hidden md:flex w-full">
+          <ul class="flex flex-row">
+            <li class="px-4 py-2">
+              <a href="#overview">Getting Started</a>
             </li>
-            <li class="navbar-left-side-label-child-container">
-              <a class="navbar-left-side-labels" href="#features">Features</a>
+            <li class="px-4 py-2">
+              <a href="#features">Features</a>
             </li>
-            <li class="navbar-left-side-label-child-container">
-              <a class="navbar-left-side-labels" href="#about">About Us</a>
+            <li class="px-4 py-2">
+              <a href="#about">About Us</a>
             </li>
-            <li class="navbar-left-side-label-child-container">
-              <a class="navbar-left-side-labels" href="#contact">Contact</a>
+            <li class="px-4 py-2">
+              <a href="#contact">Contact</a>
             </li>
           </ul>
           <!-- Right Side: Login / Sign Up -->
-          <div class="navbar-right-side-label-parent-container">
-            <div class="button-container">
-              <a href="/login" class="button">Login / Sign Up</a>
+          <div class="flex w-full justify-end">
+            <div class="inline-block">
+              <a href="/login" class="px-4 py-2 bg-quietquest-gold text-quietquest-dark rounded-md no-underline font-afacad text-base hover:bg-quietquest-dark-gold transition-colors duration-200">Login / Sign Up</a>
             </div>
           </div>
         </div>
       </div>
     </nav>
+
     <!-- Welcome to QuietQuest -->
-    <div class="welcome-message-parent-container">
+    <div class="py-24 mt-48 mb-48 flex flex-col text-center">
       <!-- Welcome Message -->
-      <h1 class="welcome-to-quietquest">Conquer your day, one quest at a time.</h1>
+      <h1 class="font-combo text-4xl">Conquer your day, one quest at a time.</h1>
       <!-- Subheading for Welcome Message -->
-      <h2 class="welcome-message-subheading">Gamify your habits, battle procrastination, and find clarity through daily action.</h2>
+      <h2 class="text-xl mt-4">Gamify your habits, battle procrastination, and find clarity through daily action.</h2>
       <!-- Login / Sign Up -->
-      <div class="button-container">
-        <a href="/login" class="button">Try now!</a>
+      <div class="inline-block mt-6">
+        <a href="/login" class="px-4 py-2 bg-quietquest-gold text-quietquest-dark rounded-md no-underline font-afacad text-base hover:bg-quietquest-dark-gold transition-colors duration-200">Try now!</a>
       </div>
-      <!-- QuietQuest Background Image -->
-      <a href="./images/QuietQuest.jpg" alt="QuietQuest"></a>
     </div>
+
     <!-- Change this later -->
     <!-- Allows User to Scroll to the Top When Clicking the Logo Button -->
     <div id="top-of-page"></div>
+
     <!-- Div Container for Overview Section -->
-    <div class="overview-section-parent-container" id="overview">
+    <div class="py-24 mt-48 mb-48 flex flex-col" id="overview">
       <!-- Overview Title -->
-      <h2 class="overview-section-title">Getting Started</h2>
-      <div class="overview-section-child-container">
+      <h2 class="font-combo text-4xl text-center">Getting Started</h2>
+      <div class="flex justify-evenly text-center">
         <!-- Overview Text and Image 1 -->
-        <h3 class="overview-text">🧭 Step 1: Begin Your Daily Quest</h3>
-        <p class="overview-text">
-          Each day, QuietQuest gives you a personalized task or self-care challenge designed to build healthy habits and mindfulness.
-        </p>
-        <img href="./images/Inspiration1.png" alt="inspiration" />
+        <div class="mb-24">
+          <h3 class="text-2xl">🧭 Step 1: Begin Your Daily Quest</h3>
+          <p>
+            Each day, QuietQuest gives you a personalized task or self-care challenge designed to build healthy habits and mindfulness.
+          </p>
+          <img src="./images/Inspiration1.png" alt="inspiration" />
+        </div>
       </div>
-      <div class="overview-section-child-container">
+      <div class="flex justify-evenly text-center">
         <!-- Overview Text and Image 2 -->
-        <h3 class="overview-text">🐉 Step 2: Face a Monster</h3>
-        <p class="overview-text">
-          Each day, you’ll encounter a themed monster—like Bed-Rot or Interrorgator. Choose how to “fight” based on your real-world action
-          and earn rewards.
-        </p>
-        <img href="./images/Inspiration2.png" alt="inspiration" />
+        <div class="mb-24">
+          <h3 class="text-2xl">🐉 Step 2: Face a Monster</h3>
+          <p>
+            Each day, you'll encounter a themed monster—like Bed-Rot or Interrorgator. Choose how to "fight" based on your real-world action
+            and earn rewards.
+          </p>
+          <img src="./images/Inspiration2.png" alt="inspiration" />
+        </div>
       </div>
-      <div class="overview-section-child-container">
+      <div class="flex justify-evenly text-center">
         <!-- Overview Text and Image 3 -->
-        <h3 class="overview-text">✨ Step 3: Earn Gold & Build Your Streak</h3>
-        <p class="overview-text">
-          Keep your streak alive by logging in daily. Defeating monsters grants gold, which you can use to unlock items, upgrade your
-          profile, and power up your quests.
-        </p>
-        <img href="./images/Inspiration3.png" alt="inspiration" />
+        <div class="mb-24">
+          <h3 class="text-2xl">✨ Step 3: Earn Gold & Build Your Streak</h3>
+          <p>
+            Keep your streak alive by logging in daily. Defeating monsters grants gold, which you can use to unlock items, upgrade your
+            profile, and power up your quests.
+          </p>
+          <img src="./images/Inspiration3.png" alt="inspiration" />
+        </div>
       </div>
     </div>
+
     <!-- Div Container for Features Section -->
-    <div class="features-section-parent-container" id="features">
+    <div class="py-24 mt-48 mb-48 flex flex-col" id="features">
       <!-- Features Title -->
-      <h2 class="features-section-title">Features</h2>
-      <div class="features-section-child-container">
+      <h2 class="font-combo text-4xl text-center">Features</h2>
+      <div class="flex justify-evenly">
         <!-- Features Text and Image 1 -->
-        <h3 class="features-text">🛡️ Personalized Hero Paths</h3>
-        <p class="features-text">
-          Choose your self-help focus—like productivity, mindfulness, or energy—and get tasks and monsters tailored to your path.
-        </p>
-        <img href="./images/Feature1.png" alt="Feature" />
+        <div class="mb-24 text-center">
+          <h3 class="text-2xl">🛡️ Personalized Hero Paths</h3>
+          <p>
+            Choose your self-help focus—like productivity, mindfulness, or energy—and get tasks and monsters tailored to your path.
+          </p>
+          <img src="./images/Feature1.png" alt="Feature" />
+        </div>
       </div>
-      <div class="features-section-child-container">
+      <div class="flex justify-evenly">
         <!-- Features Text and Image 2 -->
-        <h3 class="features-text">👥 Community Quests</h3>
-        <p class="features-text">
-          Team up with friends or others on similar journeys. Join seasonal events to slay bigger monsters and unlock rare items.
-        </p>
-        <img href="./images/Feature2.png" alt="Feature" />
+        <div class="mb-24 text-center">
+          <h3 class="text-2xl">👥 Community Quests</h3>
+          <p>
+            Team up with friends or others on similar journeys. Join seasonal events to slay bigger monsters and unlock rare items.
+          </p>
+          <img src="./images/Feature2.png" alt="Feature" />
+        </div>
       </div>
-      <div class="features-section-child-container">
+      <div class="flex justify-evenly">
         <!-- Features Text and Image 3 -->
-        <h3 class="features-text">☁️ Dynamic Weather Widget</h3>
-        <p class="features-text">
-          Stay mindful of your environment with our real-time weather widget. This feature adapts to your location, displaying current
-          conditions and offering gentle suggestions—like cozy tasks for rainy days or movement goals for sunny afternoons.
-        </p>
-        <img href="./images/Feature3.png" alt="Feature" />
-        <%- include('partials/weatherWidget') %>
+        <div class="mb-24 text-center">
+          <h3 class="text-2xl">☁️ Dynamic Weather Widget</h3>
+          <p>
+            Stay mindful of your environment with our real-time weather widget. This feature adapts to your location, displaying current
+            conditions and offering gentle suggestions—like cozy tasks for rainy days or movement goals for sunny afternoons.
+          </p>
+          <img src="./images/Feature3.png" alt="Feature" />
+          <%- include('partials/weatherWidget') %>
+        </div>
       </div>
     </div>
+
     <!-- Div Container for the About Us Page-->
-    <div class="about-us-parent-container" id="about">
+    <div class="py-24 mt-48 mb-48 flex flex-col" id="about">
       <!-- About Us title-->
-      <h2 class="about-us-title">About Us</h2>
+      <h2 class="font-combo text-4xl text-center">About Us</h2>
       <!-- Nick Nepomuceno -->
-      <div class="about-us-child-container">
-        <img class="team-profile-picture" src="./images/nick.jpg" alt="Nick's profile image" />
-        <div class="about-us-child-container2">
-          <h3 class="profile-title">Nick Nepomuceno</h3>
-          <p class="profile-description">Lead Project Manager</p>
+      <div class="flex justify-evenly py-24 text-center">
+        <img class="mb-24" src="./images/nick.jpg" alt="Nick's profile image" />
+        <div class="flex flex-col">
+          <h3 class="text-2xl">Nick Nepomuceno</h3>
+          <p class="font-bold">Lead Project Manager</p>
           <p>Nick is an ambitious CST student with great leadership skills.</p>
         </div>
       </div>
       <!-- Angelo Santos -->
-      <div class="about-us-child-container">
-        <img class="team-profile-picture" src="./images/angelo.jpg" alt="Angelo's profile image" />
-        <div class="about-us-child-container2">
-          <h3 class="profile-title">Angelo Santos</h3>
-          <p class="profile-description">Project Co-Manager & Co-Designer</p>
+      <div class="flex justify-evenly py-24 text-center">
+        <img class="mb-24" src="./images/angelo.jpg" alt="Angelo's profile image" />
+        <div class="flex flex-col">
+          <h3 class="text-2xl">Angelo Santos</h3>
+          <p class="font-bold">Project Co-Manager & Co-Designer</p>
           <p>Angelo is perceptive CST student with great leadership skills and a good eye for design.</p>
         </div>
       </div>
       <!-- Andrew Hwang -->
-      <div class="about-us-child-container">
-        <img class="team-profile-picture" src="./images/andrew.jpg" alt="Andrew's profile image" />
-        <div class="about-us-child-container2">
-          <h3 class="profile-title">Andrew Hwang</h3>
-          <p class="profile-description">Lead Designer</p>
+      <div class="flex justify-evenly py-24 text-center">
+        <img class="mb-24" src="./images/andrew.jpg" alt="Andrew's profile image" />
+        <div class="flex flex-col">
+          <h3 class="text-2xl">Andrew Hwang</h3>
+          <p class="font-bold">Lead Designer</p>
           <p>Andrew is a create CST student who thinks outside the box when crafting user-focused solutions.</p>
         </div>
       </div>
       <!-- Daryan Worya -->
-      <div class="about-us-child-container">
-        <img class="team-profile-picture" src="./images/daryan.jpg" alt="Daryan's profile image" />
-        <div class="about-us-child-container2">
-          <h3 class="profile-title">Daryan Worya</h3>
-          <p class="profile-description">Co-Designer & Co-Backend Developer</p>
+      <div class="flex justify-evenly py-24 text-center">
+        <img class="mb-24" src="./images/daryan.jpg" alt="Daryan's profile image" />
+        <div class="flex flex-col">
+          <h3 class="text-2xl">Daryan Worya</h3>
+          <p class="font-bold">Co-Designer & Co-Backend Developer</p>
           <p>Daryan is an innovative CST student with a create eye for design.</p>
         </div>
       </div>
       <!-- Giorgio Donatelli -->
-      <div class="about-us-child-container">
-        <img class="team-profile-picture" src="./images/giorgio.jpg" alt="Giorgio's profile image" />
-        <div class="about-us-child-container2">
-          <h3 class="profile-title">Giorgio Donatelli</h3>
-          <p class="profile-description">Lead Backend Developer</p>
+      <div class="flex justify-evenly py-24 text-center">
+        <img class="mb-24" src="./images/giorgio.jpg" alt="Giorgio's profile image" />
+        <div class="flex flex-col">
+          <h3 class="text-2xl">Giorgio Donatelli</h3>
+          <p class="font-bold">Lead Backend Developer</p>
           <p>Giorgio is an knowledgable CST student with great knowledge of backend code.</p>
         </div>
       </div>
     </div>
-    <div class="contact-page-parent-container" id="contact">
-      <div class="contact-page-child-container">
-        <a class="footer-text" href="">Report a bug</a>
-        <a class="footer-text" href="">Feedback</a>
-        <a class="footer-text" href="">Join our Discord/Community</a>
-        <div class="contact-page-child-container2">
-          <button type="button" class="social-media-logo">Continue with Google</button>
-          <button type="button" class="social-media-logo">Continue with Facebook</button>
-          <button type="button" class="social-media-logo">Continue with Twitter</button>
+
+    <div class="py-24 w-full flex" id="contact">
+      <div class="flex justify-end w-full">
+        <a class="mr-4" href="">Report a bug</a>
+        <a class="mr-4" href="">Feedback</a>
+        <a class="mr-4" href="">Join our Discord/Community</a>
+        <div class="flex flex-row">
+          <button type="button" class="mr-2">Continue with Google</button>
+          <button type="button" class="mr-2">Continue with Facebook</button>
+          <button type="button">Continue with Twitter</button>
         </div>
       </div>
     </div>

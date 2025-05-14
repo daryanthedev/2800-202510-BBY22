@@ -1,0 +1,69 @@
+/* custom.css */
+
+/* Fonts */
+.font-afacad {
+    font-family: 'Afacad', sans-serif;
+  }
+  .font-combo {
+    font-family: 'Combo', cursive;
+  }
+  .font-thin-afacad {
+    font-family: 'Afacad', sans-serif;
+    font-weight: 100;
+  }
+  
+  /* Text Colors */
+  .text-quietquest-green {
+    color: #bcda94;
+  }
+  .text-quietquest-blue {
+    color: #426f8a;
+  }
+  .text-quietquest-gold {
+    color: #ecb779;
+  }
+  .text-quietquest-dark-gold {
+    color: #d5a55e;
+  }
+  .text-quietquest-cream {
+    color: #f7f1e6;
+  }
+  .text-quietquest-dark {
+    color: #102128;
+  }
+  
+  /* Background Colors */
+  .bg-quietquest-green {
+    background-color: #bcda94;
+  }
+  .bg-quietquest-blue {
+    background-color: #426f8a;
+  }
+  .bg-quietquest-gold {
+    background-color: #ecb779;
+  }
+  .bg-quietquest-dark-gold {
+    background-color: #d5a55e;
+  }
+  .bg-quietquest-cream {
+    background-color: #f7f1e6;
+  }
+  .bg-quietquest-dark {
+    background-color: #102128;
+  }
+  
+  /* Border Colors */
+  .border-quietquest-green {
+    border-color: #bcda94;
+  }
+  .border-quietquest-blue {
+    border-color: #426f8a;
+  }
+  
+  /* Shadows & Transitions */
+  .text-shadow-gold {
+    text-shadow: 1px 1px 2px #ecb779;
+  }
+  .transition-quietquest {
+    transition: all 0.3s ease-in-out;
+  }
