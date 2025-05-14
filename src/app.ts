@@ -15,6 +15,7 @@ declare module "express-session" {
     interface SessionData {
         views: number;
         loggedInUserId: string;
+        monsterHealth: number;
     }
 }
 

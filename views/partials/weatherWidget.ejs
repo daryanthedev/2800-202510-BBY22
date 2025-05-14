@@ -1,41 +1,42 @@
-=<div class="flex justify-center items-center gap-4 p-4 rounded-xl bg-quietquest-blue text-white w-fit">
-  <div class="flex flex-row items-center justify-center">
-    <div class="weather-icon">
-      <img id="weather-icon" class="w-12 h-12" src="/weatherIcons/Cloudy.svg" alt="Weather Icon" />
+=
+<div class="flex justify-center items-center gap-4 p-4 rounded-xl bg-quietquest-blue text-white w-fit">
+    <div class="flex flex-row items-center justify-center">
+        <div class="weather-icon">
+            <img id="weather-icon" class="w-12 h-12" src="/weatherIcons/Cloudy.svg" alt="Weather Icon" />
+        </div>
+        <div class="flex flex-col ml-3">
+            <div id="weather-city" class="font-bold">Vancouver</div>
+            <div id="weather-temp" class="text-2xl font-bold my-1">22°C</div>
+            <div id="weather-desc" class="text-sm opacity-90 capitalize"></div>
+        </div>
     </div>
-    <div class="flex flex-col ml-3">
-      <div id="weather-city" class="font-bold">Vancouver</div>
-      <div id="weather-temp" class="text-2xl font-bold my-1">22°C</div>
-      <div id="weather-desc" class="text-sm opacity-90 capitalize"></div>
-    </div>
-  </div>
 </div>
-  <!-- I USED AI TO CHANGE styles.css TO TAILWIND exactly the same layout -->
+<!-- I USED AI TO CHANGE styles.css TO TAILWIND exactly the same layout -->
 
 <script type="module">
-  import getWeather from "/js/getWeather.js";
+    import getWeather from "/js/getWeather.js";
 
-  const iconMap = {
-    Clear: "Sunny.svg",
-    Clouds: "Cloudy.svg",
-    Rain: "Rainy.svg",
-    Snow: "Snowy.svg",
-    Thunderstorm: "Thunder.svg",
-  };
+    const iconMap = {
+        Clear: "Sunny.svg",
+        Clouds: "Cloudy.svg",
+        Rain: "Rainy.svg",
+        Snow: "Snowy.svg",
+        Thunderstorm: "Thunder.svg",
+    };
 
-  getWeather()
-    .then(weather => {
-      document.getElementById("weather-city").textContent = weather.location;
-      document.getElementById("weather-temp").textContent = `${Math.round(weather.temp)}°C`;
-      document.getElementById("weather-desc").textContent = weather.weather.description;
+    getWeather()
+        .then(weather => {
+            document.getElementById("weather-city").textContent = weather.location;
+            document.getElementById("weather-temp").textContent = `${Math.round(weather.temp)}°C`;
+            document.getElementById("weather-desc").textContent = weather.weather.description;
 
-      const iconName = iconMap[weather.weather.main] ?? "Cloudy.svg";
-      document.getElementById("weather-icon").src = `/weatherIcons/${iconName}`;
-    })
-    .catch(() => {
-      document.getElementById("weather-city").textContent = "Unavailable";
-      document.getElementById("weather-temp").textContent = "";
-      document.getElementById("weather-desc").textContent = "";
-      document.getElementById("weather-icon").src = `/weatherIcons/Cloudy.svg`;
-    });
+            const iconName = iconMap[weather.weather.main] ?? "Cloudy.svg";
+            document.getElementById("weather-icon").src = `/weatherIcons/${iconName}`;
+        })
+        .catch(() => {
+            document.getElementById("weather-city").textContent = "Unavailable";
+            document.getElementById("weather-temp").textContent = "";
+            document.getElementById("weather-desc").textContent = "";
+            document.getElementById("weather-icon").src = `/weatherIcons/Cloudy.svg`;
+        });
 </script>

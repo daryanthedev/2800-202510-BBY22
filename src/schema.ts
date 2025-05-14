@@ -12,6 +12,9 @@ interface UsersSchema {
     email: Email;
     passwordHash: string;
     lastStreakDate: Date | null;
+    points: number;
+    monsterHealth: number;
+    monsterHealthModifier: number;
 }
 
 function isUsername(data: string): data is Username {
@@ -49,6 +52,9 @@ function isUsersSchema(data: unknown): data is UsersSchema {
         typeof obj.email === "string" &&
         typeof obj.passwordHash === "string" &&
         typeof obj.lastStreakDate === "object" &&
+        typeof obj.monsterHealth === "number" &&
+        typeof obj.points === "number" &&
+        typeof obj.monsterHealthModifier === "number" &&
         (obj.lastStreakDate instanceof Date || obj.lastStreakDate === null) &&
         isUsername(obj.username) &&
         isEmail(obj.email)

@@ -44,6 +44,9 @@ export default (app: Express, database: Db) => {
                         email,
                         passwordHash,
                         lastStreakDate: null,
+                        monsterHealth: 100,
+                        points: 0,
+                        monsterHealthModifier: 0,
                     } satisfies UsersSchema)
                     .then(() => {
                         res.send();
