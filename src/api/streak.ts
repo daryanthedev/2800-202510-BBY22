@@ -31,6 +31,10 @@ export default (app: Express, database: Db) => {
             });
     });
     app.post("/api/streak/continue", (req: Request, res: Response) => {
+        if (req.session.loggedInUserId === undefined) {
+            res.status(401).send("Please authenticate first.");
+            return;
+        }
         database
             .collection("users")
             .updateOne(
