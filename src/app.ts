@@ -1,7 +1,7 @@
 import express, { Response } from "express";
 import "dotenv/config"; // Load .env file
 
-import sessionMiddleware from "./utils/sessionMiddleware.js";
+import sessionMiddleware from "./middleware/session.js";
 import database from "./utils/databaseConnection.js";
 
 if (process.env.MONGODB_DBNAME === undefined) {
