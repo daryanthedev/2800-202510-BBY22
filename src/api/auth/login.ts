@@ -37,33 +37,32 @@ function isLoginData(data: unknown): data is LoginData {
  */
 export default (app: Express, database: Db) => {
     app.post("/api/auth/login", async (req: Request, res: Response) => {
-        if (isLoginData(req.body)) {
-            const { usernameEmail, password } = req.body;
-            if (isEmail(usernameEmail)) {
-                const user = await database.collection("users").findOne({
-                    email: usernameEmail,
-                });
-                if (isUsersSchema(user)) {
-                    if (await hash.compare(password, user.passwordHash)) {
-                        req.session.loggedInUserId = user._id.toHexString();
-                        res.send();
-                    }
-                    return;
-                }
-            }
+        if (!isLoginData(req.body)) {
+            throw new StatusError(400, "Invalid data");
+        }
+        const { usernameEmail, password } = req.body;
+        if (isEmail(usernameEmail)) {
             const user = await database.collection("users").findOne({
-                username: usernameEmail,
+                email: usernameEmail,
             });
             if (isUsersSchema(user)) {
                 if (await hash.compare(password, user.passwordHash)) {
                     req.session.loggedInUserId = user._id.toHexString();
                     res.send();
-                    return;
                 }
+                return;
             }
-            throw new StatusError(401, "Incorrect login data");
-        } else {
-            throw new StatusError(400, "Invalid data");
         }
+        const user = await database.collection("users").findOne({
+            username: usernameEmail,
+        });
+        if (isUsersSchema(user)) {
+            if (await hash.compare(password, user.passwordHash)) {
+                req.session.loggedInUserId = user._id.toHexString();
+                res.send();
+                return;
+            }
+        }
+        throw new StatusError(401, "Incorrect login data");
     });
 };

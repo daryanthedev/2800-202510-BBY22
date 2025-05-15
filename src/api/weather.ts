@@ -100,29 +100,28 @@ export default (app: Express) => {
         if (!WEATHER_API_ENABLED) {
             throw new StatusError(503, "Weather API is disabled");
         }
-
-        if (isLocationData(req.body)) {
-            req.body.units ??= "metric";
-            const { longitude, latitude, units } = req.body;
-            const WEATHER_RESPONSE = await fetch(
-                `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${latitude.toString()}&lon=${longitude.toString()}&appid=${OPEN_WEATHER_MAP_API_KEY}`,
-            );
-            const weatherData = await WEATHER_RESPONSE.json() as unknown;
-            if (isWeatherData(weatherData)) {
-                const response: WeatherResponse = {
-                    location: weatherData.name,
-                    temp: weatherData.main.temp,
-                    weather: {
-                        main: weatherData.weather[0].main,
-                        description: weatherData.weather[0].description,
-                    },
-                };
-                res.json(JSON.stringify(response));
-            } else {
-                throw new Error("Unexpected response from OpenWeatherMap");
-            }
-        } else {
+        if (!isLocationData(req.body)) {
             throw new StatusError(400, "Invalid data");
+        }
+
+        req.body.units ??= "metric";
+        const { longitude, latitude, units } = req.body;
+        const WEATHER_RESPONSE = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${latitude.toString()}&lon=${longitude.toString()}&appid=${OPEN_WEATHER_MAP_API_KEY}`,
+        );
+        const weatherData = (await WEATHER_RESPONSE.json()) as unknown;
+        if (isWeatherData(weatherData)) {
+            const response: WeatherResponse = {
+                location: weatherData.name,
+                temp: weatherData.main.temp,
+                weather: {
+                    main: weatherData.weather[0].main,
+                    description: weatherData.weather[0].description,
+                },
+            };
+            res.json(JSON.stringify(response));
+        } else {
+            throw new Error("Unexpected response from OpenWeatherMap");
         }
     });
 };

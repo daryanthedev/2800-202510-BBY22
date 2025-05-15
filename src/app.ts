@@ -55,13 +55,13 @@ APP.use(() => {
 // Handle errors
 APP.use((err: Error | StatusError, _req: unknown, res: Response, _next: unknown) => {
     let sErr: StatusError;
-    if(err instanceof StatusError) {
+    if (err instanceof StatusError) {
         sErr = err;
     } else {
         sErr = new StatusError(500, "An unexpected error occurred", true);
         console.error(err);
     }
-    if(sErr.html) {
+    if (sErr.html) {
         res.status(sErr.status).render("error", {
             errorCode: sErr.status,
             errorName: sErr.name,
