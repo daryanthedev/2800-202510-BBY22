@@ -109,7 +109,7 @@ export default (app: Express) => {
         const WEATHER_RESPONSE = await fetch(
             `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${latitude.toString()}&lon=${longitude.toString()}&appid=${OPEN_WEATHER_MAP_API_KEY}`,
         );
-        const weatherData = await WEATHER_RESPONSE.json() as unknown;
+        const weatherData = (await WEATHER_RESPONSE.json()) as unknown;
         if (isWeatherData(weatherData)) {
             const response: WeatherResponse = {
                 location: weatherData.name,

@@ -14,11 +14,9 @@ export default (app: Express, database: Db) => {
             throw new StatusError(401, "Please authenticate first");
         }
 
-        const user = await database
-            .collection("users")
-            .findOne({
-                _id: new ObjectId(req.session.loggedInUserId),
-            });
+        const user = await database.collection("users").findOne({
+            _id: new ObjectId(req.session.loggedInUserId),
+        });
 
         if (!isUsersSchema(user)) {
             throw new Error("User from database does not match expected schema");

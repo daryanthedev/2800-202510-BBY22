@@ -23,11 +23,11 @@ class StatusError extends Error {
         this.status = status;
         this.html = html ?? false;
 
-        if(Object.keys(errorNames).includes(status.toString())) {
+        if (Object.keys(errorNames).includes(status.toString())) {
             this.name = errorNames[status as keyof typeof errorNames];
         } else {
             this.name = "Unknown Error";
-        };
+        }
     }
 }
 

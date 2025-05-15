@@ -56,18 +56,16 @@ export default (app: Express, database: Db) => {
         const { username, email, password } = req.body;
         if (await emailNotUsed(email)) {
             const passwordHash = await hash.hash(password);
-            await database
-                .collection("users")
-                .insertOne({
-                    username,
-                    email,
-                    passwordHash,
-                    lastStreakDate: null,
-                    enemyHealth: 100,
-                    points: 0,
-                    enemyHealthModifier: 0,
-                    inventory: [],
-                } satisfies UsersSchema);
+            await database.collection("users").insertOne({
+                username,
+                email,
+                passwordHash,
+                lastStreakDate: null,
+                enemyHealth: 100,
+                points: 0,
+                enemyHealthModifier: 0,
+                inventory: [],
+            } satisfies UsersSchema);
             res.send();
         } else {
             throw new StatusError(400, "Email already in use");

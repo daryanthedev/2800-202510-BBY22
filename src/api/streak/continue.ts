@@ -13,18 +13,16 @@ export default (app: Express, database: Db) => {
             throw new StatusError(401, "Please authenticate first");
         }
 
-        await database
-            .collection("users")
-            .updateOne(
-                {
-                    _id: new ObjectId(req.session.loggedInUserId),
+        await database.collection("users").updateOne(
+            {
+                _id: new ObjectId(req.session.loggedInUserId),
+            },
+            {
+                $set: {
+                    lastStreakDate: new Date(),
                 },
-                {
-                    $set: {
-                        lastStreakDate: new Date(),
-                    },
-                },
-            );
+            },
+        );
         res.send();
     });
 };
