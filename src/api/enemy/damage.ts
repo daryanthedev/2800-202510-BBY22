@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
-import { takeDamage } from "../../utils/monsterUtils.js";
+import { takeDamage } from "../../utils/enemyUtils.js";
 
 /**
  * Registers the /api/enemy/damage endpoint to provide the ability to damage the enemy.
