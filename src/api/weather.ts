@@ -4,6 +4,7 @@ if (process.env.OPEN_WEATHER_MAP_API_KEY === undefined) {
     throw new Error("OPEN_WEATHER_MAP_API_KEY environment variable not defined.");
 }
 const OPEN_WEATHER_MAP_API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
+const WEATHER_API_ENABLED = process.env.WEATHER_API_ENABLED === "true";
 
 // Data required to request weather information.
 interface LocationData {
@@ -95,6 +96,11 @@ function isWeatherData(data: unknown): data is WeatherData {
  */
 export default (app: Express) => {
     app.post("/api/weather", async (req: Request, res: Response) => {
+        if (!WEATHER_API_ENABLED) {
+            res.status(503).send("Weather API is disabled.");
+            return;
+        }
+
         if (isLocationData(req.body)) {
             req.body.units ??= "metric";
             const { longitude, latitude, units } = req.body;
