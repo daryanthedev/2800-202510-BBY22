@@ -20,14 +20,13 @@ export default (app: Express, database: Db) => {
                 _id: new ObjectId(req.session.loggedInUserId),
             });
 
-        if (isUsersSchema(user)) {
-            res.json(
-                JSON.stringify({
-                    lastStreakDate: user.lastStreakDate,
-                }),
-            );
-        } else {
+        if (!isUsersSchema(user)) {
             throw new Error("User from database does not match expected schema");
         }
+        res.json(
+            JSON.stringify({
+                lastStreakDate: user.lastStreakDate,
+            }),
+        );
     });
 };

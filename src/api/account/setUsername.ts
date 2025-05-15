@@ -33,23 +33,23 @@ export default (app: Express, database: Db) => {
         if (req.session.loggedInUserId === undefined) {
             throw new StatusError(401, "Please authenticate first");
         }
-        if (isSetUsernameData(req.body)) {
-            const { username } = req.body;
-            await database
-                .collection("users")
-                .updateOne(
-                    {
-                        _id: new ObjectId(req.session.loggedInUserId),
-                    },
-                    {
-                        $set: {
-                            username,
-                        },
-                    },
-                );
-            res.send();
-        } else {
+        if (!isSetUsernameData(req.body)) {
             throw new StatusError(400, "Invalid data");
         }
+
+        const { username } = req.body;
+        await database
+            .collection("users")
+            .updateOne(
+                {
+                    _id: new ObjectId(req.session.loggedInUserId),
+                },
+                {
+                    $set: {
+                        username,
+                    },
+                },
+            );
+        res.send();
     });
 };
