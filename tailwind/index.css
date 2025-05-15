@@ -1,3 +1,28 @@
 /* Compiles to /tailwind.css on the website */
 
 @import "tailwindcss";
+
+
+@theme {
+    /* Colors */
+    --color-quietquest-green: #bcda94;
+    --color-quietquest-blue: #426f8a;
+    --color-quietquest-gold: #ecb779;
+    --color-quietquest-dark-gold: #d5a55e;
+    --color-quietquest-cream: #f7f1e6;
+    --color-quietquest-dark: #102128;
+  
+    /* Fonts */
+    --font-afacad: "Afacad", sans-serif;
+    --font-combo: "Combo", cursive;
+  
+    /* Font weights */
+    --font-weight-thin-afacad: 100;
+  
+    /* Shadows */
+    --shadow-gold: 1px 1px 2px #ecb779;
+  
+    /* Transitions */
+    --ease-quietquest: ease-in-out;
+    --animate-quietquest: all;
+  }

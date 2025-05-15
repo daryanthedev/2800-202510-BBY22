@@ -1,71 +1,23 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-  <%- include('partials/header') %>
-
-    <title>QuietQuest — Register</title>
-    <!-- Google Fonts link -->
-    <link href="https://fonts.googleapis.com/css2?family=Afacad:wght@100..1000&family=Combo&display=swap"
-      rel="stylesheet" />
-</head>
-
-<body class="bg-quietquest-gold font-afacad flex flex-col items-center justify-center min-h-screen px-4">
-  <!-- Logo and Heading -->
-  <div class="text-center mb-8">
-    <img src="/images/QuietQuest.jpg" alt="QuietQuest logo" class="mx-auto w-16 h-16 mb-2" />
-    <h1 class="font-combo text-3xl text-quietquest-blue">QuietQuest</h1>
-    <p class="text-quietquest-dark mt-1">Create your account</p>
-  </div>
-
-  <!-- Register Form -->
-  <form id="registerForm" class="w-full max-w-sm space-y-5">
-    <div>
-      <label for="username" class="block text-sm font-medium text-quietquest-dark mb-1">
-        Username
-      </label>
-      <input id="username" name="username" type="text" placeholder="Your username" class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-quietquest-green text-quietquest-dark
-                 focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition" />
-    </div>
-    <div>
-      <label for="email" class="block text-sm font-medium text-quietquest-dark mb-1">
-        Email address
-      </label>
-      <input id="email" name="email" type="email" placeholder="you@example.com" class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-quietquest-green text-quietquest-dark
-                 focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition" />
-    </div>
-    <div>
-      <label for="password" class="block text-sm font-medium text-quietquest-dark mb-1">
-        Password
-      </label>
-      <input id="password" name="password" type="password" placeholder="••••••••" class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-quietquest-green text-quietquest-dark
-                 focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition" />
-    </div>
-
-    <button type="submit" class="cursor-pointer w-full py-3 rounded-full bg-quietquest-green font-semibold transition">
-      Register
-    </button>
-
-
-    <!-- OR Divider -->
-    <div class="flex items-center my-6 w-full max-w-sm">
-      <hr class="flex-grow border-quietquest-dark" />
-      <span class="mx-3 text-quietquest-dark font-medium">OR</span>
-      <hr class="flex-grow border-quietquest-dark" />
-    </div>
-
-    <!-- Back to Login -->
-    <a href="/login" class="cursor-pointer w-full max-w-sm block py-3 rounded-full bg-quietquest-cream
-         hover:bg-[#ECE5D6] text-quietquest-blue font-medium text-center transition-colors">
-      Back to Login
-    </a>
-
-
-    <!-- initialize formSend -->
-    <script type="module">
-      import formSend from "/js/formSend.js";
-      formSend("/api/register", document.getElementById("registerForm"), "/login");
-    </script>
-</body>
-
+    <head>
+        <%- include('partials/header') %>
+        <title>Register</title>
+    </head>
+    <body>
+        <a href="/">Back</a>
+        <br />
+        Register
+        <form id="registerForm">
+            <input name="username" type="text" placeholder="Username" />
+            <input name="email" type="email" placeholder="Email" />
+            <input name="password" type="password" placeholder="Password" />
+            <button href="/login">Go Back</button>
+            <button>Register</button>
+        </form>
+        <script type="module">
+            import formSend from "/js/formSend.js";
+            formSend("/api/auth/register", document.getElementById("registerForm"), "/login");
+        </script>
+    </body>
 </html>

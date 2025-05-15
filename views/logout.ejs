@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <%- include('partials/header') %>
-    <title>Logout</title>
-  </head>
-  <body>
-    <a href="/">Back</a>
-    <br />
-    Logout
-    <form id="logoutForm">
-      <button>Submit</button>
-    </form>
-    <script type="module">
-      import formSend from "/js/formSend.js";
-      formSend("/api/logout", document.getElementById("logoutForm"), "/");
-    </script>
-  </body>
+    <head>
+        <%- include('partials/header') %>
+        <title>Logout</title>
+    </head>
+    <body>
+        <a href="/">Back</a>
+        <br />
+        Logout
+        <form id="logoutForm">
+            <button>Submit</button>
+        </form>
+        <script type="module">
+            import formSend from "/js/formSend.js";
+            formSend("/api/auth/logout", document.getElementById("logoutForm"), "/");
+        </script>
+    </body>
 </html>

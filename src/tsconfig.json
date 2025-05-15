@@ -1,12 +1,12 @@
 {
-  "compilerOptions": {
-    "allowImportingTsExtensions": false,
-    "noEmit": false,
-    "outDir": "../dist/src",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext"
-  },
-  "include": ["./**/*.ts", "./**/*.d.ts"],
-  "exclude": ["./ts/**/*"],
-  "extends": "../tsconfig.base.json"
+    "compilerOptions": {
+        "allowImportingTsExtensions": false,
+        "noEmit": false,
+        "outDir": "../dist/src",
+        "module": "NodeNext",
+        "moduleResolution": "nodenext"
+    },
+    "include": ["./**/*.ts", "./**/*.d.ts"],
+    "exclude": ["./ts/**/*"],
+    "extends": "../tsconfig.base.json"
 }
