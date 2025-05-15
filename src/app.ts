@@ -48,7 +48,10 @@ APP.use(express.static(PUBLIC_ROOT));
 
 // Serve a 404 page for any other routes
 APP.use((_, res: Response) => {
-    res.status(404).send("404");
+    res.status(404).render("error", {
+        errorCode: "404",
+        errorName: "Page not found",
+    });
 });
 
 APP.listen(PORT, () => {
