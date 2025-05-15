@@ -1,28 +1,39 @@
 import { Db, ObjectId } from "mongodb";
 import { Request } from "express";
+import { isUsersSchema } from "../schema.js";
+
+/**
+ * Interface for the enemy's information.
+ */
+interface EnemyInfo {
+    health: number;
+}
 
 /**
  * Retrieves the current enemy's health for the logged-in user from the database.
  *
  * @param {Request} req - The Express request object.
  * @param {Db} database - The MongoDB database instance.
- * @returns {Promise<number | null>} The enemy's health as a number if available, otherwise `null`.
+ * @returns {Promise<EnemyInfo>} The info about the enemy
+ * @throws Will throw an error if the user is not found or if the user's data is not valid.
  */
-async function getEnemy(req: Request, database: Db): Promise<number | null> {
+async function getEnemyInfo(req: Request, database: Db): Promise<EnemyInfo> {
     // Create variable with all of user's data within it
     const user = await database.collection("users").findOne({
         _id: new ObjectId(req.session.loggedInUserId),
     });
-    // Ensure user isn't null
+
+    // Ensure user is valid
     if (user === null) {
-        return null;
+        throw new Error("User not found");
     }
-    // Check if the enemy's health is a number, if so, return the enemy's health
-    if (typeof user.enemyHealth === "number") {
-        return user.enemyHealth;
+    if (!isUsersSchema(user)) {
+        throw new Error("User data is not valid");
     }
-    // If not, return null
-    return null;
+
+    return {
+        health: user.enemyHealth,
+    };
 }
 
 /**
@@ -100,4 +111,5 @@ async function takeDamage(req: Request, database: Db): Promise<undefined | null>
     }
 }
 
-export { getEnemy, takeDamage };
+export { getEnemyInfo, takeDamage };
+export type { EnemyInfo };

@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
-import { getEnemy } from "../../utils/enemyUtils.js";
+import { getEnemyInfo, EnemyInfo } from "../../utils/enemyUtils.js";
 
 /**
  * Registers the /api/enemy/info endpoint to provide the enemy's info.
@@ -13,16 +13,16 @@ export default (app: Express, database: Db) => {
             res.status(401).send("Please authenticate first.");
             return;
         }
-        const monsterHealth = await getEnemy(req, database);
 
-        if(monsterHealth === null) {
-            console.error("Error getting monster health.");
+        let enemyInfo: EnemyInfo;
+        try {
+            enemyInfo = await getEnemyInfo(req, database);
+        } catch (err) {
+            console.error("Error getting monster health:", err);
             res.status(500).send("Internal server error.");
+            return;
         }
-        res.type("application/json").send(
-            JSON.stringify({
-                monsterHealth,
-            }),
-        );
+
+        res.type("application/json").send(JSON.stringify(enemyInfo));
     });
 };
