@@ -10,7 +10,7 @@ if (process.env.MONGODB_DBNAME === undefined) {
 
 const MONGODB_DATABASE = database.db(process.env.MONGODB_DBNAME);
 
-// Add custom types to the session object
+// Use declaration merging to include custom session properties.
 declare module "express-session" {
     interface SessionData {
         views: number;
@@ -38,6 +38,7 @@ APP.use(sessionMiddleware());
 // Use the Typescript that was compiled to JS in the dist folder
 APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
 
+// Register API and route handlers (dynamically)
 await (await import("./api/index.js")).default(APP, MONGODB_DATABASE);
 await (await import("./routes/index.js")).default(APP, MONGODB_DATABASE);
 
