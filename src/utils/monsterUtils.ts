@@ -1,41 +1,52 @@
 import { Db, ObjectId } from "mongodb";
 import { Request } from "express";
 
-/*
-Pulls Monster information from the database
+/**
+ * Retrieves the current monster's health for the logged-in user from the database.
+ *
+ * @param {Request} req - The Express request object.
+ * @param {Db} database - The MongoDB database instance.
+ * @returns {Promise<number | null>} The monster's health as a number if available, otherwise `null`.
  */
-async function getMonster(req: Request, database: Db) {
-    //Create variable with all of user's data within it
+async function getMonster(req: Request, database: Db): Promise<number | null> {
+    // Create variable with all of user's data within it
     const user = await database.collection("users").findOne({
         _id: new ObjectId(req.session.loggedInUserId),
     });
-    //Ensure user isn't null
-
+    // Ensure user isn't null
     if (user === null) {
         return null;
     }
-    //Check if the monster's health is a number, if so, return the monster's health
+    // Check if the monster's health is a number, if so, return the monster's health
     if (typeof user.monsterHealth === "number") {
         return user.monsterHealth;
     }
-    //If not, return null
+    // If not, return null
     return null;
 }
 
-/*
-Adjust monster's HP when damage needs to be taken. If monster dies, create new monster in user's DB
+/**
+ * Applies damage to the user's monster by subtracting the user's points from the monster's health.
+ * If the monster's health drops to zero or below, a new monster is created with increased health,
+ * the health modifier is incremented, and the user's points are reset.
+ * If the monster survives, its health is updated and the user's points are reset.
+ *
+ * @param {Request} req - The Express request object, expected to contain the session with `loggedInUserId`.
+ * @param {Db} database - The MongoDB database instance.
+ * @returns {Promise<undefined | null>} A promise that resolves when the operation is complete, or `null` if the user is not found.
+ * @throws Will throw an error if the user's points, monster health, or monster health modifier are not numbers.
  */
-async function takeDamage(req: Request, database: Db) {
-    //Create variable with all of user's data within it
+async function takeDamage(req: Request, database: Db): Promise<undefined | null> {
+    // Create variable with all of user's data within it
     const user = await database.collection("users").findOne({
         _id: new ObjectId(req.session.loggedInUserId),
     });
-    //Ensure user isn't null
+    // Ensure user isn't null
     if (user === null) {
         return null;
     }
 
-    //Check the type of the data pulled from the DB, if not a number throw error
+    // Check the type of the data pulled from the DB, if not a number throw error
     if (typeof user.points !== "number") {
         throw new Error("points must be a number");
     }
@@ -45,14 +56,14 @@ async function takeDamage(req: Request, database: Db) {
     if (typeof user.monsterHealthModifier !== "number") {
         throw new Error("monster's health modifier must be a number");
     }
-    //Default for monster's hp,
+    // Default for monster's hp,
     const DEFAULT_MONSTER_HP = 100;
-    //pull user's monster health modifier from the DB, if used update it after
+    // Pull user's monster health modifier from the DB, if used update it after
     const MONSTER_HP_MODIFIER: number = user.monsterHealthModifier;
-    //Check if the damage is going to kill the monster, store this in a variable
+    // Check if the damage is going to kill the monster, store this in a variable
     const hpCheck: number = user.monsterHealth - user.points;
 
-    //If the monster is dead, create a new one
+    // If the monster is dead, create a new one
     if (hpCheck <= 0) {
         await database.collection("users").updateOne(
             {
@@ -61,27 +72,27 @@ async function takeDamage(req: Request, database: Db) {
             },
             {
                 $set: {
-                    //Create new monster with modified HP value
+                    // Create new monster with modified HP value
                     monsterHealth: DEFAULT_MONSTER_HP + MONSTER_HP_MODIFIER,
-                    //Adjust the user's modifier after creating new monster
+                    // Adjust the user's modifier after creating new monster
                     monsterHealthModifier: user.monsterHealthModifier + 10,
-                    //Reset the user's points
+                    // Reset the user's points
                     points: 0,
                 },
             },
         );
-    } //If monster not dead, adjust its HP
+    } // If monster not dead, adjust its HP
     else {
         await database.collection("users").updateOne(
             {
-                //Get user ID from session
+                // Get user ID from session
                 _id: new ObjectId(req.session.loggedInUserId),
             },
             {
                 $set: {
-                    //Adjust monsters HP
+                    // Adjust monsters HP
                     monsterHealth: user.monsterHealth - user.points,
-                    //Reset user's points
+                    // Reset user's points
                     points: 0,
                 },
             },
