@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
-import { takeDamage } from "../../utils/enemyUtils.js";
+import { damageEnemy } from "../../utils/enemyUtils.js";
 
 /**
  * Registers the /api/enemy/damage endpoint to provide the ability to damage the enemy.
@@ -14,7 +14,13 @@ export default (app: Express, database: Db) => {
             return;
         }
 
-        await takeDamage(req, database);
+        try {
+            await damageEnemy(req, database);
+        } catch (err) {
+            console.error("Error damaging enemy:", err);
+            res.status(500).send("Internal server error.");
+            return;
+        }
 
         res.send();
     });
