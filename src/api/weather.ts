@@ -5,12 +5,14 @@ if (process.env.OPEN_WEATHER_MAP_API_KEY === undefined) {
 }
 const OPEN_WEATHER_MAP_API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
 
+// Data required to request weather information.
 interface LocationData {
     longitude: number;
     latitude: number;
     units: "metric" | "imperial" | undefined;
 }
 
+// Shape of the weather data returned by the OpenWeatherMap API.
 interface WeatherData {
     name: string;
     main: {
@@ -24,6 +26,7 @@ interface WeatherData {
     ];
 }
 
+// Shape of the weather response sent to the client.
 interface WeatherResponse {
     location: string;
     temp: number;
@@ -33,6 +36,11 @@ interface WeatherResponse {
     };
 }
 
+/**
+ * Type guard to check if an object is LocationData.
+ * @param {unknown} data
+ * @returns {data is LocationData}
+ */
 function isLocationData(data: unknown): data is LocationData {
     if (typeof data !== "object" || data === null) {
         return false;
@@ -46,6 +54,11 @@ function isLocationData(data: unknown): data is LocationData {
     );
 }
 
+/**
+ * Type guard to check if an object is WeatherData.
+ * @param {unknown} data
+ * @returns {data is WeatherData}
+ */
 function isWeatherData(data: unknown): data is WeatherData {
     if (
         typeof data === "object" &&
@@ -76,6 +89,10 @@ function isWeatherData(data: unknown): data is WeatherData {
     }
 }
 
+/**
+ * Registers the /api/weather endpoint to provide weather data to the client.
+ * @param {Express} app - The Express application instance.
+ */
 export default (app: Express) => {
     app.post("/api/weather", async (req: Request, res: Response) => {
         if (isLocationData(req.body)) {

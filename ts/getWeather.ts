@@ -1,3 +1,6 @@
+/**
+ * The shape of the weather response returned from the server.
+ */
 interface WeatherResponse {
     location: string;
     temp: number;
@@ -7,32 +10,44 @@ interface WeatherResponse {
     };
 }
 
+/**
+ * Capitalizes the first letter of a string.
+ * @param {string} string - The string to capitalize.
+ * @returns {string}
+ */
 function capitalize(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+/**
+ * Type guard to check if a value is a WeatherResponse.
+ * @param {unknown} data
+ * @returns {data is WeatherResponse}
+ */
 function isWeatherResponse(data: unknown): data is WeatherResponse {
+    if (typeof data !== "object" || data === null) {
+        return false;
+    }
+    const obj = data as Record<string, unknown>;
+    if (typeof obj.location !== "string" || typeof obj.temp !== "number" || typeof obj.weather !== "object" || obj.weather === null) {
+        return false;
+    }
+    const weather = obj.weather as Record<string, unknown>;
     return (
-        typeof data === "object" &&
-        data !== null &&
-        "location" in data &&
-        "temp" in data &&
-        "weather" in data &&
-        typeof data.location === "string" &&
-        typeof data.temp === "number" &&
-        typeof data.weather === "object" &&
-        data.weather !== null &&
-        "main" in data.weather &&
-        "description" in data.weather &&
-        typeof data.weather.main === "string" &&
-        typeof data.weather.description === "string"
+        typeof weather.main === "string" &&
+        typeof weather.description === "string"
     );
 }
 
+/**
+ * Gets the current weather for the user's location using the browser's geolocation API.
+ * @returns {Promise<WeatherResponse>} Resolves with weather data or rejects on error.
+ */
 function getWeather(): Promise<WeatherResponse> {
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
             async position => {
+                // Send coordinates to the server to get weather data
                 const response = await fetch("/api/weather", {
                     headers: {
                         "Content-type": "application/json",
@@ -45,6 +60,7 @@ function getWeather(): Promise<WeatherResponse> {
                 });
                 const json = (await response.json()) as unknown;
                 if (isWeatherResponse(json)) {
+                    // Capitalize the weather description for display
                     json.weather.description = capitalize(json.weather.description);
                     resolve(json);
                 } else {
