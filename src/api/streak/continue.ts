@@ -1,5 +1,6 @@
 import { Express, Request, Response } from "express";
 import { Db, ObjectId } from "mongodb";
+import StatusError from "../../utils/statusError.js";
 
 /**
  * Registers the /api/streak/continue endpoint to update the user's last streak date to now.
@@ -7,12 +8,11 @@ import { Db, ObjectId } from "mongodb";
  * @param {Db} database - The MongoDB database instance.
  */
 export default (app: Express, database: Db) => {
-    app.post("/api/streak/continue", (req: Request, res: Response) => {
+    app.post("/api/streak/continue", async (req: Request, res: Response) => {
         if (req.session.loggedInUserId === undefined) {
-            res.status(401).send("Please authenticate first.");
-            return;
+            throw new StatusError(401, "Please authenticate first");
         }
-        database
+        await database
             .collection("users")
             .updateOne(
                 {
@@ -23,13 +23,7 @@ export default (app: Express, database: Db) => {
                         lastStreakDate: new Date(),
                     },
                 },
-            )
-            .then(() => {
-                res.send();
-            })
-            .catch((err: unknown) => {
-                console.error("Error inserting user into database:", err);
-                res.status(500).send("Internal server error.");
-            });
+            );
+        res.send();
     });
 };

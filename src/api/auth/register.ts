@@ -3,6 +3,7 @@ import { Db } from "mongodb";
 
 import * as hash from "../../utils/hash.js";
 import { isUsername, isEmail, isPassword, Username, Email, Password, UsersSchema } from "../../schema.js";
+import StatusError from "../../utils/statusError.js";
 
 // Data required for registration: username, email, and password.
 interface RegisterData {
@@ -53,7 +54,7 @@ export default (app: Express, database: Db) => {
             const { username, email, password } = req.body;
             if (await emailNotUsed(email)) {
                 const passwordHash = await hash.hash(password);
-                database
+                await database
                     .collection("users")
                     .insertOne({
                         username,
@@ -64,19 +65,13 @@ export default (app: Express, database: Db) => {
                         points: 0,
                         enemyHealthModifier: 0,
                         inventory: [],
-                    } satisfies UsersSchema)
-                    .then(() => {
-                        res.send();
-                    })
-                    .catch((err: unknown) => {
-                        console.error("Error inserting user into database:", err);
-                        res.status(500).send("Internal server error.");
-                    });
+                    } satisfies UsersSchema);
+                res.send();
             } else {
-                res.status(400).send("Email already in use.");
+                throw new StatusError(400, "Email already in use");
             }
         } else {
-            res.status(400).send("Invalid data.");
+            throw new StatusError(400, "Invalid data");
         }
     });
 };
