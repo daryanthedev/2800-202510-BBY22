@@ -48,10 +48,10 @@ async function getEnemyInfo(req: Request, database: Db): Promise<EnemyInfo> {
  * @param {Request} req - The Express request object, expected to contain the session with `loggedInUserId`.
  * @param {Db} database - The MongoDB database instance.
  * @param {number} damage - The amount of damage to apply to the enemy.
- * @returns {Promise<undefined>} A promise that resolves when the operation is complete.
+ * @returns {Promise<EnemyInfo>} A promise that resolves to the updated enemy information.
  * @throws Will throw an error if the user's points, enemy health, or enemy health modifier are not numbers.
  */
-async function damageEnemy(req: Request, database: Db, damage: number): Promise<undefined> {
+async function damageEnemy(req: Request, database: Db, damage: number): Promise<EnemyInfo> {
     if (damage <= 0) {
         throw new Error("Damage must be greater than 0");
     }
@@ -114,6 +114,10 @@ async function damageEnemy(req: Request, database: Db, damage: number): Promise<
             },
         );
     }
+
+    return {
+        health: newEnemyHealth,
+    };
 }
 
 export { getEnemyInfo, damageEnemy };

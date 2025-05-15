@@ -39,13 +39,12 @@ export default (app: Express, database: Db) => {
         }
 
         try {
-            await damageEnemy(req, database, req.body.damage);
+            const newEnemyStatus = await damageEnemy(req, database, req.body.damage);
+            res.json(JSON.stringify(newEnemyStatus));
         } catch (err) {
             console.error("Error damaging enemy:", err);
             res.status(500).send("Internal server error.");
             return;
         }
-
-        res.send();
     });
 };
