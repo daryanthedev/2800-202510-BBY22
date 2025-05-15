@@ -1,204 +1,291 @@
 <!doctype html>
 <html lang="en">
-  <!-- I USED AI TO CHANGE styles.css TO TAILWIND exactly the same layout -->
-  <head>
-    <%- include('partials/header') %>
+<!-- I USED AI TO CHANGE styles.css TO TAILWIND exactly the same layout -->
+
+<head>
+  <%- include('partials/header') %>
     <title>Quiet Quest</title>
     <!-- Add these to your header partial -->
-    <link href="https://fonts.googleapis.com/css2?family=Afacad:wght@100..1000&family=Combo&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-quietquest-green font-afacad">
-    <!-- Navbar -->
-    <nav class="flex w-full bg-quietquest-blue text-quietquest-cream">
-      <div class="w-full flex">
-        <!-- QuietQuest Logo -->
-        <a class="flex items-center" href="#top-of-page">
-          <b class="font-combo text-3xl">🌿 QuietQuest</b>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad:wght@100..1000&family=Combo&display=swap"
+      rel="stylesheet">
+</head>
+
+<body class="bg-quietquest-green font-afacad">
+  <!-- Navbar -->
+   <!-- AI fixed the navbar layout issue (there was overlap between the left side and right side of the links) -->
+  <nav class="fixed top-0 z-50 flex w-full bg-quietquest-blue text-quietquest-cream shadow-md py-6" id="navbar">
+    <div class="flex justify-between items-center w-full px-6">
+      <!-- QuietQuest Logo -->
+      <div class="flex items-center">
+        <img src="/quietQuestIcons/Logo Wide.svg" alt="Quiet Quest Logo" class="h-10 w-auto object-contain" />
+      </div>
+
+      <!-- Middle: Nav Links (hidden on mobile) -->
+      <ul class="hidden md:flex flex-row items-center space-x-6">
+        <li>
+          <div class="flex items-center space-x-2">
+            <img class="h-6 w-6 object-contain hidden lg:inline" src="/quietQuestIcons/opened-door-aperture.png"
+              alt="openDoor">
+            <a href="#overview" class="whitespace-nowrap">Getting Started</a>
+          </div>
+        </li>
+        <li>
+          <div class="flex items-center space-x-2">
+            <img class="h-6 w-6 object-contain hidden lg:inline" src="/quietQuestIcons/tool.png" alt="tool">
+            <a href="#features">Features</a>
+          </div>
+        </li>
+        <li>
+          <div class="flex items-center space-x-2">
+            <img class="h-6 w-6 object-contain hidden lg:inline" src="/quietQuestIcons/information.png"
+              alt="information">
+            <a href="#about" class="whitespace-nowrap">About Us</a>
+          </div>
+        </li>
+        <li>
+          <div class="flex items-center space-x-2">
+            <img class="h-6 w-6 object-contain hidden lg:inline" src="/quietQuestIcons/phone.png" alt="phone">
+            <a href="#contact">Contact</a>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Right: Login Button (always visible), Hamburger (mobile only) -->
+      <div class="flex items-center space-x-4">
+        <!-- Mobile Hamburger -->
+        <button id="mobile-menu-button" class="md:hidden text-3xl focus:outline-none" aria-label="Toggle menu"
+          aria-expanded="false">
+          ☰
+        </button>
+
+        <!-- Login Button -->
+        <a href="/login"
+          class="hidden md:inline-block px-4 py-2 bg-quietquest-gold text-quietquest-dark rounded-md no-underline font-afacad text-base hover:bg-quietquest-dark-gold transition-colors duration-200">
+          Login / Sign Up
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden bg-quietquest-blue-darker w-full px-6 py-4 space-y-4">
+      <div class="flex flex-col space-y-6">
+        <!-- Getting Started -->
+        <a href="#overview"
+          class="flex items-center space-x-2 text-lg hover:bg-quietquest-blue/30 px-2 py-1 rounded transition-colors">
+          <img class="h-6 w-6 object-contain" src="/quietQuestIcons/opened-door-aperture.png" alt="openDoor">
+          <span>Getting Started</span>
         </a>
 
-        <!-- Hamburger Button (Mobile Only) -->
-        <button class="md:hidden ml-auto text-2xl" aria-label="Toggle menu">☰</button>
+        <!-- Features -->
+        <a href="#features"
+          class="flex items-center space-x-2 text-lg hover:bg-quietquest-blue/30 px-2 py-1 rounded transition-colors">
+          <img class="h-6 w-6 object-contain" src="/quietQuestIcons/tool.png" alt="tool">
+          <span>Features</span>
+        </a>
 
-        <!-- Left Side: Overview, Features, About Us and Contact -->
-        <div class="hidden md:flex w-full">
-          <ul class="flex flex-row">
-            <li class="px-4 py-2">
-              <a href="#overview">Getting Started</a>
-            </li>
-            <li class="px-4 py-2">
-              <a href="#features">Features</a>
-            </li>
-            <li class="px-4 py-2">
-              <a href="#about">About Us</a>
-            </li>
-            <li class="px-4 py-2">
-              <a href="#contact">Contact</a>
-            </li>
-          </ul>
-          <!-- Right Side: Login / Sign Up -->
-          <div class="flex w-full justify-end">
-            <div class="inline-block">
-              <a href="/login" class="px-4 py-2 bg-quietquest-gold text-quietquest-dark rounded-md no-underline font-afacad text-base hover:bg-quietquest-dark-gold transition-colors duration-200">Login / Sign Up</a>
-            </div>
-          </div>
-        </div>
+        <!-- About Us -->
+        <a href="#about"
+          class="flex items-center space-x-2 text-lg hover:bg-quietquest-blue/30 px-2 py-1 rounded transition-colors">
+          <img class="h-6 w-6 object-contain" src="/quietQuestIcons/information.png" alt="information">
+          <span>About Us</span>
+        </a>
+
+        <!-- Contact -->
+        <a href="#contact"
+          class="flex items-center space-x-2 text-lg hover:bg-quietquest-blue/30 px-2 py-1 rounded transition-colors">
+          <img class="h-6 w-6 object-contain" src="/quietQuestIcons/phone.png" alt="phone">
+          <span>Contact</span>
+        </a>
       </div>
-    </nav>
 
-    <!-- Welcome to QuietQuest -->
-    <div class="py-24 mt-48 mb-48 flex flex-col text-center">
-      <!-- Welcome Message -->
-      <h1 class="font-combo text-4xl">Conquer your day, one quest at a time.</h1>
-      <!-- Subheading for Welcome Message -->
-      <h2 class="text-xl mt-4">Gamify your habits, battle procrastination, and find clarity through daily action.</h2>
-      <!-- Login / Sign Up -->
-      <div class="inline-block mt-6">
-        <a href="/login" class="px-4 py-2 bg-quietquest-gold text-quietquest-dark rounded-md no-underline font-afacad text-base hover:bg-quietquest-dark-gold transition-colors duration-200">Try now!</a>
+      <!-- Login/Sign Up Button -->
+      <div class="pt-4 border-t border-quietquest-cream/20 mt-4">
+        <a href="/login"
+          class="block w-full px-4 py-3 text-center bg-quietquest-gold text-quietquest-dark rounded-md no-underline font-afacad text-base hover:bg-quietquest-dark-gold transition-colors duration-200">
+          Login / Sign Up
+        </a>
       </div>
     </div>
 
-    <!-- Change this later -->
-    <!-- Allows User to Scroll to the Top When Clicking the Logo Button -->
-    <div id="top-of-page"></div>
+  </nav>
 
-    <!-- Div Container for Overview Section -->
-    <div class="py-24 mt-48 mb-48 flex flex-col" id="overview">
-      <!-- Overview Title -->
-      <h2 class="font-combo text-4xl text-center">Getting Started</h2>
-      <div class="flex justify-evenly text-center">
-        <!-- Overview Text and Image 1 -->
-        <div class="mb-24">
-          <h3 class="text-2xl">🧭 Step 1: Begin Your Daily Quest</h3>
-          <p>
-            Each day, QuietQuest gives you a personalized task or self-care challenge designed to build healthy habits and mindfulness.
-          </p>
-          <img src="./images/Inspiration1.png" alt="inspiration" />
-        </div>
-      </div>
-      <div class="flex justify-evenly text-center">
-        <!-- Overview Text and Image 2 -->
-        <div class="mb-24">
-          <h3 class="text-2xl">🐉 Step 2: Face a Monster</h3>
-          <p>
-            Each day, you'll encounter a themed monster—like Bed-Rot or Interrorgator. Choose how to "fight" based on your real-world action
-            and earn rewards.
-          </p>
-          <img src="./images/Inspiration2.png" alt="inspiration" />
-        </div>
-      </div>
-      <div class="flex justify-evenly text-center">
-        <!-- Overview Text and Image 3 -->
-        <div class="mb-24">
-          <h3 class="text-2xl">✨ Step 3: Earn Gold & Build Your Streak</h3>
-          <p>
-            Keep your streak alive by logging in daily. Defeating monsters grants gold, which you can use to unlock items, upgrade your
-            profile, and power up your quests.
-          </p>
-          <img src="./images/Inspiration3.png" alt="inspiration" />
-        </div>
+
+  <div id="top-of-page"></div>
+
+  <!-- Welcome to QuietQuest -->
+  <div class="py-24 mt-48 mb-48 flex flex-col text-center">
+    <!-- Welcome Message -->
+    <h1 class="font-combo text-4xl">Conquer your day, one quest at a time.</h1>
+    <!-- Subheading for Welcome Message -->
+    <h2 class="text-xl mt-4">Gamify your habits, battle procrastination, and find clarity through daily action.</h2>
+    <!-- Login / Sign Up -->
+    <div class="inline-block mt-6">
+      <a href="/login"
+        class="px-4 py-2 bg-quietquest-gold text-quietquest-dark rounded-md no-underline font-afacad text-base hover:bg-quietquest-dark-gold transition-colors duration-200">Try
+        now!</a>
+    </div>
+  </div>
+
+  <!-- Div Container for Overview Section -->
+  <div class="py-24 mt-48 mb-48 flex flex-col" id="overview">
+    <!-- Overview Title -->
+    <h2 class="font-combo text-4xl text-center">Getting Started</h2>
+    <div class="flex justify-evenly text-center">
+      <!-- Overview Text and Image 1 -->
+      <div class="mb-24">
+        <h3 class="text-2xl">🧭 Step 1: Begin Your Daily Quest</h3>
+        <p>
+          Each day, QuietQuest gives you a personalized task or self-care challenge designed to build healthy habits and
+          mindfulness.
+        </p>
+        <img src="./images/Inspiration1.png" alt="inspiration" />
       </div>
     </div>
-
-    <!-- Div Container for Features Section -->
-    <div class="py-24 mt-48 mb-48 flex flex-col" id="features">
-      <!-- Features Title -->
-      <h2 class="font-combo text-4xl text-center">Features</h2>
-      <div class="flex justify-evenly">
-        <!-- Features Text and Image 1 -->
-        <div class="mb-24 text-center">
-          <h3 class="text-2xl">🛡️ Personalized Hero Paths</h3>
-          <p>
-            Choose your self-help focus—like productivity, mindfulness, or energy—and get tasks and monsters tailored to your path.
-          </p>
-          <img src="./images/Feature1.png" alt="Feature" />
-        </div>
-      </div>
-      <div class="flex justify-evenly">
-        <!-- Features Text and Image 2 -->
-        <div class="mb-24 text-center">
-          <h3 class="text-2xl">👥 Community Quests</h3>
-          <p>
-            Team up with friends or others on similar journeys. Join seasonal events to slay bigger monsters and unlock rare items.
-          </p>
-          <img src="./images/Feature2.png" alt="Feature" />
-        </div>
-      </div>
-      <div class="flex justify-evenly">
-        <!-- Features Text and Image 3 -->
-        <div class="mb-24 text-center">
-          <h3 class="text-2xl">☁️ Dynamic Weather Widget</h3>
-          <p>
-            Stay mindful of your environment with our real-time weather widget. This feature adapts to your location, displaying current
-            conditions and offering gentle suggestions—like cozy tasks for rainy days or movement goals for sunny afternoons.
-          </p>
-          <img src="./images/Feature3.png" alt="Feature" />
-          <%- include('partials/weatherWidget') %>
-        </div>
+    <div class="flex justify-evenly text-center">
+      <!-- Overview Text and Image 2 -->
+      <div class="mb-24">
+        <h3 class="text-2xl">🐉 Step 2: Face a Monster</h3>
+        <p>
+          Each day, you'll encounter a themed monster—like Bed-Rot or Interrorgator. Choose how to "fight" based on your
+          real-world action
+          and earn rewards.
+        </p>
+        <img src="./images/Inspiration2.png" alt="inspiration" />
       </div>
     </div>
-
-    <!-- Div Container for the About Us Page-->
-    <div class="py-24 mt-48 mb-48 flex flex-col" id="about">
-      <!-- About Us title-->
-      <h2 class="font-combo text-4xl text-center">About Us</h2>
-      <!-- Nick Nepomuceno -->
-      <div class="flex justify-evenly py-24 text-center">
-        <img class="mb-24" src="./images/nick.jpg" alt="Nick's profile image" />
-        <div class="flex flex-col">
-          <h3 class="text-2xl">Nick Nepomuceno</h3>
-          <p class="font-bold">Lead Project Manager</p>
-          <p>Nick is an ambitious CST student with great leadership skills.</p>
-        </div>
-      </div>
-      <!-- Angelo Santos -->
-      <div class="flex justify-evenly py-24 text-center">
-        <img class="mb-24" src="./images/angelo.jpg" alt="Angelo's profile image" />
-        <div class="flex flex-col">
-          <h3 class="text-2xl">Angelo Santos</h3>
-          <p class="font-bold">Project Co-Manager & Co-Designer</p>
-          <p>Angelo is perceptive CST student with great leadership skills and a good eye for design.</p>
-        </div>
-      </div>
-      <!-- Andrew Hwang -->
-      <div class="flex justify-evenly py-24 text-center">
-        <img class="mb-24" src="./images/andrew.jpg" alt="Andrew's profile image" />
-        <div class="flex flex-col">
-          <h3 class="text-2xl">Andrew Hwang</h3>
-          <p class="font-bold">Lead Designer</p>
-          <p>Andrew is a creative CST student who thinks outside the box when crafting user-focused solutions.</p>
-        </div>
-      </div>
-      <!-- Daryan Worya -->
-      <div class="flex justify-evenly py-24 text-center">
-        <img class="mb-24" src="./images/daryan.jpg" alt="Daryan's profile image" />
-        <div class="flex flex-col">
-          <h3 class="text-2xl">Daryan Worya</h3>
-          <p class="font-bold">Co-Designer & Co-Backend Developer</p>
-          <p>Daryan is an innovative CST student with a create eye for design.</p>
-        </div>
-      </div>
-      <!-- Giorgio Donatelli -->
-      <div class="flex justify-evenly py-24 text-center">
-        <img class="mb-24" src="./images/giorgio.jpg" alt="Giorgio's profile image" />
-        <div class="flex flex-col">
-          <h3 class="text-2xl">Giorgio Donatelli</h3>
-          <p class="font-bold">Lead Backend Developer</p>
-          <p>Giorgio is an knowledgable CST student with great knowledge of backend code.</p>
-        </div>
+    <div class="flex justify-evenly text-center">
+      <!-- Overview Text and Image 3 -->
+      <div class="mb-24">
+        <h3 class="text-2xl">✨ Step 3: Earn Gold & Build Your Streak</h3>
+        <p>
+          Keep your streak alive by logging in daily. Defeating monsters grants gold, which you can use to unlock items,
+          upgrade your
+          profile, and power up your quests.
+        </p>
+        <img src="./images/Inspiration3.png" alt="inspiration" />
       </div>
     </div>
+  </div>
 
-    <div class="py-24 w-full flex" id="contact">
-      <div class="flex justify-end w-full">
-        <a class="mr-4" href="">Report a bug</a>
-        <a class="mr-4" href="">Feedback</a>
-        <a class="mr-4" href="">Join our Discord/Community</a>
-        <div class="flex flex-row">
-          <button type="button" class="mr-2">Continue with Google</button>
-          <button type="button" class="mr-2">Continue with Facebook</button>
-          <button type="button">Continue with Twitter</button>
-        </div>
+  <!-- Div Container for Features Section -->
+  <div class="bg-quietquest-gold py-24 mt-48 mb-48 flex flex-col" id="features">
+    <!-- Features Title -->
+    <h2 class="font-combo text-4xl text-center">Features</h2>
+    <div class="flex justify-evenly">
+      <!-- Features Text and Image 1 -->
+      <div class="mb-24 text-center">
+        <h3 class="text-2xl">🛡️ Personalized Hero Paths</h3>
+        <p>
+          Choose your self-help focus—like productivity, mindfulness, or energy—and get tasks and monsters tailored to
+          your path.
+        </p>
+        <img src="./images/Feature1.png" alt="Feature" />
       </div>
     </div>
-  </body>
+    <div class="flex justify-evenly">
+      <!-- Features Text and Image 2 -->
+      <div class="mb-24 text-center">
+        <h3 class="text-2xl">👥 Community Quests</h3>
+        <p>
+          Team up with friends or others on similar journeys. Join seasonal events to slay bigger monsters and unlock
+          rare items.
+        </p>
+        <img src="./images/Feature2.png" alt="Feature" />
+      </div>
+    </div>
+    <div class="flex justify-evenly">
+      <!-- Features Text and Image 3 -->
+      <div class="mb-24 text-center">
+        <h3 class="text-2xl">☁️ Dynamic Weather Widget</h3>
+        <p>
+          Stay mindful of your environment with our real-time weather widget. This feature adapts to your location,
+          displaying current
+          conditions and offering gentle suggestions—like cozy tasks for rainy days or movement goals for sunny
+          afternoons.
+        </p>
+        <img src="./images/Feature3.png" alt="Feature" />
+        <%- include('partials/weatherWidget') %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Div Container for the About Us Page-->
+  <div class="py-24 mt-48 mb-48 flex flex-col" id="about">
+    <!-- About Us title-->
+    <h2 class="font-combo text-4xl text-center">About Us</h2>
+    <!-- Nick Nepomuceno -->
+    <div class="flex justify-evenly py-24 text-center">
+      <img class="mb-24" src="./images/nick.jpg" alt="Nick's profile image" />
+      <div class="flex flex-col">
+        <h3 class="text-2xl">Nick Nepomuceno</h3>
+        <p class="font-bold">Lead Project Manager</p>
+        <p>Nick is an ambitious CST student with great leadership skills.</p>
+      </div>
+    </div>
+    <!-- Angelo Santos -->
+    <div class="flex justify-evenly py-24 text-center">
+      <img class="mb-24" src="./images/angelo.jpg" alt="Angelo's profile image" />
+      <div class="flex flex-col">
+        <h3 class="text-2xl">Angelo Santos</h3>
+        <p class="font-bold">Project Co-Manager & Co-Designer</p>
+        <p>Angelo is perceptive CST student with great leadership skills and a good eye for design.</p>
+      </div>
+    </div>
+    <!-- Andrew Hwang -->
+    <div class="flex justify-evenly py-24 text-center">
+      <img class="mb-24" src="./images/andrew.jpg" alt="Andrew's profile image" />
+      <div class="flex flex-col">
+        <h3 class="text-2xl">Andrew Hwang</h3>
+        <p class="font-bold">Lead Designer</p>
+        <p>Andrew is a creative CST student who thinks outside the box when crafting user-focused solutions.</p>
+      </div>
+    </div>
+    <!-- Daryan Worya -->
+    <div class="flex justify-evenly py-24 text-center">
+      <img class="mb-24" src="./images/daryan.jpg" alt="Daryan's profile image" />
+      <div class="flex flex-col">
+        <h3 class="text-2xl">Daryan Worya</h3>
+        <p class="font-bold">Co-Designer & Co-Backend Developer</p>
+        <p>Daryan is an innovative CST student with a create eye for design.</p>
+      </div>
+    </div>
+    <!-- Giorgio Donatelli -->
+    <div class="flex justify-evenly py-24 text-center">
+      <img class="mb-24" src="./images/giorgio.jpg" alt="Giorgio's profile image" />
+      <div class="flex flex-col">
+        <h3 class="text-2xl">Giorgio Donatelli</h3>
+        <p class="font-bold">Lead Backend Developer</p>
+        <p>Giorgio is an knowledgable CST student with great knowledge of backend code.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full bg-quietquest-gold py-12 px-8" id="contact">
+    <div class="flex flex-col md:flex-row justify-between w-full items-center md:items-start gap-8">
+      <!-- Left Side: Bug Report & Feedback -->
+      <div class="flex flex-col space-y-4">
+        <!-- Bug -->
+        <div class="flex items-center space-x-2">
+          <a class="text-base font-medium" href="">Report a bug</a>
+          <img class="h-6 w-6 object-contain" src="/socialMediaIcons/bug.png" alt="bug">
+        </div>
+        <!-- Feedback -->
+        <div class="flex items-center space-x-2">
+          <a class="text-base font-medium" href="">Feedback</a>
+          <img class="h-6 w-6 object-contain" src="/socialMediaIcons/feedback.png" alt="feedback">
+        </div>
+      </div>
+
+      <!-- Right Side: Social Media Icons -->
+      <div class="flex flex-row space-x-4 justify-end w-full md:w-auto">
+        <img class="h-6 w-6 object-contain" src="/socialMediaIcons/discord.png" alt="discord">
+        <img class="h-6 w-6 object-contain" src="/socialMediaIcons/google.png" alt="google">
+        <img class="h-6 w-6 object-contain" src="/socialMediaIcons/facebook.png" alt="facebook">
+        <img class="h-6 w-6 object-contain" src="/socialMediaIcons/twitter.png" alt="twitter">
+      </div>
+    </div>
+  </div>
+  <script src="/path/to/mobileMenu.js"></script>
+</body>
+
 </html>
