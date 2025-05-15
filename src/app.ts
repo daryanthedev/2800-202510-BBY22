@@ -4,6 +4,7 @@ import "dotenv/config"; // Load .env file
 import sessionMiddleware from "./middleware/session.js";
 import database from "./utils/databaseConnection.js";
 import loadRoutes from "./utils/loadRoutes.js";
+import StatusError from "./utils/statusError.js";
 
 if (process.env.MONGODB_DBNAME === undefined) {
     throw new Error("MONGODB_DBNAME environment variable not defined.");
@@ -46,12 +47,28 @@ await Promise.all([loadRoutes("./src/api", APP, MONGODB_DATABASE), loadRoutes(".
 APP.use(express.static(PUBLIC_ROOT));
 
 // Serve a 404 page for any other routes
-APP.use((_, res: Response) => {
-    res.status(404).render("error", {
-        errorCode: "404",
-        errorName: "Page not found",
-        errorMessage: "Looks like this path leads to a dead end... even the goblins are confused.",
-    });
+APP.use(() => {
+    throw new StatusError(404, "Looks like this path leads to a dead end... even the goblins are confused", true);
+});
+
+// Handle errors
+APP.use((err: Error | StatusError, _req: unknown, res: Response, _next: unknown) => {
+    let sErr: StatusError;
+    if (err instanceof StatusError) {
+        sErr = err;
+    } else {
+        sErr = new StatusError(500, "An unexpected error occurred", true);
+        console.error(err);
+    }
+    if (sErr.html) {
+        res.status(sErr.status).render("error", {
+            errorCode: sErr.status,
+            errorName: sErr.name,
+            errorMessage: sErr.message,
+        });
+    } else {
+        res.status(sErr.status).send(sErr.message);
+    }
 });
 
 APP.listen(PORT, () => {

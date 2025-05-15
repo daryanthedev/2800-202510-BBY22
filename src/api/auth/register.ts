@@ -3,6 +3,7 @@ import { Db } from "mongodb";
 
 import * as hash from "../../utils/hash.js";
 import { isUsername, isEmail, isPassword, Username, Email, Password, UsersSchema } from "../../schema.js";
+import StatusError from "../../utils/statusError.js";
 
 // Data required for registration: username, email, and password.
 interface RegisterData {
@@ -49,34 +50,25 @@ export default (app: Express, database: Db) => {
     }
 
     app.post("/api/auth/register", async (req: Request, res: Response) => {
-        if (isRegisterData(req.body)) {
-            const { username, email, password } = req.body;
-            if (await emailNotUsed(email)) {
-                const passwordHash = await hash.hash(password);
-                database
-                    .collection("users")
-                    .insertOne({
-                        username,
-                        email,
-                        passwordHash,
-                        lastStreakDate: null,
-                        enemyHealth: 100,
-                        points: 0,
-                        enemyHealthModifier: 0,
-                        inventory: [],
-                    } satisfies UsersSchema)
-                    .then(() => {
-                        res.send();
-                    })
-                    .catch((err: unknown) => {
-                        console.error("Error inserting user into database:", err);
-                        res.status(500).send("Internal server error.");
-                    });
-            } else {
-                res.status(400).send("Email already in use.");
-            }
+        if (!isRegisterData(req.body)) {
+            throw new StatusError(400, "Invalid data");
+        }
+        const { username, email, password } = req.body;
+        if (await emailNotUsed(email)) {
+            const passwordHash = await hash.hash(password);
+            await database.collection("users").insertOne({
+                username,
+                email,
+                passwordHash,
+                lastStreakDate: null,
+                enemyHealth: 100,
+                points: 0,
+                enemyHealthModifier: 0,
+                inventory: [],
+            } satisfies UsersSchema);
+            res.send();
         } else {
-            res.status(400).send("Invalid data.");
+            throw new StatusError(400, "Email already in use");
         }
     });
 };

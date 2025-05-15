@@ -2,6 +2,7 @@ import { Express, Request, Response } from "express";
 import { Db, ObjectId } from "mongodb";
 
 import { isUsername, Username } from "../../schema.js";
+import StatusError from "../../utils/statusError.js";
 
 // Data required to set a new username for the user.
 interface SetUsernameData {
@@ -28,34 +29,25 @@ function isSetUsernameData(data: unknown): data is SetUsernameData {
  * @param {Db} database - The MongoDB database instance.
  */
 export default (app: Express, database: Db) => {
-    app.post("/api/account/setUsername", (req: Request, res: Response) => {
+    app.post("/api/account/setUsername", async (req: Request, res: Response) => {
         if (req.session.loggedInUserId === undefined) {
-            res.status(401).send("Please authenticate first.");
-            return;
+            throw new StatusError(401, "Please authenticate first");
         }
-        if (isSetUsernameData(req.body)) {
-            const { username } = req.body;
-            database
-                .collection("users")
-                .updateOne(
-                    {
-                        _id: new ObjectId(req.session.loggedInUserId),
-                    },
-                    {
-                        $set: {
-                            username,
-                        },
-                    },
-                )
-                .then(() => {
-                    res.send();
-                })
-                .catch((err: unknown) => {
-                    console.error("Error updating username:", err);
-                    res.status(500).send("Internal server error.");
-                });
-        } else {
-            res.status(400).send("Invalid data.");
+        if (!isSetUsernameData(req.body)) {
+            throw new StatusError(400, "Invalid data");
         }
+
+        const { username } = req.body;
+        await database.collection("users").updateOne(
+            {
+                _id: new ObjectId(req.session.loggedInUserId),
+            },
+            {
+                $set: {
+                    username,
+                },
+            },
+        );
+        res.send();
     });
 };

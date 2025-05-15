@@ -1,6 +1,7 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
 import { damageEnemy } from "../../utils/enemyUtils.js";
+import StatusError from "../../utils/statusError.js";
 
 // Data passed to the damage api.
 interface DamageData {
@@ -29,22 +30,13 @@ function isDamageData(data: unknown): data is DamageData {
 export default (app: Express, database: Db) => {
     app.post("/api/enemy/damage", async (req: Request, res: Response) => {
         if (req.session.loggedInUserId === undefined) {
-            res.status(401).send("Please authenticate first.");
-            return;
+            throw new StatusError(401, "Please authenticate first");
         }
-
         if (!isDamageData(req.body)) {
-            res.status(400).send("Invalid damage value.");
-            return;
+            throw new StatusError(400, "Invalid damage value");
         }
 
-        try {
-            const newEnemyStatus = await damageEnemy(req, database, req.body.damage);
-            res.json(JSON.stringify(newEnemyStatus));
-        } catch (err) {
-            console.error("Error damaging enemy:", err);
-            res.status(500).send("Internal server error.");
-            return;
-        }
+        const newEnemyStatus = await damageEnemy(req, database, req.body.damage);
+        res.json(JSON.stringify(newEnemyStatus));
     });
 };
