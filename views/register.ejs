@@ -2,19 +2,68 @@
 <html lang="en">
     <head>
         <%- include('partials/header') %>
-        <title>Register</title>
+        <title>QuietQuest - Register</title>
     </head>
     <body>
-        <a href="/">Back</a>
-        <br />
-        Register
-        <form id="registerForm">
-            <input name="username" type="text" placeholder="Username" />
-            <input name="email" type="email" placeholder="Email" />
-            <input name="password" type="password" placeholder="Password" />
-            <button href="/login">Go Back</button>
-            <button>Register</button>
-        </form>
+        <body class="bg-quietquest-gold font-afacad flex items-center justify-center min-h-screen px-4">
+            <!-- Register Box -->
+            <div class="bg-[#426f8a] text-white w-full max-w-md rounded-2xl shadow-lg p-8 space-y-6">
+              <!-- Back Link -->
+              <div class="text-sm text-white">
+                <a href="/login" class="hover:underline">&larr; Back to Login</a>
+              </div>
+        
+              <!-- Heading -->
+              <img src="/quietQuestIcons/Logo Wide.svg" alt="QuietQuest logo" class="mx-auto mb-2" />
+              <h1 class="text-quietquest-cream font-combo mt-1 text-center">Register your account</h1>
+        
+              <!-- Register Form -->
+              <form id="registerForm" class="space-y-5">
+                <label for="username" class="block text-sm font-medium text-quietquest-cream font-combo mb-1">
+                    Username
+                </label>
+                <input
+                  name="username"
+                  type="text"
+                  placeholder="Username"
+                  class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark 
+                         focus:outline-none focus:ring-2 focus:ring-white transition"
+                />
+                <label for="email" class="block text-sm font-medium text-quietquest-cream font-combo mb-1">
+                    Email
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark 
+                         focus:outline-none focus:ring-2 focus:ring-white transition"
+                />
+                <label for="password" class="block text-sm font-medium text-quietquest-cream font-combo mb-1">
+                    Password
+                </label>
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark 
+                         focus:outline-none focus:ring-2 focus:ring-white transition"
+                />
+        
+                <div class="flex flex-col gap-3">
+
+                  <button
+                    type="submit"
+                    class="w-full py-3 rounded-full bg-quietquest-green hover:bg-quietquest-dark-gold text-quietquest-dark mt-10
+                           font-semibold transition"
+                  >
+                    Register
+                  </button>
+                </div>
+              </form>
+            </div>
+        
+
         <script type="module">
             import formSend from "/js/formSend.js";
             formSend("/api/auth/register", document.getElementById("registerForm"), "/login");
