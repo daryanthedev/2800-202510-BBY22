@@ -15,6 +15,7 @@ interface UsersSchema {
     points: number;
     monsterHealth: number;
     monsterHealthModifier: number;
+    inventory: string[];
 }
 
 function isUsername(data: string): data is Username {
@@ -55,6 +56,8 @@ function isUsersSchema(data: unknown): data is UsersSchema {
         typeof obj.monsterHealth === "number" &&
         typeof obj.points === "number" &&
         typeof obj.monsterHealthModifier === "number" &&
+        typeof obj.inventory === "object" &&
+        Array.isArray(obj.inventory) &&
         (obj.lastStreakDate instanceof Date || obj.lastStreakDate === null) &&
         isUsername(obj.username) &&
         isEmail(obj.email)

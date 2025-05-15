@@ -47,6 +47,7 @@ export default (app: Express, database: Db) => {
                         monsterHealth: 100,
                         points: 0,
                         monsterHealthModifier: 0,
+                        inventory: [],
                     } satisfies UsersSchema)
                     .then(() => {
                         res.send();
