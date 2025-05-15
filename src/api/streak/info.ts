@@ -2,6 +2,11 @@ import { Express, Request, Response } from "express";
 import { isUsersSchema } from "../../schema.js";
 import { Db, ObjectId } from "mongodb";
 
+/**
+ * Registers the /api/streak/info endpoint to provide the user's last streak date.
+ * @param {Express} app - The Express application instance.
+ * @param {Db} database - The MongoDB database instance.
+ */
 export default (app: Express, database: Db) => {
     app.get("/api/streak/info", (req: Request, res: Response) => {
         if (req.session.loggedInUserId === undefined) {

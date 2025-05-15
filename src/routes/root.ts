@@ -3,6 +3,11 @@ import { Db, ObjectId } from "mongodb";
 
 import { isUsersSchema } from "../schema.js";
 
+/**
+ * Registers the / route to render the index page.
+ * @param {Express} app - The Express application instance.
+ * @param {Db} database - The MongoDB database instance.
+ */
 export default (app: Express, database: Db) => {
     app.get("/", async (req: Request, res: Response) => {
         // Define the type of the data that will be passed to the EJS template (for type safety)
@@ -21,6 +26,7 @@ export default (app: Express, database: Db) => {
 
         let username = "";
         if (req.session.loggedInUserId !== undefined) {
+            // If the user is logged in, get the username from the database
             const user = await database.collection("users").findOne({ _id: new ObjectId(req.session.loggedInUserId) });
             if (!isUsersSchema(user)) {
                 res.status(500).send();
@@ -29,6 +35,7 @@ export default (app: Express, database: Db) => {
             }
             username = user.username;
         } else {
+            // If the user is not logged in, default the username to "None"
             username = "None";
         }
 
