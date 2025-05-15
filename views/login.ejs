@@ -1,60 +1,69 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-    <!-- pulls in your meta tags + Tailwind CSS build -->
-    <%- include('partials/header') %>
+    <head>
+        <!-- pulls in your meta tags + Tailwind CSS build -->
+        <%- include('partials/header') %>
         <title>QuietQuest — Login</title>
-</head>
+    </head>
 
-<body class="bg-quietquest-gold font-afacad flex flex-col items-center justify-center min-h-screen px-4">
-    <div class="bg-[#426f8a] text-white w-full max-w-md rounded-2xl shadow-lg p-8 space-y-6">
+    <body class="bg-quietquest-gold font-afacad flex flex-col items-center justify-center min-h-screen px-4">
+        <div class="bg-[#426f8a] text-white w-full max-w-md rounded-2xl shadow-lg p-8 space-y-6">
+            <!-- Logo and Heading -->
+            <div class="text-center mb-8">
+                <img src="/quietQuestIcons/Logo Wide.svg" alt="QuietQuest logo" class="mx-auto mb-2" />
+                <p class="text-quietquest-cream font-combo mt-1">Login to your account</p>
+            </div>
 
-        <!-- Logo and Heading -->
-        <div class="text-center mb-8">
-            <img src="/quietQuestIcons/Logo Wide.svg" alt="QuietQuest logo" class="mx-auto mb-2" />
-            <p class="text-quietquest-cream font-combo mt-1">Login to your account</p>
+            <!-- Login Form -->
+            <form id="loginForm" class="w-full max-w-sm space-y-5">
+                <div>
+                    <label for="usernameEmail" class="block text-sm font-medium text-quietquest-cream font-combo mb-1">
+                        Email address
+                    </label>
+                    <input
+                        id="usernameEmail"
+                        name="usernameEmail"
+                        type="text"
+                        placeholder="you@example.com"
+                        class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition"
+                    />
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-quietquest-cream font-combo mb-1"> Password </label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="••••••••"
+                        class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="w-full py-3 rounded-full bg-quietquest-green hover:bg-quietquest-dark-gold text-quietquest-dark font-semibold transition"
+                >
+                    Login
+                </button>
+
+                <!-- OR Divider -->
+                <div class="flex items-center gap-4 text-quietquest-cream">
+                    <hr class="flex-grow border-quietquest-cream" />
+                    <span class="text-sm">OR</span>
+                    <hr class="flex-grow border-quietquest-cream" />
+                </div>
+
+                <!-- Register Button -->
+                <a
+                    href="/register"
+                    class="block text-center w-full py-3 rounded-full bg-white hover:bg-gray-100 text-quietquest-dark border border-gray-300 font-semibold transition"
+                >
+                    Register
+                </a>
+            </form>
         </div>
-
-        <!-- Login Form -->
-        <form id="loginForm" class="w-full max-w-sm space-y-5">
-            <div>
-                <label for="usernameEmail" class="block text-sm font-medium text-quietquest-cream font-combo mb-1">
-                    Email address
-                </label>
-                <input id="usernameEmail" name="usernameEmail" type="text" placeholder="you@example.com" class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark 
-                 focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition" />
-            </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-quietquest-cream font-combo mb-1">
-                    Password
-                </label>
-                <input id="password" name="password" type="password" placeholder="••••••••" class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark 
-                 focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition" />
-            </div>
-            <button type="submit" class="w-full py-3 rounded-full bg-quietquest-green hover:bg-quietquest-dark-gold text-quietquest-dark 
-               font-semibold transition">
-                Login
-            </button>
-
-            <!-- OR Divider -->
-            <div class="flex items-center gap-4 text-quietquest-cream">
-                <hr class="flex-grow border-quietquest-cream" />
-                <span class="text-sm">OR</span>
-                <hr class="flex-grow border-quietquest-cream" />
-            </div>
-
-            <!-- Register Button -->
-            <a href="/register" class="block text-center w-full py-3 rounded-full bg-white hover:bg-gray-100 text-quietquest-dark border 
-               border-gray-300 font-semibold transition">
-                Register
-            </a>
-        </form>
-    </div>
-    <script type="module">
-        import formSend from "/js/formSend.js";
-        formSend("/api/auth/login", document.getElementById("loginForm"), "/");
-    </script>
-</body>
-
+        <script type="module">
+            import formSend from "/js/formSend.js";
+            formSend("/api/auth/login", document.getElementById("loginForm"), "/");
+        </script>
+    </body>
 </html>

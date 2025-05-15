@@ -5,7 +5,7 @@ import { Express, Request, Response } from "express";
  * @param {Express} app - The Express application instance.
  */
 export default (app: Express) => {
-    app.get("/", async (req: Request, res: Response) => {
+    app.get("/", (req: Request, res: Response) => {
         if (req.session.loggedInUserId !== undefined) {
             res.render("home");
         } else {
