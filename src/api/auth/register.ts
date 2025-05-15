@@ -60,9 +60,9 @@ export default (app: Express, database: Db) => {
                         email,
                         passwordHash,
                         lastStreakDate: null,
-                        monsterHealth: 100,
+                        enemyHealth: 100,
                         points: 0,
-                        monsterHealthModifier: 0,
+                        enemyHealthModifier: 0,
                         inventory: [],
                     } satisfies UsersSchema)
                     .then(() => {

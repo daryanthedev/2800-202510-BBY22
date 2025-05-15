@@ -18,8 +18,8 @@ interface UsersSchema {
     passwordHash: string;
     lastStreakDate: Date | null;
     points: number;
-    monsterHealth: number;
-    monsterHealthModifier: number;
+    enemyHealth: number;
+    enemyHealthModifier: number;
     inventory: string[];
 }
 
@@ -78,9 +78,9 @@ function isUsersSchema(data: unknown): data is UsersSchema {
         typeof obj.email === "string" &&
         typeof obj.passwordHash === "string" &&
         typeof obj.lastStreakDate === "object" &&
-        typeof obj.monsterHealth === "number" &&
+        typeof obj.enemyHealth === "number" &&
         typeof obj.points === "number" &&
-        typeof obj.monsterHealthModifier === "number" &&
+        typeof obj.enemyHealthModifier === "number" &&
         typeof obj.inventory === "object" &&
         Array.isArray(obj.inventory) &&
         (obj.lastStreakDate instanceof Date || obj.lastStreakDate === null) &&
