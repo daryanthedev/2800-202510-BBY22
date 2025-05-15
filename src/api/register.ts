@@ -4,12 +4,18 @@ import { Db } from "mongodb";
 import * as hash from "../utils/hash.js";
 import { isUsername, isEmail, isPassword, Username, Email, Password, UsersSchema } from "../schema.js";
 
+// Data required for registration: username, email, and password.
 interface RegisterData {
     username: Username;
     email: Email;
     password: Password;
 }
 
+/**
+ * Type guard to check if an object is RegisterData.
+ * @param {unknown} data - The data to validate.
+ * @returns {data is RegisterData} - True if the data matches the RegisterData structure.
+ */
 function isRegisterData(data: unknown): data is RegisterData {
     if (typeof data !== "object" || data === null) {
         return false;
@@ -26,8 +32,18 @@ function isRegisterData(data: unknown): data is RegisterData {
     );
 }
 
+/**
+ * Registers the /api/register endpoint for user registration.
+ * @param {Express} app - The Express application instance.
+ * @param {Db} database - The MongoDB database instance.
+ */
 export default (app: Express, database: Db) => {
-    async function emailNotUsed(email: Email) {
+    /**
+     * Checks if the given email is not already used by another user.
+     * @param {Email} email - The email to check.
+     * @returns {Promise<boolean>} - True if the email is not used, false otherwise.
+     */
+    async function emailNotUsed(email: Email): Promise<boolean> {
         const user = await database.collection("users").findOne({ email });
         return user === null;
     }
@@ -44,6 +60,10 @@ export default (app: Express, database: Db) => {
                         email,
                         passwordHash,
                         lastStreakDate: null,
+                        monsterHealth: 100,
+                        points: 0,
+                        monsterHealthModifier: 0,
+                        inventory: [],
                     } satisfies UsersSchema)
                     .then(() => {
                         res.send();

@@ -1,23 +1,23 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <%- include('partials/header') %>
-    <title>Register</title>
-  </head>
-  <body>
-    <a href="/">Back</a>
-    <br />
-    Register
-    <form id="registerForm">
-      <input name="username" type="text" placeholder="Username" />
-      <input name="email" type="email" placeholder="Email" />
-      <input name="password" type="password" placeholder="Password" />
-      <button href="/login">Go Back</button>
-      <button>Register</button>
-    </form>
-    <script type="module">
-      import formSend from "/js/formSend.js";
-      formSend("/api/register", document.getElementById("registerForm"), "/login");
-    </script>
-  </body>
+    <head>
+        <%- include('partials/header') %>
+        <title>Register</title>
+    </head>
+    <body>
+        <a href="/">Back</a>
+        <br />
+        Register
+        <form id="registerForm">
+            <input name="username" type="text" placeholder="Username" />
+            <input name="email" type="email" placeholder="Email" />
+            <input name="password" type="password" placeholder="Password" />
+            <button href="/login">Go Back</button>
+            <button>Register</button>
+        </form>
+        <script type="module">
+            import formSend from "/js/formSend.js";
+            formSend("/api/register", document.getElementById("registerForm"), "/login");
+        </script>
+    </body>
 </html>

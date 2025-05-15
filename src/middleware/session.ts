@@ -1,7 +1,7 @@
 import MongoStore from "connect-mongo";
 import session from "express-session";
 
-import mongodbUri from "./mongodbUri.js";
+import mongodbUri from "../utils/mongodbUri.js";
 
 // Load the session secret from the environment variable or throw an error if not defined
 const NODE_SESSION_SECRET =
@@ -38,7 +38,11 @@ const MONGO_STORE = MongoStore.create({
     },
 });
 
-export default () =>
+/**
+ * Returns an Express session middleware configured to use MongoDB for session storage.
+ * @returns {import("express").RequestHandler}
+ */
+export default (): import("express").RequestHandler =>
     session({
         secret: NODE_SESSION_SECRET,
         store: MONGO_STORE,
