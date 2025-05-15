@@ -1,8 +1,8 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
 
-import * as hash from "../utils/hash.js";
-import { isUsername, isEmail, isPassword, Username, Email, Password, UsersSchema } from "../schema.js";
+import * as hash from "../../utils/hash.js";
+import { isUsername, isEmail, isPassword, Username, Email, Password, UsersSchema } from "../../schema.js";
 
 // Data required for registration: username, email, and password.
 interface RegisterData {
@@ -48,7 +48,7 @@ export default (app: Express, database: Db) => {
         return user === null;
     }
 
-    app.post("/api/register", async (req: Request, res: Response) => {
+    app.post("/api/auth/register", async (req: Request, res: Response) => {
         if (isRegisterData(req.body)) {
             const { username, email, password } = req.body;
             if (await emailNotUsed(email)) {

@@ -5,7 +5,7 @@ import { Express, Request, Response } from "express";
  * @param {Express} app - The Express application instance.
  */
 export default (app: Express) => {
-    app.post("/api/logout", (req: Request, res: Response) => {
+    app.post("/api/auth/logout", (req: Request, res: Response) => {
         // Clear the loggedInUserId from the session to log out the user
         req.session.loggedInUserId = undefined;
         res.send();
