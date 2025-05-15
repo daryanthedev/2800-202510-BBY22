@@ -1,12 +1,62 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <%- include('partials/header') %>
-        <title>Login</title>
-    </head>
-    <body>
-        <a href="/">Back</a>
-        <br />
+  <head>
+    <!-- pulls in your meta tags + Tailwind CSS build -->
+    <%- include('partials/header') %>
+
+    <title>QuietQuest — Login</title>
+    <!-- same Google Fonts you added to index.ejs -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Afacad:wght@100..1000&family=Combo&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-quietquest-gold font-afacad flex flex-col items-center justify-center min-h-screen px-4">
+    <!-- Logo and Heading -->
+    <div class="text-center mb-8">
+      <img
+        src="/images/QuietQuest.jpg"
+        alt="QuietQuest logo"
+        class="mx-auto w-16 h-16 mb-2"
+      /> 
+      <h1 class="font-combo text-3xl text-quietquest-blue">QuietQuest</h1>
+      <p class="text-quietquest-dark mt-1">Login to your account</p>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="w-full max-w-sm space-y-5">
+      <div>
+        <label for="usernameEmail" class="block text-sm font-medium text-quietquest-dark mb-1">
+          Email address
+        </label>
+        <input
+          id="usernameEmail"
+          name="usernameEmail"
+          type="text"
+          placeholder="you@example.com"
+          class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-quietquest-green text-quietquest-dark 
+                 focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition"
+        />
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium text-quietquest-dark mb-1">
+          Password
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="••••••••"
+          class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-quietquest-green text-quietquest-dark 
+                 focus:outline-none focus:ring-2 focus:ring-quietquest-blue transition"
+        />
+      </div>
+      <button
+        type="submit"
+        class="w-full py-3 rounded-full bg-quietquest-green hover:bg-quietquest-dark-gold text-quietquest-dark 
+               font-semibold transition"
+      >
         Login
         <form id="loginForm">
             <input name="usernameEmail" type="text" placeholder="Username/Email" />
