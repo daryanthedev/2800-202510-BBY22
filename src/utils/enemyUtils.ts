@@ -47,10 +47,15 @@ async function getEnemyInfo(req: Request, database: Db): Promise<EnemyInfo> {
  *
  * @param {Request} req - The Express request object, expected to contain the session with `loggedInUserId`.
  * @param {Db} database - The MongoDB database instance.
+ * @param {number} damage - The amount of damage to apply to the enemy.
  * @returns {Promise<undefined>} A promise that resolves when the operation is complete.
  * @throws Will throw an error if the user's points, enemy health, or enemy health modifier are not numbers.
  */
-async function damageEnemy(req: Request, database: Db): Promise<undefined> {
+async function damageEnemy(req: Request, database: Db, damage: number): Promise<undefined> {
+    if (damage <= 0) {
+        throw new Error("Damage must be greater than 0");
+    }
+
     // Create variable with all of user's data within it
     const user = await database.collection("users").findOne({
         _id: new ObjectId(req.session.loggedInUserId),
@@ -64,13 +69,20 @@ async function damageEnemy(req: Request, database: Db): Promise<undefined> {
         throw new Error("User data is not valid");
     }
 
+    // Cap the damage to the user's points
+    if (user.points < damage) {
+        damage = user.points;
+    }
+    // Cap the damage to the enemy's health
+    if (user.enemyHealth < damage) {
+        damage = user.enemyHealth;
+    }
+
     // Check the enemies new HP
-    const newEnemyHealth = user.enemyHealth - user.points;
-    let newUserPoints = 0;
+    const newEnemyHealth = user.enemyHealth - damage;
+    const newUserPoints = user.points - damage;
 
     if (newEnemyHealth <= 0) {
-        // Refund unused points
-        newUserPoints = -newEnemyHealth;
         user.enemyHealthModifier += 10;
 
         // If the enemy is dead, create a new one
