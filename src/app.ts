@@ -51,6 +51,7 @@ APP.use((_, res: Response) => {
     res.status(404).render("error", {
         errorCode: "404",
         errorName: "Page not found",
+        errorMessage: "Looks like this path leads to a dead end... even the goblins are confused.",
     });
 });
 
