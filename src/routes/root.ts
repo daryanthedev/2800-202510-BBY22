@@ -29,12 +29,7 @@ export default (app: Express, database: Db) => {
             // If the user is logged in, get the username from the database
             const user = await database.collection("users").findOne({ _id: new ObjectId(req.session.loggedInUserId) });
             if (!isUsersSchema(user)) {
-                res.status(500).render("error", {
-                    errorCode: "500",
-                    errorName: "Internal server error",
-                });
-                console.error(`Error: Couldn't find user with id "${req.session.loggedInUserId}".`);
-                return;
+                throw new Error("Couldn't find user in database with the ID: " + req.session.loggedInUserId);
             }
             username = user.username;
         } else {

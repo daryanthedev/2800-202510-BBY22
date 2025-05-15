@@ -3,6 +3,7 @@ import { Db } from "mongodb";
 
 import * as hash from "../../utils/hash.js";
 import { isUsersSchema, isUsername, isEmail, isPassword, Username, Email, Password } from "../../schema.js";
+import StatusError from "../../utils/statusError.js";
 
 // Data required for login: username/email and password.
 interface LoginData {
@@ -60,11 +61,9 @@ export default (app: Express, database: Db) => {
                     return;
                 }
             }
-            res.status(401).send("Incorrect login data.");
-            return;
+            throw new StatusError(401, "Incorrect login data");
         } else {
-            res.status(400).send("Invalid data.");
-            return;
+            throw new StatusError(400, "Invalid data");
         }
     });
 };

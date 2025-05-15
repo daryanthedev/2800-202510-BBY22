@@ -1,4 +1,5 @@
 import { Express, Request, Response } from "express";
+import StatusError from "../utils/statusError.js";
 
 if (process.env.OPEN_WEATHER_MAP_API_KEY === undefined) {
     throw new Error("OPEN_WEATHER_MAP_API_KEY environment variable not defined.");
@@ -97,8 +98,7 @@ function isWeatherData(data: unknown): data is WeatherData {
 export default (app: Express) => {
     app.post("/api/weather", async (req: Request, res: Response) => {
         if (!WEATHER_API_ENABLED) {
-            res.status(503).send("Weather API is disabled.");
-            return;
+            throw new StatusError(503, "Weather API is disabled");
         }
 
         if (isLocationData(req.body)) {
@@ -107,29 +107,22 @@ export default (app: Express) => {
             const WEATHER_RESPONSE = await fetch(
                 `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${latitude.toString()}&lon=${longitude.toString()}&appid=${OPEN_WEATHER_MAP_API_KEY}`,
             );
-            WEATHER_RESPONSE.json()
-                .then(weatherData => {
-                    if (isWeatherData(weatherData)) {
-                        const response: WeatherResponse = {
-                            location: weatherData.name,
-                            temp: weatherData.main.temp,
-                            weather: {
-                                main: weatherData.weather[0].main,
-                                description: weatherData.weather[0].description,
-                            },
-                        };
-                        res.type("application/json").send(JSON.stringify(response));
-                    } else {
-                        res.status(500).send("Internal server error.");
-                        console.error("Error: Unexpected response from OpenWeatherMap.");
-                    }
-                })
-                .catch(() => {
-                    res.status(500).send("Internal server error.");
-                    console.error("Error: Unexpected response from OpenWeatherMap.");
-                });
+            const weatherData = await WEATHER_RESPONSE.json() as unknown;
+            if (isWeatherData(weatherData)) {
+                const response: WeatherResponse = {
+                    location: weatherData.name,
+                    temp: weatherData.main.temp,
+                    weather: {
+                        main: weatherData.weather[0].main,
+                        description: weatherData.weather[0].description,
+                    },
+                };
+                res.json(JSON.stringify(response));
+            } else {
+                throw new Error("Unexpected response from OpenWeatherMap");
+            }
         } else {
-            res.status(400).send("Invalid data.");
+            throw new StatusError(400, "Invalid data");
         }
     });
 };
