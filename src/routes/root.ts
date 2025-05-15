@@ -1,48 +1,15 @@
 import { Express, Request, Response } from "express";
-import { Db, ObjectId } from "mongodb";
-
-import { isUsersSchema } from "../schema.js";
 
 /**
  * Registers the / route to render the index page.
  * @param {Express} app - The Express application instance.
- * @param {Db} database - The MongoDB database instance.
  */
-export default (app: Express, database: Db) => {
-    app.get("/", async (req: Request, res: Response) => {
-        // Define the type of the data that will be passed to the EJS template (for type safety)
-        interface RouteData {
-            currentUser: string;
-            body: string;
-            views: number;
-        }
-
-        // We have to verify that views is defined, otherwise ts will throw an error
-        if (req.session.views) {
-            req.session.views++;
-        } else {
-            req.session.views = 1;
-        }
-
-        let username = "";
+export default (app: Express) => {
+    app.get("/", (req: Request, res: Response) => {
         if (req.session.loggedInUserId !== undefined) {
-            // If the user is logged in, get the username from the database
-            const user = await database.collection("users").findOne({ _id: new ObjectId(req.session.loggedInUserId) });
-            if (!isUsersSchema(user)) {
-                throw new Error("Couldn't find user in database with the ID: " + req.session.loggedInUserId);
-            }
-            username = user.username;
+            res.render("home");
         } else {
-            // If the user is not logged in, default the username to "None"
-            username = "None";
+            res.render("landing");
         }
-
-        // Render the EJS template with the data
-        // We have to use the `satisfies` operator to make sure that the data passed to the template is of the correct type
-        res.render("index.ejs", {
-            currentUser: username,
-            body: "Rendered using EJS!!!",
-            views: req.session.views,
-        } satisfies RouteData);
     });
 };

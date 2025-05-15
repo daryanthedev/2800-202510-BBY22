@@ -15,7 +15,6 @@ const MONGODB_DATABASE = database.db(process.env.MONGODB_DBNAME);
 // Use declaration merging to include custom session properties.
 declare module "express-session" {
     interface SessionData {
-        views: number;
         loggedInUserId: string;
         monsterHealth: number;
     }
