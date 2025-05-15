@@ -60,8 +60,7 @@ export default (app: Express, database: Db) => {
                     return;
                 }
             }
-            res.status(500).send("Internal server error.");
-            console.error(`Error: Couldn't find user with name/email "${usernameEmail}".`);
+            res.status(401).send("Incorrect login data.");
             return;
         } else {
             res.status(400).send("Invalid data.");
