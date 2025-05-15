@@ -8,5 +8,18 @@
         <div>
             <a href="/settings"><box-icon name="arrow-back"></box-icon></a>
         </div>
+        <h1>Account</h1>
+        <div class="container">
+            <h2>Change Username</h2>
+            <form id="usernameForm">
+                <input name="username" />
+                <button name="usernameSubmit">Submit</button>
+            </form>
+        </div>
+
+        <script type="module">
+            import formSend from "/js/formSend.js";
+            formSend("/api/account/setUsername", document.getElementById("usernameForm"), "/");
+        </script>
     </body>
 </html>
