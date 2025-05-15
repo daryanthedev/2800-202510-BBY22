@@ -11,7 +11,7 @@ if (process.env.MONGODB_DBNAME === undefined) {
 
 const MONGODB_DATABASE = database.db(process.env.MONGODB_DBNAME);
 
-// Add custom types to the session object
+// Use declaration merging to include custom session properties.
 declare module "express-session" {
     interface SessionData {
         views: number;
@@ -40,6 +40,7 @@ APP.use(sessionMiddleware());
 // Use the Typescript that was compiled to JS in the dist folder
 APP.use(express.static(DIST_PUBLIC_ROOT));
 
+// Register API and route handlers (dynamically)
 await Promise.all([loadRoutes("./src/api", APP, MONGODB_DATABASE), loadRoutes("./src/routes", APP, MONGODB_DATABASE)]);
 
 // Use static middleware to serve static files from the public folder
@@ -47,7 +48,11 @@ APP.use(express.static(PUBLIC_ROOT));
 
 // Serve a 404 page for any other routes
 APP.use((_, res: Response) => {
-    res.status(404).send("404");
+    res.status(404).render("error", {
+        errorCode: "404",
+        errorName: "Page not found",
+        errorMessage: "Looks like this path leads to a dead end... even the goblins are confused.",
+    });
 });
 
 APP.listen(PORT, () => {
