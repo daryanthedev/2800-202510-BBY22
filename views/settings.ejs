@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <%- include('partials/header') %>
         <title>Settings</title>
@@ -22,8 +22,15 @@
         <a href="/settings/about">
             <div>
                 <h2>About</h2>
-                <p>About our app.</p>
+                <p>Details about our app and the developers.</p>
             </div>
         </a>
+        <form id="logoutForm">
+            <button>Logout</button>
+        </form>
+        <script type="module">
+            import formSend from "/js/formSend.js";
+            formSend("/api/logout", document.getElementById("logoutForm"), "/");
+        </script>
     </body>
 </html>
