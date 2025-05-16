@@ -36,6 +36,9 @@ interface UserChallengeInfo extends ChallengeInfo {
     completed: boolean;
 }
 
+/*
+ * Interface for for the data a challenge completion responds with.
+ */
 interface ChallengeCompleteData {
     // The user's new points balance after completing the challenge.
     points: number;

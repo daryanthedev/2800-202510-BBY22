@@ -14,6 +14,8 @@ interface ChallengeInfo {
     endTime: Date;
     // The div element of the challenge.
     div: HTMLDivElement
+    // THe span element of the name of the challenge.
+    nameSpan: HTMLSpanElement;
 }
 
 /*
@@ -30,6 +32,16 @@ interface Modal {
     points: HTMLSpanElement;
     // The close button element of the modal.
     closeButton: HTMLButtonElement;
+    // The complete button element of the modal.
+    completeButton: HTMLButtonElement;
+}
+
+/*
+ * Interface for for the data a challenge completion responds with.
+ */
+interface ChallengeCompleteData {
+    // The user's new points balance after completing the challenge.
+    points: number;
 }
 
 /**
@@ -67,10 +79,20 @@ function createModal(name: string, description: string, points: number): Modal {
     pointsSpan.textContent = points.toString();
     pointsElem.appendChild(pointsSpan);
 
+    // Create a flex container for the buttons, so they are centered with space around
+    const buttonContainer = document.createElement("div");
+    buttonContainer.className = "flex flex-row justify-around mt-4";
+    modalContent.appendChild(buttonContainer);
+
     const closeButton = document.createElement("button");
-    closeButton.className = "mt-4 px-4 py-2 bg-[var(--color-quietquest-cream)] text-quietquest-dark cursor-pointer rounded shadow";
+    closeButton.className = "px-4 py-2 bg-[var(--color-quietquest-cream)] text-quietquest-dark cursor-pointer rounded shadow";
     closeButton.textContent = "Close";
-    modalContent.appendChild(closeButton);
+    buttonContainer.appendChild(closeButton);
+
+    const completeButton = document.createElement("button");
+    completeButton.className = "px-4 py-2 bg-[var(--color-quietquest-green)] text-quietquest-dark cursor-pointer rounded shadow";
+    completeButton.textContent = "Complete";
+    buttonContainer.appendChild(completeButton);
 
     return {
         modal: modalElem,
@@ -78,9 +100,40 @@ function createModal(name: string, description: string, points: number): Modal {
         description: descriptionElem,
         points: pointsElem,
         closeButton,
-    };;
+        completeButton,
+    };
 }
 
+/**
+ * Removes a modal from the page.
+ * @param {Modal} modal - The modal to remove
+ */
+function removeModal(modal: Modal): void {
+    modal.modal.remove();
+}
+
+function completeChallenge(challenge: ChallengeInfo, data: ChallengeCompleteData, modal: Modal): void {
+    // Update the challenge div to show that it has been completed
+    challenge.div.classList.add("opacity-60");
+
+    // Update the challenge name to show that it has been completed
+    challenge.nameSpan.textContent = challenge.name.toString();
+    challenge.nameSpan.classList.add("line-through");
+
+    // Update all spots where the points are displayed
+    document.querySelectorAll(".user-points-display").forEach(element => {
+        element.textContent = data.points.toString();
+    });
+
+    // Remove the modal from the DOM
+    removeModal(modal);
+}
+
+/**
+ * Initializes a list of challenge info with events listeners that create modal
+ * @param {ChallengeInfo[]} challenges - An array of challenge info to add event listeners for modals to
+ * @param {HTMLElement} modalContainer - A container element to put modals into
+ */
 function initializeChallenges(challenges: ChallengeInfo[], modalContainer: HTMLElement): void {
     challenges.forEach(challenge => {
         challenge.div.addEventListener("click", () => {
@@ -93,12 +146,29 @@ function initializeChallenges(challenges: ChallengeInfo[], modalContainer: HTMLE
             modalContainer.appendChild(modal.modal);
             // Close the modal when the close button is clicked
             modal.closeButton.addEventListener("click", () => {
-                modalContainer.removeChild(modal.modal);
+                removeModal(modal);
+            });
+            modal.completeButton.addEventListener("click", async () => {
+                const response = await fetch("/api/challenge/complete", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        challengeId: challenge._id,
+                    }),
+                });
+                if (response.ok) {
+                    const data = await response.json() as ChallengeCompleteData;
+                    completeChallenge(challenge, data, modal);
+                } else {
+                    alert("Error completing the challenge.");
+                }
             });
             // Allow clicking outside the modal to close it
             modal.modal.addEventListener("click", event => {
                 if (event.target === modal.modal) {
-                    modalContainer.removeChild(modal.modal);
+                    removeModal(modal);
                 }
             });
         });
