@@ -44,7 +44,7 @@ function hasDefaultFunction(imported: unknown): imported is { default: (...args:
  * @param {...unknown} otherArgs - Arguments to pass to each route module's default export.
  */
 async function loadRoutes(loadPath: string, ...otherArgs: unknown[]) {
-    const files = await getJsFilesRecursive(loadPath); 
+    const files = await getJsFilesRecursive(loadPath);
     await Promise.all(
         files.map(async file => {
             // Convert file path to a relative path for import
@@ -52,7 +52,7 @@ async function loadRoutes(loadPath: string, ...otherArgs: unknown[]) {
             const unixFilePath = filePath.split(path.sep).join("/");
 
             const imported = (await import(unixFilePath)) as unknown;
-           
+
             if (hasDefaultFunction(imported)) {
                 imported.default(...otherArgs);
             }
