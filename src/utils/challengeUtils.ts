@@ -1,37 +1,62 @@
 import { Db, ObjectId, WithId } from "mongodb";
 import { Request } from "express";
 import { isUsersSchema, ChallengeStatus } from "../schema.js";
+import StatusError from "./statusError.js";
 
-/**
+/*
  * Offset for Pacific Standard Time (PST) in milliseconds (UTC-8).
  */
-const PST_OFFSET = -8 * 60 * 60 * 1000; // UTC-8 in milliseconds
+const PST_OFFSET = -8 * 60 * 60 * 1000;
 
-/**
+/*
  * The number of daily challenges to maintain in the database.
  */
 const NUM_CHALLENGES = 3;
 
-/**
+/*
  * Interface for the challenge information.
  */
 interface ChallengeInfo {
-    /** The name of the challenge. */
+    // The name of the challenge.
     name: string;
-    /** The description of the challenge. */
+    // The description of the challenge.
     description: string;
-    /** The number of points awarded for completing the challenge. */
+    // The number of points awarded for completing the challenge.
     pointReward: number;
-    /** The end time of the challenge. */
+    // The end time of the challenge.
     endTime: Date;
 }
 
-/**
+/*
  * Interface for the user's challenge information, extending ChallengeInfo.
  */
 interface UserChallengeInfo extends ChallengeInfo {
-    /** Whether the user has completed the challenge. */
+    // Whether the user has completed the challenge.
     completed: boolean;
+}
+
+interface ChallengeCompleteData {
+    // The user's new points balance after completing the challenge.
+    points: number;
+}
+
+/**
+ * Type guard to check if an object is of type ChallengeInfo.
+ * @param data - The object to check.
+ * @returns {obj is ChallengeInfo} True if the object is a ChallengeInfo.
+ */
+function isChallengeInfo(data: unknown): data is ChallengeInfo {
+    if (typeof data !== "object" || data === null) {
+        return false;
+    }
+
+    const obj = data as Record<string, unknown>;
+    return (
+        typeof obj.name === "string" &&
+        typeof obj.description === "string" &&
+        typeof obj.pointReward === "number" &&
+        obj.endTime instanceof Date
+    );
 }
 
 /**
@@ -40,6 +65,24 @@ interface UserChallengeInfo extends ChallengeInfo {
  */
 function getPstTimeNow(): Date {
     return new Date(Date.now() + PST_OFFSET);
+}
+
+/**
+ * Gets a challenge from the database by its ObjectId.
+ * @param {Db} database - The MongoDB database instance.
+ * @param {ObjectId} challengeId - The ObjectId of the challenge to delete.
+ * @returns {Promise<ChallengeInfo>} The challenge information.
+ * @throws Will throw an error if the challenge is not found, or if the data from the database is invalid.
+ */
+async function getChallenge(database: Db, challengeId: ObjectId): Promise<ChallengeInfo> {
+    const challenge = await database.collection("challenges").findOne({ _id: challengeId });
+    if (challenge === null) {
+        throw new Error("Challenge not found");
+    }
+    if (!isChallengeInfo(challenge)) {
+        throw new Error("Challenge data is not valid");
+    }
+    return challenge;
 }
 
 /**
@@ -99,26 +142,11 @@ async function getAllChallenges(database: Db): Promise<WithId<ChallengeInfo>[]> 
     // Validate and filter challenges, deleting any that are invalid
     const challengeInfos: WithId<ChallengeInfo>[] = challenges
         .map(challenge => {
-            if (
-                !("name" in challenge) ||
-                !("description" in challenge) ||
-                !("pointReward" in challenge) ||
-                !("endTime" in challenge) ||
-                typeof challenge.name !== "string" ||
-                typeof challenge.description !== "string" ||
-                typeof challenge.pointReward !== "number" ||
-                !(challenge.endTime instanceof Date)
-            ) {
+            if (!isChallengeInfo(challenge)) {
                 void deleteChallenge(database, challenge._id);
                 return null;
             }
-            return {
-                _id: challenge._id,
-                name: challenge.name,
-                description: challenge.description,
-                pointReward: challenge.pointReward,
-                endTime: challenge.endTime,
-            };
+            return challenge;
         })
         .filter(challengeInfo => challengeInfo !== null);
 
@@ -233,5 +261,68 @@ async function getUserChallenges(req: Request, database: Db): Promise<UserChalle
     return userChallenges;
 }
 
-export { getUserChallenges };
+/**
+ * Completes a challenge for the logged-in user and updates their challenge statuses.
+ * @param {Request} req - The Express request object.
+ * @param {Db} database - The MongoDB database instance.
+ * @param {string} challengeId - The ID of the challenge to complete.
+ * @returns {Promise<ChallengeCompleteData>} An promise indicating the completion of the operation, and resolves to ChallengeCompleteData.
+ * @throws Will throw an error if the user is not authenticated, not found, has invalid data, or if there is not a challenge with the given ID.
+ */
+async function completeChallenge(req: Request, database: Db, challengeId: string): Promise<ChallengeCompleteData> {
+    if (req.session.loggedInUserId === undefined) {
+        throw new Error("User must authenticate first");
+    }
+
+    const user = await database.collection("users").findOne({
+        _id: new ObjectId(req.session.loggedInUserId),
+    });
+
+    // Ensure user is valid
+    if (user === null) {
+        throw new Error("User not found");
+    }
+    if (!isUsersSchema(user)) {
+        throw new Error("User data is not valid");
+    }
+
+    let status = user.challengeStatuses.find(status => status.challengeId === challengeId);
+    if (status === undefined) {
+        const challenges = await getAllChallenges(database);
+        user.challengeStatuses = await updateUserChallengeStatuses(
+            database,
+            req.session.loggedInUserId,
+            user.challengeStatuses,
+            challenges,
+        );
+        status = user.challengeStatuses.find(status => status.challengeId === challengeId);
+        if (status === undefined) {
+            throw new StatusError(400, "No challenge with the given ID found");
+        }
+    }
+
+    if (status.completed) {
+        throw new StatusError(400, "Challenge already completed");
+    }
+
+    const challenge = await getChallenge(database, new ObjectId(challengeId));
+
+    status.completed = true;
+    user.points += challenge.pointReward;
+    await database.collection("users").updateOne(
+        { _id: new ObjectId(req.session.loggedInUserId) },
+        {
+            $set: {
+                challengeStatuses: user.challengeStatuses,
+                points: user.points,
+            },
+        },
+    );
+
+    return {
+        points: user.points,
+    };
+}
+
+export { getUserChallenges, completeChallenge };
 export type { ChallengeInfo };
