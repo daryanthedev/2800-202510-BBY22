@@ -2,6 +2,7 @@ import { Db, ObjectId, WithId } from "mongodb";
 import { Request } from "express";
 import { isUsersSchema, ChallengeStatus } from "../schema.js";
 import StatusError from "./statusError.js";
+import { GoogleGenAI } from "@google/genai";
 
 /*
  * Offset for Pacific Standard Time (PST) in milliseconds (UTC-8).
@@ -99,27 +100,60 @@ async function deleteChallenge(database: Db, challengeId: ObjectId): Promise<voi
 }
 
 /**
- * Creates a specified number of new challenges and inserts them into the database.
- * @param {Db} database - The MongoDB database instance.
- * @param {number} amount - The number of challenges to create.
- * @returns {Promise<WithId<ChallengeInfo>[]>} The created challenges with their generated ObjectIds.
+ * Generates a specified number of challenges using GoogleGenAI.
+ * @param {number} amount - The number of challenges to generate.
+ * @param {GoogleGenAI} ai - The AI instance used to generate challenges.
+ * @returns {Promixe<ChallengeInfo[]>} The generated challenges.
  */
-async function createChallenges(database: Db, amount: number): Promise<WithId<ChallengeInfo>[]> {
+async function generateChallenges(amount: number, ai: GoogleGenAI): Promise<ChallengeInfo[]> {
     const pstTimeNow = getPstTimeNow();
     // Calculate the start of tomorrow in PST
     const startOfTomorrowPst = new Date(
         Date.UTC(pstTimeNow.getUTCFullYear(), pstTimeNow.getUTCMonth(), pstTimeNow.getUTCDate() + 1, 0, 0, 0, 0),
     );
 
-    const challenges: ChallengeInfo[] = [];
-    for (let i = 0; i < amount; i++) {
-        challenges[i] = {
-            name: "Challenge 1",
-            description: "Complete the first challenge.",
-            pointReward: Math.floor(Math.random() * 90) + 10, // Random reward between 10 and 99
-            endTime: startOfTomorrowPst,
-        };
+    const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: `Generate JSON for ${amount.toString()} daily challenge(s) for an app designed to help introverts get more comfortable. Each challenge should have a name, description, point reward. Point reward should be between 10 and 99. Point rewards should scale with difficulty. The challenges should be fun and engaging. Do not use markdown. The JSON should be in the following format: [{ "name": "Say Hi To Someone 👋", "description": "Go out and say hi to someone new!", "pointReward": 24 }]`,
+    });
+
+    if (response.text === undefined) {
+        throw new Error("AI response is undefined");
     }
+    const jsonArrStart = response.text.indexOf("[");
+    const jsonArrEnd = response.text.indexOf("]");
+    const jsonString = response.text.substring(jsonArrStart, jsonArrEnd + 1);
+    let parsed: unknown;
+    try {
+        parsed = JSON.parse(jsonString);
+    } catch (_) {
+        throw new Error("Failed to parse AI response");
+    }
+    if (!Array.isArray(parsed)) {
+        throw new Error("AI response is not an array");
+    }
+    if (parsed.length !== amount) {
+        throw new Error("AI response does not match requested number of challenges");
+    }
+
+    parsed.forEach((challenge: ChallengeInfo) => {
+        challenge.endTime = startOfTomorrowPst;
+    });
+    if (!parsed.every(isChallengeInfo)) {
+        throw new Error("AI response is not valid ChallengeInfo");
+    }
+    return parsed;
+}
+
+/**
+ * Creates a specified number of new challenges and inserts them into the database.
+ * @param {Db} database - The MongoDB database instance.
+ * @param {number} amount - The number of challenges to create.
+ * @param {GoogleGenAI} ai - The AI instance used to generate challenges.
+ * @returns {Promise<WithId<ChallengeInfo>[]>} The created challenges with their generated ObjectIds.
+ */
+async function createChallenges(database: Db, amount: number, ai: GoogleGenAI): Promise<WithId<ChallengeInfo>[]> {
+    const challenges = await generateChallenges(amount, ai);
 
     const insertResult = await database.collection("challenges").insertMany(challenges);
     // Attach the generated _id to each challenge
@@ -134,9 +168,10 @@ async function createChallenges(database: Db, amount: number): Promise<WithId<Ch
 /**
  * Retrieves all valid daily challenges from the database, removes expired or invalid ones, and creates new ones if needed.
  * @param {Db} database - The MongoDB database instance.
+ * @param {GoogleGenAI} ai - The AI instance used to generate challenges.
  * @returns {Promise<WithId<ChallengeInfo>[]>} The info about all of the current challenges.
  */
-async function getAllChallenges(database: Db): Promise<WithId<ChallengeInfo>[]> {
+async function getAllChallenges(database: Db, ai: GoogleGenAI): Promise<WithId<ChallengeInfo>[]> {
     const challenges = await database.collection("challenges").find().toArray();
 
     // Validate and filter challenges, deleting any that are invalid
@@ -163,7 +198,12 @@ async function getAllChallenges(database: Db): Promise<WithId<ChallengeInfo>[]> 
     // If there are less than NUM_CHALLENGES challenges, create new ones
     let newChallenges: WithId<ChallengeInfo>[] = [];
     if (remainingChallengeInfos.length < NUM_CHALLENGES) {
-        newChallenges = await createChallenges(database, NUM_CHALLENGES - remainingChallengeInfos.length);
+        try {
+            newChallenges = await createChallenges(database, NUM_CHALLENGES - remainingChallengeInfos.length, ai);
+        } catch (err) {
+            console.error("Error creating new challenges:", err);
+            newChallenges = [];
+        }
     }
 
     return remainingChallengeInfos.concat(newChallenges);
@@ -225,10 +265,11 @@ async function updateUserChallengeStatuses(
  * Updates the user's challenge statuses to match the current set of challenges.
  * @param {Request} req - The Express request object.
  * @param {Db} database - The MongoDB database instance.
+ * @param {GoogleGenAI} ai - The AI instance used to generate challenges.
  * @returns {Promise<UserChallengeInfo[]>} The info about all of the user's challenges.
  * @throws Will throw an error if the user is not authenticated, not found, or has invalid data.
  */
-async function getUserChallenges(req: Request, database: Db): Promise<UserChallengeInfo[]> {
+async function getUserChallenges(req: Request, database: Db, ai: GoogleGenAI): Promise<UserChallengeInfo[]> {
     if (req.session.loggedInUserId === undefined) {
         throw new Error("User must authenticate first");
     }
@@ -245,7 +286,7 @@ async function getUserChallenges(req: Request, database: Db): Promise<UserChalle
         throw new Error("User data is not valid");
     }
 
-    const challenges = await getAllChallenges(database);
+    const challenges = await getAllChallenges(database, ai);
 
     // This function call will update user.challengeStatuses if necessary
     // This includes removing any completed challenges that no longer exist and adding any new challenges
@@ -266,10 +307,11 @@ async function getUserChallenges(req: Request, database: Db): Promise<UserChalle
  * @param {Request} req - The Express request object.
  * @param {Db} database - The MongoDB database instance.
  * @param {string} challengeId - The ID of the challenge to complete.
+ * @param {GoogleGenAI} ai - The AI instance used to generate challenges.
  * @returns {Promise<ChallengeCompleteData>} An promise indicating the completion of the operation, and resolves to ChallengeCompleteData.
  * @throws Will throw an error if the user is not authenticated, not found, has invalid data, or if there is not a challenge with the given ID.
  */
-async function completeChallenge(req: Request, database: Db, challengeId: string): Promise<ChallengeCompleteData> {
+async function completeChallenge(req: Request, database: Db, challengeId: string, ai: GoogleGenAI): Promise<ChallengeCompleteData> {
     if (req.session.loggedInUserId === undefined) {
         throw new Error("User must authenticate first");
     }
@@ -288,7 +330,7 @@ async function completeChallenge(req: Request, database: Db, challengeId: string
 
     let status = user.challengeStatuses.find(status => status.challengeId === challengeId);
     if (status === undefined) {
-        const challenges = await getAllChallenges(database);
+        const challenges = await getAllChallenges(database, ai);
         user.challengeStatuses = await updateUserChallengeStatuses(
             database,
             req.session.loggedInUserId,
