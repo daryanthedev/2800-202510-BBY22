@@ -1,6 +1,7 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
 import { buyItem } from "../utils/storeUtils.js";
+import validateSession from "../middleware/validateSession.js";
 
 interface Item {
     _id: string;
@@ -12,7 +13,7 @@ interface Item {
 
 export default (app: Express, database: Db) => {
     // GET /shop → render shop.ejs with all items + notifications
-    app.get("/shop", async (req: Request, res: Response) => {
+    app.get("/shop", validateSession, async (req: Request, res: Response) => {
         const rawItems = await database.collection<Item>("items").find({}).toArray();
         const items = rawItems.map(i => ({
             _id: i._id.toString(),
@@ -31,6 +32,9 @@ export default (app: Express, database: Db) => {
 
     // POST /api/shop/buy → attempt purchase then redirect back
     app.post("/api/shop/buy", async (req: Request, res: Response) => {
+        if (req.session.loggedInUserId === undefined) {
+            throw new StatusError(401, "Please authenticate first");
+        }
         const { itemName } = req.body as { itemName?: string };
         if (!itemName) {
             res.redirect("/shop");
