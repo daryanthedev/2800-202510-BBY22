@@ -1,14 +1,44 @@
 import { Express, Request, Response } from "express";
-console.log("Loading shop route");
+import { Db } from "mongodb";
+import { giveItem } from "../utils/storeUtils.js";
 
-/**
- * Registers the /shop route to render the shop page.
- * @param {Express} app - The Express application instance.
- */
-export default (app: Express) => {
-    console.log(app);
-    console.log("Rendering shop page");
-    app.get("/shop", (_: Request, res: Response) => {
-        res.render("shop.ejs");
+interface Item {
+    _id: string;
+    name: string;
+    description: string;
+    imageUrl?: string;
+    price: number;
+}
+
+export default (app: Express, database: Db) => {
+    app.get("/shop", async (req: Request, res: Response) => {
+        const rawItems = await database.collection<Item>("items").find({}).toArray();
+        const items = rawItems.map(i => ({
+            _id: i._id.toString(),
+            name: i.name,
+            description: i.description,
+            imageUrl: i.imageUrl ?? "/images/placeholder.png",
+            price: i.price,
+        }));
+        res.render("shop", { items, error: req.query.error });
+    });
+
+    // POST /api/shop/buy -> attempt purchase then redirect back to shop
+    app.post("/api/shop/buy", async (req: Request, res: Response) => {
+        const { itemName } = req.body as { itemName?: string };
+        if (!itemName) {
+            res.redirect("/shop");
+            return;
+        }
+
+        try {
+            await giveItem(req, database, itemName);
+            res.redirect("/shop");
+            return;
+        } catch (err: unknown) {
+            console.error("Purchase error:", err);
+            res.redirect("/shop?error=" + encodeURIComponent((err as Error).message));
+            return;
+        }
     });
 };
