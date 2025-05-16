@@ -1,6 +1,5 @@
 import { Db, ObjectId, WithId } from "mongodb";
-import { Request } from "express";
-import { isUsersSchema, ChallengeStatus } from "../schema.js";
+import { ChallengeStatus, UsersSchema } from "../schema.js";
 import StatusError from "./statusError.js";
 import { GoogleGenAI } from "@google/genai";
 
@@ -216,14 +215,14 @@ async function getAllChallenges(database: Db, ai: GoogleGenAI): Promise<WithId<C
  * Updates the user's challenge completion statuses to match the current set of challenges.
  * Removes statuses for challenges that no longer exist and adds statuses for new challenges.
  * @param {Db} database - The MongoDB database instance.
- * @param {string} userId - The user's ObjectId as a string.
+ * @param {ObjectId} userId - The user's id.
  * @param {ChallengeStatus[]} challengeStatuses - The user's current challenge statuses.
  * @param {WithId<ChallengeInfo>[]} challenges - The current set of challenges.
  * @returns {Promise<ChallengeStatus[]>} The updated challenge statuses.
  */
 async function updateUserChallengeStatuses(
     database: Db,
-    userId: string,
+    userId: ObjectId,
     challengeStatuses: ChallengeStatus[],
     challenges: WithId<ChallengeInfo>[],
 ): Promise<ChallengeStatus[]> {
@@ -257,43 +256,27 @@ async function updateUserChallengeStatuses(
     // Update the user's challenge completions in the database if modified
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (challengeStatusesModified) {
-        await database.collection("users").updateOne({ _id: new ObjectId(userId) }, { $set: { challengeStatuses } });
+        await database.collection("users").updateOne({ _id: userId }, { $set: { challengeStatuses } });
     }
 
     return challengeStatuses;
 }
 
 /**
- * Retrieves the challenge information for the logged-in user from the database.
+ * Retrieves the challenge information for a user from the database.
  * Updates the user's challenge statuses to match the current set of challenges.
- * @param {Request} req - The Express request object.
+ * @param {WithId<UsersSchema>} user - The user to get challenges for.
  * @param {Db} database - The MongoDB database instance.
  * @param {GoogleGenAI} ai - The AI instance used to generate challenges.
  * @returns {Promise<UserChallengeInfo[]>} The info about all of the user's challenges.
  * @throws Will throw an error if the user is not authenticated, not found, or has invalid data.
  */
-async function getUserChallenges(req: Request, database: Db, ai: GoogleGenAI): Promise<UserChallengeInfo[]> {
-    if (req.session.loggedInUserId === undefined) {
-        throw new Error("User must authenticate first");
-    }
-
-    const user = await database.collection("users").findOne({
-        _id: new ObjectId(req.session.loggedInUserId),
-    });
-
-    // Ensure user is valid
-    if (user === null) {
-        throw new Error("User not found");
-    }
-    if (!isUsersSchema(user)) {
-        throw new Error("User data is not valid");
-    }
-
+async function getUserChallenges(user: WithId<UsersSchema>, database: Db, ai: GoogleGenAI): Promise<UserChallengeInfo[]> {
     const challenges = await getAllChallenges(database, ai);
 
     // This function call will update user.challengeStatuses if necessary
     // This includes removing any completed challenges that no longer exist and adding any new challenges
-    user.challengeStatuses = await updateUserChallengeStatuses(database, req.session.loggedInUserId, user.challengeStatuses, challenges);
+    user.challengeStatuses = await updateUserChallengeStatuses(database, user._id, user.challengeStatuses, challenges);
 
     const userChallenges = user.challengeStatuses.map((challengeStatus, index: number): UserChallengeInfo => {
         const challenge = challenges[index];
@@ -306,37 +289,21 @@ async function getUserChallenges(req: Request, database: Db, ai: GoogleGenAI): P
 }
 
 /**
- * Completes a challenge for the logged-in user and updates their challenge statuses.
- * @param {Request} req - The Express request object.
+ * Completes a challenge for a user and updates their challenge statuses.
+ * @param {WithId<UsersSchema>} user - The currently logged in user.
  * @param {Db} database - The MongoDB database instance.
  * @param {string} challengeId - The ID of the challenge to complete.
  * @param {GoogleGenAI} ai - The AI instance used to generate challenges.
  * @returns {Promise<ChallengeCompleteData>} An promise indicating the completion of the operation, and resolves to ChallengeCompleteData.
  * @throws Will throw an error if the user is not authenticated, not found, has invalid data, or if there is not a challenge with the given ID.
  */
-async function completeChallenge(req: Request, database: Db, challengeId: string, ai: GoogleGenAI): Promise<ChallengeCompleteData> {
-    if (req.session.loggedInUserId === undefined) {
-        throw new Error("User must authenticate first");
-    }
-
-    const user = await database.collection("users").findOne({
-        _id: new ObjectId(req.session.loggedInUserId),
-    });
-
-    // Ensure user is valid
-    if (user === null) {
-        throw new Error("User not found");
-    }
-    if (!isUsersSchema(user)) {
-        throw new Error("User data is not valid");
-    }
-
+async function completeChallenge(user: WithId<UsersSchema>, database: Db, challengeId: string, ai: GoogleGenAI): Promise<ChallengeCompleteData> {
     let status = user.challengeStatuses.find(status => status.challengeId === challengeId);
     if (status === undefined) {
         const challenges = await getAllChallenges(database, ai);
         user.challengeStatuses = await updateUserChallengeStatuses(
             database,
-            req.session.loggedInUserId,
+            user._id,
             user.challengeStatuses,
             challenges,
         );
@@ -355,7 +322,7 @@ async function completeChallenge(req: Request, database: Db, challengeId: string
     status.completed = true;
     user.points += challenge.pointReward;
     await database.collection("users").updateOne(
-        { _id: new ObjectId(req.session.loggedInUserId) },
+        { _id: user._id },
         {
             $set: {
                 challengeStatuses: user.challengeStatuses,
