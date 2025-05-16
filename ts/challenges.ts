@@ -112,13 +112,13 @@ function createModal(challenge: ChallengeInfo): Modal {
 
 /**
  * Removes a modal from the page.
- * @param {Modal} modal - The modal to remove
+ * @param {Modal} modal - The modal to remove.
  */
 function removeModal(modal: Modal): void {
     modal.modal.remove();
 }
 
-function completeChallenge(challenge: ChallengeInfo, data: ChallengeCompleteData, modal: Modal): void {
+function updateChallengeElemCompletion(challenge: ChallengeInfo, data: ChallengeCompleteData, modal: Modal): void {
     // Update the challenge div to show that it has been completed
     challenge.div.classList.add("opacity-60");
 
@@ -136,11 +136,36 @@ function completeChallenge(challenge: ChallengeInfo, data: ChallengeCompleteData
 }
 
 /**
- * Initializes a list of challenge info with events listeners that create modal
- * @param {ChallengeInfo[]} challenges - An array of challenge info to add event listeners for modals to
- * @param {HTMLElement} modalContainer - A container element to put modals into
+ * Makes a POST request to complete a challenge.
+ * @param {string} challengeId - The ID of the challenge.
+ * @returns {Promise<ChallengeCompleteData | undefined>} The API response or undefined if the request failed in some way.
+ */
+async function completeChallenge(challengeId: string): Promise<ChallengeCompleteData | undefined> {
+    // Make a POST request to the API
+    const response = await fetch("/api/challenge/complete", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            challengeId,
+        }),
+    });
+    // If the response was ok, then return it, other alert and return undefined
+    if (response.ok) {
+        return await response.json() as ChallengeCompleteData;
+    } else {
+        alert("Error completing the challenge.");
+    }
+}
+
+/**
+ * Initializes a list of challenge info with events listeners that create modal.
+ * @param {ChallengeInfo[]} challenges - An array of challenge info to add event listeners for modals to.
+ * @param {HTMLElement} modalContainer - A container element to put modals into.
  */
 function initializeChallenges(challenges: ChallengeInfo[], modalContainer: HTMLElement): void {
+    // Add a listener for every challenge
     challenges.forEach(challenge => {
         challenge.div.addEventListener("click", () => {
             const modal = createModal(challenge);
@@ -150,22 +175,15 @@ function initializeChallenges(challenges: ChallengeInfo[], modalContainer: HTMLE
             modal.closeButton.addEventListener("click", () => {
                 removeModal(modal);
             });
+            // If the modal has a completion button, complete the challenge on click
             if(modal.completeButton !== undefined) {
                 modal.completeButton.addEventListener("click", async () => {
-                    const response = await fetch("/api/challenge/complete", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            challengeId: challenge._id,
-                        }),
-                    });
-                    if (response.ok) {
-                        const data = await response.json() as ChallengeCompleteData;
-                        completeChallenge(challenge, data, modal);
-                    } else {
-                        alert("Error completing the challenge.");
+                    // Try completing the challenge
+                    const data = await completeChallenge(challenge._id);
+                    // On success, update the page to reflect
+                    if(data !== undefined) {
+                        challenge.completed = true;
+                        updateChallengeElemCompletion(challenge, data, modal);
                     }
                 });
             }
