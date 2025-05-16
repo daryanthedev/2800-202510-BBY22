@@ -1,6 +1,7 @@
 /* Compiles to /tailwind.css on the website */
 
 @import "tailwindcss";
+@plugin "daisyui";
 @import url('https://fonts.googleapis.com/css2?family=Afacad:wght@100..1000&family=Combo&display=swap');
 
 @theme {
