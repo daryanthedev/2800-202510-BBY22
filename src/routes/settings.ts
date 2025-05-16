@@ -6,12 +6,12 @@ import validateSession from "../middleware/validateSession.js";
  * @param {Express} app - The Express application instance.
  */
 export default (app: Express) => {
-    app.get("/settings", (_: Request, res: Response) => {
+    app.get("/settings", validateSession, (_: Request, res: Response) => {
         res.render("settings.ejs");
     });
 
-    app.get("/settings/*", validateSession, (req: Request, res: Response) => {
-        const settingCatagory = req.params[0];
+    app.get("/settings/:settingCategory", validateSession, (req: Request, res: Response) => {
+        const settingCatagory = req.params.settingCatagory;
         const settingCategories = ["about", "account", "appearance"];
 
         if (settingCategories.includes(settingCatagory)) {
@@ -23,7 +23,5 @@ export default (app: Express) => {
                 errorMessage: "Looks like this path leads to a dead end... even the goblins are confused.",
             });
         }
-
-        res.render("settings.ejs");
     });
 };
