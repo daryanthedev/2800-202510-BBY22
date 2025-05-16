@@ -130,10 +130,10 @@
                         <% } else { %>
                             <div
                                 onclick="showModal('<%= challenge.name %>', '<%= challenge.description %>', '<%= challenge.pointReward %>')"
-                                class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow opacity-60 line-through cursor-pointer hover:scale-[1.01] transition-transform"
+                                class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer opacity-60 hover:scale-[1.01] transition-transform"
                             >
-                                <span><%= challenge.name %></span>
-                                <span class="bg-[var(--color-quietquest-dark)] text-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"><%= challenge.pointReward %> pts</span>
+                                <span class="line-through"><%= challenge.name %></span>
+                                <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"><%= challenge.pointReward %> pts</span>
                             </div>
                         <% } %>
                     <% }); %>
