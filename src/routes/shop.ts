@@ -1,4 +1,5 @@
 import { Express, Request, Response } from "express";
+import validateSession from "../middleware/validateSession.js";
 console.log("Loading shop route");
 
 /**
@@ -6,9 +7,7 @@ console.log("Loading shop route");
  * @param {Express} app - The Express application instance.
  */
 export default (app: Express) => {
-    console.log(app);
-    console.log("Rendering shop page");
-    app.get("/shop", (_: Request, res: Response) => {
+    app.get("/shop", validateSession, (_: Request, res: Response) => {
         res.render("shop.ejs");
     });
 };
