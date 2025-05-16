@@ -74,7 +74,7 @@ async function buyItem(req: Request, database: Db, itemName: string): Promise<un
 
     const item = await getItem(itemName, database);
 
-    // If the price is less than the price of the item, throw an error
+    // If the user cannot afford the item, throw an error
     if (user.points < item.price) {
         throw new Error("Cannot buy item, you do not have enough points");
     }
