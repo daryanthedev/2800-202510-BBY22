@@ -1,4 +1,5 @@
 import { Express, Request, Response } from "express";
+import validateSession from "../middleware/validateSession.js";
 
 /**
  * Registers the /settings route to render the settings page.
@@ -9,9 +10,10 @@ export default (app: Express) => {
         res.render("settings.ejs");
     });
 
-    app.get("/settings/*", (req: Request, res: Response) => {
+    app.get("/settings/*", validateSession, (req: Request, res: Response) => {
         const settingCatagory = req.params[0];
         const settingCategories = ['about', 'account', 'appearance'];
+        
         if (settingCategories.includes(settingCatagory)) 
             {
             res.render(`settings/${settingCatagory}`);
