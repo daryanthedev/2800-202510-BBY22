@@ -100,13 +100,18 @@
                 </div>
 
                 <!-- Modal (hidden by default) -->
-                <div id="goal-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-                    <div class="bg-white p-6 rounded-xl w-96 shadow-lg space-y-4">
-                        <h2 class="text-xl font-semibold text-[var(--color-quietquest-dark)]" id="modal-title">Goal Title</h2>
+                <div id="goal-modal" class="fixed inset-0 bg-quietquest-green bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div
+                        class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] p-6 rounded-xl w-96 shadow-lg space-y-4"
+                    >
+                        <h2 class="text-xl font-semibold" id="modal-title">Goal Title</h2>
                         <p id="modal-description">This is a placeholder description of the challenge.</p>
                         <p><strong>Points:</strong> <span id="modal-points">50</span></p>
                         <p><strong>End Time:</strong> <span id="modal-endtime">Tomorrow 10am</span></p>
-                        <button onclick="closeModal()" class="mt-4 px-4 py-2 bg-[var(--color-quietquest-dark)] text-white rounded shadow">
+                        <button
+                            onclick="closeModal()"
+                            class="mt-4 px-4 py-2 bg-[var(--color-quietquest-cream)] text-quietquest-dark rounded shadow"
+                        >
                             Close
                         </button>
                     </div>
