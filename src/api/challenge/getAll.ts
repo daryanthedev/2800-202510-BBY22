@@ -22,7 +22,7 @@ export default (app: Express, database: Db, ai: GoogleGenAI) => {
         try {
             user = await getCurrentUser(database, new ObjectId(req.session.loggedInUserId));
         } catch(_) {
-            throw new StatusError(500, "Error find user in database");
+            throw new StatusError(500, "Error finding user in database");
         }
 
         const userChallenges = await getUserChallenges(user, database, ai);
