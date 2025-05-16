@@ -21,6 +21,7 @@
 
     <body class="bg-quietquest-gold font-afacad min-h-screen relative">
         <!-- Header -->
+        <%- include('partials/topNavbar') %>
         <header class="bg-quietquest-blue text-quietquest-cream text-center py-8">
             <h1 class="font-combo text-4xl">Shop</h1>
             <p class="mt-2 text-lg">Browse our treasures</p>
@@ -58,7 +59,6 @@
                 <div class="bg-quietquest-cream/50 rounded-full p-4 mb-3">
                     <img src="<%= item.imageUrl %>" alt="<%= item.name %>" class="w-16 h-16 object-cover" />
                 </div>
-
                 <!-- Name & Description -->
                 <h2 class="text-white font-semibold text-center mb-1"><%= item.name %></h2>
                 <p class="text-white text-center text-sm mb-2"><%= item.description %></p>
@@ -105,5 +105,6 @@
             </div>
             <% }) %>
         </main>
+        <%- include('partials/bottomNavbar') %>
     </body>
 </html>
