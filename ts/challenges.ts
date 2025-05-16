@@ -32,33 +32,77 @@ interface Modal {
     closeButton: HTMLButtonElement;
 }
 
-function showModal(modal: Modal, title: string, description: string, points: number) {
-    modal.title.textContent = title.toString();
-    modal.description.textContent = description.toString();
-    modal.points.textContent = points.toString();
-    modal.modal.classList.remove("hidden");
+/**
+ * Creates a modal for displaying challenge information.
+ * @param {string} name The title of the challenge.
+ * @param {string} description The description of the challenge.
+ * @param {number} points The number of points awarded for completing the challenge.
+ * @returns {Modal} The modal elements.
+ */
+function createModal(name: string, description: string, points: number): Modal {
+    const modalElem = document.createElement("div");
+    modalElem.className = "fixed inset-0 bg-opacity-50 flex items-center justify-center z-100 backdrop-blur-sm";
+
+    const modalContent = document.createElement("div");
+    modalContent.className = "bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] p-6 rounded-xl w-96 shadow-lg space-y-4 backdrop-filter-none";
+    modalElem.appendChild(modalContent);
+
+    const nameElem = document.createElement("h2");
+    nameElem.className = "text-xl font-semibold";
+    nameElem.textContent = name.toString();
+    modalContent.appendChild(nameElem);
+
+    const descriptionElem = document.createElement("p");
+    descriptionElem.textContent = description.toString();
+    modalContent.appendChild(descriptionElem);
+
+    const pointsElem = document.createElement("p");
+    modalContent.appendChild(pointsElem);
+
+    const pointsStrong = document.createElement("strong");
+    pointsStrong.textContent = "Points:";
+    pointsElem.appendChild(pointsStrong);
+
+    const pointsSpan = document.createElement("span");
+    pointsSpan.textContent = points.toString();
+    pointsElem.appendChild(pointsSpan);
+
+    const closeButton = document.createElement("button");
+    closeButton.className = "mt-4 px-4 py-2 bg-[var(--color-quietquest-cream)] text-quietquest-dark cursor-pointer rounded shadow";
+    closeButton.textContent = "Close";
+    modalContent.appendChild(closeButton);
+
+    return {
+        modal: modalElem,
+        title: nameElem,
+        description: descriptionElem,
+        points: pointsElem,
+        closeButton,
+    };;
 }
 
-function closeModal(modal: Modal) {
-    modal.modal.classList.add("hidden");
-}
-
-function initializeChallenges(challenges: ChallengeInfo[], modal: Modal): void {
-    modal.closeButton.addEventListener("click", () => {
-        closeModal(modal);
-    });
-
+function initializeChallenges(challenges: ChallengeInfo[], modalContainer: HTMLElement): void {
     challenges.forEach(challenge => {
         challenge.div.addEventListener("click", () => {
-            showModal(
-                modal,
+            const modal = createModal(
                 challenge.name,
                 challenge.description,
                 challenge.pointReward,
             );
+            // Append the modal to the modal container
+            modalContainer.appendChild(modal.modal);
+            // Close the modal when the close button is clicked
+            modal.closeButton.addEventListener("click", () => {
+                modalContainer.removeChild(modal.modal);
+            });
+            // Allow clicking outside the modal to close it
+            modal.modal.addEventListener("click", event => {
+                if (event.target === modal.modal) {
+                    modalContainer.removeChild(modal.modal);
+                }
+            });
         });
     });
-    console.log(challenges);
 }
 
 export default initializeChallenges;

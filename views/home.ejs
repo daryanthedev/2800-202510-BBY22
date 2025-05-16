@@ -8,6 +8,10 @@
     <body class="bg-quietquest-green font-afacad pb-20">
         <!-- Add bottom padding so bottom nav doesn't cover content -->
         <%- include('partials/topNavbar') %>
+
+        <!-- Spot where modal is dynamically created -->
+        <div id="modal-container"></div>
+
         <!-- Main content -->
         <main class="pt-8 md:pt-20 px-4">
             <!-- Streaks Button -->
@@ -99,43 +103,30 @@
                     </button>
                 </div>
 
-                <!-- Modal (hidden by default) -->
-                <div id="goal-modal" class="fixed inset-0 bg-quietquest-green bg-opacity-50 flex items-center justify-center z-50 hidden">
-                    <div
-                        class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] p-6 rounded-xl w-96 shadow-lg space-y-4"
-                    >
-                        <h2 class="text-xl font-semibold" id="modal-title">Goal Title</h2>
-                        <p id="modal-description">This is a placeholder description of the challenge.</p>
-                        <p><strong>Points:</strong> <span id="modal-points">50</span></p>
-                        <button
-                            id="modal-close"
-                            class="mt-4 px-4 py-2 bg-[var(--color-quietquest-cream)] text-quietquest-dark rounded shadow"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Goal Items -->
                 <div id="goal-container" class="flex flex-col space-y-4">
                     <% challenges.forEach(challenge => { %>
-                        <% if (!challenge.completed) { %>
-                            <div
-                                id="challenge-<%= challenge._id %>"
-                                class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform"
-                            >
-                                <span><%= challenge.name %></span>
-                                <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"><%= challenge.pointReward %> pts</span>
-                            </div>
-                        <% } else { %>
-                            <div
-                                id="challenge-<%= challenge._id %>"
-                                class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer opacity-60 hover:scale-[1.01] transition-transform"
-                            >
-                                <span class="line-through"><%= challenge.name %></span>
-                                <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"><%= challenge.pointReward %> pts</span>
-                            </div>
-                        <% } %>
+                    <% if (!challenge.completed) { %>
+                    <div
+                        id="challenge-<%= challenge._id %>"
+                        class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform"
+                    >
+                        <span><%= challenge.name %></span>
+                        <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"
+                            ><%= challenge.pointReward %> pts</span
+                        >
+                    </div>
+                    <% } else { %>
+                    <div
+                        id="challenge-<%= challenge._id %>"
+                        class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer opacity-60 hover:scale-[1.01] transition-transform"
+                    >
+                        <span class="line-through"><%= challenge.name %></span>
+                        <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"
+                            ><%= challenge.pointReward %> pts</span
+                        >
+                    </div>
+                    <% } %>
                     <% }); %>
                 </div>
             </div>
@@ -143,28 +134,19 @@
         <%- include('partials/bottomNavbar') %>
         <script src="/js/battle.js"></script>
         <script type="module">
-            import initializeChallenges from '/js/challenges.js';
+            import initializeChallenges from "/js/challenges.js";
 
             const challenges = JSON.parse(`<%- JSON.stringify(challenges) %>`);
+            // Add div property to each challenge object
             challenges.forEach(challenge => {
                 challenge.div = document.getElementById(`challenge-${challenge._id}`);
             });
 
-            const modalElement = document.getElementById("goal-modal");
-            const titleElement = document.getElementById("modal-title");
-            const descriptionElement = document.getElementById("modal-description");
-            const pointsElement = document.getElementById("modal-points");
-            const modalCloseButton = document.getElementById("modal-close");
+            // Get the spot where modals will be created
+            const modalContainer = document.getElementById("modal-container");
 
-            const modal = {
-                modal: modalElement,
-                title: titleElement,
-                description: descriptionElement,
-                points: pointsElement,
-                closeButton: modalCloseButton,
-            };
-
-            initializeChallenges(challenges, modal);
+            // Set up event listeners for challenge divs
+            initializeChallenges(challenges, modalContainer);
         </script>
     </body>
 </html>
