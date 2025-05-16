@@ -10,6 +10,8 @@ interface ChallengeInfo {
     description: string;
     // The number of points awarded for completing the challenge.
     pointReward: number;
+    // Whether the user has completed the challenge.
+    completed: boolean;
     // The end time of the challenge.
     endTime: Date;
     // The div element of the challenge.
@@ -33,7 +35,7 @@ interface Modal {
     // The close button element of the modal.
     closeButton: HTMLButtonElement;
     // The complete button element of the modal.
-    completeButton: HTMLButtonElement;
+    completeButton?: HTMLButtonElement;
 }
 
 /*
@@ -46,12 +48,10 @@ interface ChallengeCompleteData {
 
 /**
  * Creates a modal for displaying challenge information.
- * @param {string} name The title of the challenge.
- * @param {string} description The description of the challenge.
- * @param {number} points The number of points awarded for completing the challenge.
+ * @param {ChallengeInfo} challenge - The challenge to base the modal off of.
  * @returns {Modal} The modal elements.
  */
-function createModal(name: string, description: string, points: number): Modal {
+function createModal(challenge: ChallengeInfo): Modal {
     const modalElem = document.createElement("div");
     modalElem.className = "fixed inset-0 bg-opacity-50 flex items-center justify-center z-100 backdrop-blur-sm";
 
@@ -61,11 +61,11 @@ function createModal(name: string, description: string, points: number): Modal {
 
     const nameElem = document.createElement("h2");
     nameElem.className = "text-xl font-semibold";
-    nameElem.textContent = name.toString();
+    nameElem.textContent = challenge.name.toString();
     modalContent.appendChild(nameElem);
 
     const descriptionElem = document.createElement("p");
-    descriptionElem.textContent = description.toString();
+    descriptionElem.textContent = challenge.description.toString();
     modalContent.appendChild(descriptionElem);
 
     const pointsElem = document.createElement("p");
@@ -76,7 +76,7 @@ function createModal(name: string, description: string, points: number): Modal {
     pointsElem.appendChild(pointsStrong);
 
     const pointsSpan = document.createElement("span");
-    pointsSpan.textContent = points.toString();
+    pointsSpan.textContent = challenge.pointReward.toString();
     pointsElem.appendChild(pointsSpan);
 
     // Create a flex container for the buttons, so they are centered with space around
@@ -89,19 +89,25 @@ function createModal(name: string, description: string, points: number): Modal {
     closeButton.textContent = "Close";
     buttonContainer.appendChild(closeButton);
 
-    const completeButton = document.createElement("button");
-    completeButton.className = "px-4 py-2 bg-[var(--color-quietquest-green)] text-quietquest-dark cursor-pointer rounded shadow";
-    completeButton.textContent = "Complete";
-    buttonContainer.appendChild(completeButton);
-
-    return {
+    const modal: Modal = {
         modal: modalElem,
         title: nameElem,
         description: descriptionElem,
         points: pointsElem,
         closeButton,
-        completeButton,
     };
+
+    // Only add the complete button if the challenge is not completed yet
+    if (!challenge.completed) {
+        const completeButton = document.createElement("button");
+        completeButton.className = "px-4 py-2 bg-[var(--color-quietquest-green)] text-quietquest-dark cursor-pointer rounded shadow";
+        completeButton.textContent = "Complete";
+        buttonContainer.appendChild(completeButton);
+
+        modal.completeButton = completeButton;
+    }
+
+    return modal;
 }
 
 /**
@@ -137,34 +143,32 @@ function completeChallenge(challenge: ChallengeInfo, data: ChallengeCompleteData
 function initializeChallenges(challenges: ChallengeInfo[], modalContainer: HTMLElement): void {
     challenges.forEach(challenge => {
         challenge.div.addEventListener("click", () => {
-            const modal = createModal(
-                challenge.name,
-                challenge.description,
-                challenge.pointReward,
-            );
+            const modal = createModal(challenge);
             // Append the modal to the modal container
             modalContainer.appendChild(modal.modal);
             // Close the modal when the close button is clicked
             modal.closeButton.addEventListener("click", () => {
                 removeModal(modal);
             });
-            modal.completeButton.addEventListener("click", async () => {
-                const response = await fetch("/api/challenge/complete", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        challengeId: challenge._id,
-                    }),
+            if(modal.completeButton !== undefined) {
+                modal.completeButton.addEventListener("click", async () => {
+                    const response = await fetch("/api/challenge/complete", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            challengeId: challenge._id,
+                        }),
+                    });
+                    if (response.ok) {
+                        const data = await response.json() as ChallengeCompleteData;
+                        completeChallenge(challenge, data, modal);
+                    } else {
+                        alert("Error completing the challenge.");
+                    }
                 });
-                if (response.ok) {
-                    const data = await response.json() as ChallengeCompleteData;
-                    completeChallenge(challenge, data, modal);
-                } else {
-                    alert("Error completing the challenge.");
-                }
-            });
+            }
             // Allow clicking outside the modal to close it
             modal.modal.addEventListener("click", event => {
                 if (event.target === modal.modal) {
