@@ -119,42 +119,25 @@
 
                 <!-- Goal Items -->
                 <div id="goal-container" class="flex flex-col space-y-4">
-                    <!-- Single Goal -->
-                    <div
-                        onclick="showModal('Do 10 jumping jacks', 'Jump 10 times to get the blood flowing.', 20, 'Today at 5pm')"
-                        class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform"
-                    >
-                        <span>Do 10 jumping jacks</span>
-                        <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow">+20 pts</span>
-                    </div>
-
-                    <div
-                        onclick="showModal('Meditate for 5 minutes', 'Sit quietly and breathe for 5 minutes.', 30, 'Tonight at 9pm')"
-                        class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform"
-                    >
-                        <span>Meditate for 5 minutes</span>
-                        <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow">+30 pts</span>
-                    </div>
-
-                    <div
-                        onclick="showModal('Drink a glass of water', 'Hydrate to stay healthy and focused.', 10, 'Tomorrow morning')"
-                        class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform"
-                    >
-                        <span>Drink a glass of water</span>
-                        <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow">+10 pts</span>
-                    </div>
-
-                    <!-- Completed Goal -->
-                    <div
-                        onclick="showModal('Read a book for 30 minutes', 'Improve your knowledge by reading.', 40, 'Next Monday')"
-                        class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow opacity-60 line-through cursor-pointer hover:scale-[1.01] transition-transform"
-                    >
-                        <span>Read a book for 30 minutes</span>
-                        <span
-                            class="bg-[var(--color-quietquest-dark)] text-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"
-                            >+40 pts</span
-                        >
-                    </div>
+                    <% challenges.forEach(challenge => { %>
+                        <% if (!challenge.completed) { %>
+                            <div
+                                onclick="showModal('<%= challenge.name %>', '<%= challenge.description %>', '<%= challenge.pointReward %>', 'new Date(<%= challenge.endTime %>)')"
+                                class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform"
+                            >
+                                <span><%= challenge.name %></span>
+                                <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"><%= challenge.pointReward %> pts</span>
+                            </div>
+                        <% } else { %>
+                            <div
+                                onclick="showModal('<%= challenge.name %>', '<%= challenge.description %>', '<%= challenge.pointReward %>', new Date('<%= challenge.endTime %>'))"
+                                class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow opacity-60 line-through cursor-pointer hover:scale-[1.01] transition-transform"
+                            >
+                                <span><%= challenge.name %></span>
+                                <span class="bg-[var(--color-quietquest-dark)] text-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"><%= challenge.pointReward %> pts</span>
+                            </div>
+                        <% } %>
+                    <% }); %>
                 </div>
             </div>
         </main>
