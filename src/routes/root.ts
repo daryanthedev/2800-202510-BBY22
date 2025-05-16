@@ -22,7 +22,7 @@ export default (app: Express, database: Db, ai: GoogleGenAI) => {
                 throw new StatusError(500);
             }
             const challenges = await getUserChallenges(user, database, ai);
-            res.render("home", { challenges });
+            res.render("home", { challenges, user });
         } else {
             res.render("landing");
         }
