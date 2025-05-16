@@ -2,6 +2,7 @@ import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
 import StatusError from "../../utils/statusError.js";
 import { completeChallenge } from "../../utils/challengeUtils.js";
+import { GoogleGenAI } from "@google/genai";
 
 // Data taken in by this api endpoint.
 interface ChallengeCompleteData {
@@ -19,17 +20,16 @@ function isChallengeCompleteData(data: unknown): data is ChallengeCompleteData {
     }
 
     const obj = data as Record<string, unknown>;
-    return (
-        typeof obj.challengeId === "string"
-    );
+    return typeof obj.challengeId === "string";
 }
 
 /**
  * Registers the /api/challenge/complete endpoint to allow the user to complete challenges.
  * @param {Express} app - The Express application instance.
  * @param {Db} database - The MongoDB database instance.
+ * @param {GoogleGenAI} ai - The Google GenAI instance.
  */
-export default (app: Express, database: Db) => {
+export default (app: Express, database: Db, ai: GoogleGenAI) => {
     app.post("/api/challenge/complete", async (req: Request, res: Response) => {
         if (req.session.loggedInUserId === undefined) {
             throw new StatusError(401, "Please authenticate first");
@@ -40,7 +40,7 @@ export default (app: Express, database: Db) => {
 
         const { challengeId } = req.body;
 
-        const challengeCompleteData = await completeChallenge(req, database, challengeId);
+        const challengeCompleteData = await completeChallenge(req, database, challengeId, ai);
         res.json(challengeCompleteData);
     });
 };
