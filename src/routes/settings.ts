@@ -10,18 +10,7 @@ export default (app: Express) => {
         res.render("settings.ejs");
     });
 
-    app.get("/settings/:settingCategory", validateSession, (req: Request, res: Response) => {
-        const settingCatagory = req.params.settingCatagory;
-        const settingCategories = ["about", "account", "appearance"];
-
-        if (settingCategories.includes(settingCatagory)) {
-            res.render(`settings/${settingCatagory}`);
-        } else {
-            res.status(404).render("error", {
-                errorCode: "404",
-                errorName: "Page not found",
-                errorMessage: "Looks like this path leads to a dead end... even the goblins are confused.",
-            });
-        }
+    app.get("/settings/account", validateSession, (_: Request, res: Response) => {
+        res.render("settings/account.ejs");
     });
 };
