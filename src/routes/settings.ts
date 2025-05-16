@@ -12,14 +12,11 @@ export default (app: Express) => {
 
     app.get("/settings/*", validateSession, (req: Request, res: Response) => {
         const settingCatagory = req.params[0];
-        const settingCategories = ['about', 'account', 'appearance'];
-        
-        if (settingCategories.includes(settingCatagory)) 
-            {
+        const settingCategories = ["about", "account", "appearance"];
+
+        if (settingCategories.includes(settingCatagory)) {
             res.render(`settings/${settingCatagory}`);
-        }
-        else
-        {
+        } else {
             res.status(404).render("error", {
                 errorCode: "404",
                 errorName: "Page not found",
