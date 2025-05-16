@@ -33,17 +33,19 @@ export default (app: Express, database: Db) => {
     app.post("/api/shop/buy", async (req: Request, res: Response) => {
         const { itemName } = req.body as { itemName?: string };
         if (!itemName) {
-            res.redirect("/shop"); return;
+            res.redirect("/shop");
+            return;
         }
 
         try {
             await buyItem(req, database, itemName);
             // on success, show success message
-            res.redirect(`/shop?success=${encodeURIComponent(itemName)}`); return;
+            res.redirect(`/shop?success=${encodeURIComponent(itemName)}`);
+            return;
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : String(err);
-            console.error("Purchase error:", err);
-            res.redirect(`/shop?error=${encodeURIComponent(message)}`); return;
+            const message = err instanceof Error ? err.message : String(err); 
+            res.redirect(`/shop?error=${encodeURIComponent(message)}`);
+            return;
         }
     });
 };
