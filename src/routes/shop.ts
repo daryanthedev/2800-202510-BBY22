@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
-import { giveItem } from "../utils/storeUtils.js";
+import { buyItem } from "../utils/storeUtils.js";
 
 interface Item {
     _id: string;
@@ -11,6 +11,7 @@ interface Item {
 }
 
 export default (app: Express, database: Db) => {
+    // GET /shop → render shop.ejs with all items + notifications
     app.get("/shop", async (req: Request, res: Response) => {
         const rawItems = await database.collection<Item>("items").find({}).toArray();
         const items = rawItems.map(i => ({
@@ -20,25 +21,29 @@ export default (app: Express, database: Db) => {
             imageUrl: i.imageUrl ?? "/images/placeholder.png",
             price: i.price,
         }));
-        res.render("shop", { items, error: req.query.error });
+
+        // Safely extract notification params
+        const error = typeof req.query.error === "string" ? req.query.error : undefined;
+        const success = typeof req.query.success === "string" ? req.query.success : undefined;
+
+        res.render("shop", { items, error, success });
     });
 
-    // POST /api/shop/buy -> attempt purchase then redirect back to shop
+    // POST /api/shop/buy → attempt purchase then redirect back
     app.post("/api/shop/buy", async (req: Request, res: Response) => {
         const { itemName } = req.body as { itemName?: string };
         if (!itemName) {
-            res.redirect("/shop");
-            return;
+            res.redirect("/shop"); return;
         }
 
         try {
-            await giveItem(req, database, itemName);
-            res.redirect("/shop");
-            return;
+            await buyItem(req, database, itemName);
+            // on success, show success message
+            res.redirect(`/shop?success=${encodeURIComponent(itemName)}`); return;
         } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
             console.error("Purchase error:", err);
-            res.redirect("/shop?error=" + encodeURIComponent((err as Error).message));
-            return;
+            res.redirect(`/shop?error=${encodeURIComponent(message)}`); return;
         }
     });
 };
