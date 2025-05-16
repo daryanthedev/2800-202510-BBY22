@@ -12,7 +12,6 @@ export default (app: Express) => {
     app.get("/settings/*", (req: Request, res: Response) => {
         const settingCatagory = req.params[0];
         const settingCategories = ['about', 'account', 'appearance'];
-
         if (settingCategories.includes(settingCatagory)) 
             {
             res.render(`settings/${settingCatagory}`);
