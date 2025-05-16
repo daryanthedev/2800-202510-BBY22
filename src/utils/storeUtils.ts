@@ -2,67 +2,98 @@ import { Db, ObjectId } from "mongodb";
 import { Request } from "express";
 import { isUsersSchema } from "../schema.js";
 
-/*
-Gets the price of an item from the database
+/**
+ * Interface for the enemy's information.
  */
-async function getItemPrice(itemName: string, database: Db) {
-    //Get all the item from the database by querying for the items name
+interface ItemInfo {
+    name: string;
+    price: number;
+}
+
+/**
+ * Retrieves the price of an item from the database by its name.
+ * @param {string} itemName - The name of the item to look up.
+ * @param {Db} database - The MongoDB database instance.
+ * @returns {Promise<ItemInfo>} The item's information.
+ * @throws Error if the item's price is not a number.
+ */
+async function getItem(itemName: string, database: Db): Promise<ItemInfo> {
+    // Get the item from the database by querying for the items name
     const item = await database.collection("items").findOne({
         name: itemName,
     });
-    //check if item is null
+
+    // Check if item is null
     if (item === null) {
-        return null;
+        throw new Error("Item not found");
     }
-    //Ensure the items price is a number
+
+    // Ensure the items price is a number
     if (typeof item.price !== "number") {
-        throw new Error("price must be a number");
+        throw new Error("Items must have a price");
     }
-    //Return the price of the item
-    return item.price;
+    if (item.price <= 0) {
+        throw new Error("Item price must be greater than 0");
+    }
+
+    if (typeof item.name !== "string") {
+        throw new Error("Items must have a name");
+    }
+    if (item.name.trim() === "") {
+        throw new Error("Item name must not be blank");
+    }
+
+    // Return the item info
+    return {
+        name: item.name,
+        price: item.price,
+    };
 }
-/*
-Give the user the item they're buying
+
+/**
+ * Gives the specified item to the user if they have enough points.
+ * Updates the user's inventory and deducts the item's price from their points.
+ * @param {Request} req - The Express request object containing the session user ID.
+ * @param {Db} database - The MongoDB database instance.
+ * @param {string} itemName - The name of the item to give to the user.
+ * @returns {Promise<undefined>} void or throws an error if the operation fails.
  */
-async function giveItem(req: Request, database: Db, itemName: string) {
-    //Get the user's information from the user's ID
+async function buyItem(req: Request, database: Db, itemName: string): Promise<undefined> {
+    // Get the user's information from the user's ID
     const user = await database.collection("users").findOne({
         _id: new ObjectId(req.session.loggedInUserId),
     });
 
-    //Check if user is null
+    // Ensure user is valid
     if (user === null) {
-        return null;
+        throw new Error("User not found");
     }
-    //Ensure valid user
     if (!isUsersSchema(user)) {
-        throw new Error("Must be a valid user");
+        throw new Error("User data is not valid");
     }
-    //Get price of item
-    const price: number | null = await getItemPrice(itemName, database);
-    //Check that the item's price isn't null
-    if (price === null) {
-        throw new Error("Item price cannot be null");
-    }
-    //If the price is less or Equal to the user's available points, give them the item
-    if (price <= user.points) {
-        //Add the item to the user's inventory
-        user.inventory.push(itemName);
-        //Update user's database with the new inventory
-        await database.collection("users").updateOne(
-            {
-                _id: new ObjectId(req.session.loggedInUserId),
-            },
-            {
-                $set: {
-                    inventory: user.inventory,
-                    points: user.points - price,
-                },
-            },
-        );
-    } else {
+
+    const item = await getItem(itemName, database);
+
+    // If the price is less or Equal to the user's available points, give them the item
+    if (user.points > item.price) {
         throw new Error("Cannot buy item, you do not have enough points");
     }
+
+    // Add the item to the user's inventory
+    user.inventory.push(itemName);
+
+    // Update users database with the new inventory and update their points
+    await database.collection("users").updateOne(
+        {
+            _id: new ObjectId(req.session.loggedInUserId),
+        },
+        {
+            $set: {
+                inventory: user.inventory,
+                points: user.points - item.price,
+            },
+        },
+    );
 }
 
-export { giveItem };
+export { buyItem };
