@@ -19,9 +19,7 @@ function isChallengeCompleteData(data: unknown): data is ChallengeCompleteData {
     }
 
     const obj = data as Record<string, unknown>;
-    return (
-        typeof obj.challengeId === "string"
-    );
+    return typeof obj.challengeId === "string";
 }
 
 /**
