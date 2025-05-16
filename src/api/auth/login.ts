@@ -3,6 +3,7 @@ import { Db } from "mongodb";
 
 import * as hash from "../../utils/hash.js";
 import { isUsersSchema, isUsername, isEmail, isPassword, Username, Email, Password } from "../../schema.js";
+import StatusError from "../../utils/statusError.js";
 
 // Data required for login: username/email and password.
 interface LoginData {
@@ -36,35 +37,32 @@ function isLoginData(data: unknown): data is LoginData {
  */
 export default (app: Express, database: Db) => {
     app.post("/api/auth/login", async (req: Request, res: Response) => {
-        if (isLoginData(req.body)) {
-            const { usernameEmail, password } = req.body;
-            if (isEmail(usernameEmail)) {
-                const user = await database.collection("users").findOne({
-                    email: usernameEmail,
-                });
-                if (isUsersSchema(user)) {
-                    if (await hash.compare(password, user.passwordHash)) {
-                        req.session.loggedInUserId = user._id.toHexString();
-                        res.send();
-                    }
-                    return;
-                }
-            }
+        if (!isLoginData(req.body)) {
+            throw new StatusError(400, "Invalid data");
+        }
+        const { usernameEmail, password } = req.body;
+        if (isEmail(usernameEmail)) {
             const user = await database.collection("users").findOne({
-                username: usernameEmail,
+                email: usernameEmail,
             });
             if (isUsersSchema(user)) {
                 if (await hash.compare(password, user.passwordHash)) {
                     req.session.loggedInUserId = user._id.toHexString();
                     res.send();
-                    return;
                 }
+                return;
             }
-            res.status(401).send("Incorrect login data.");
-            return;
-        } else {
-            res.status(400).send("Invalid data.");
-            return;
         }
+        const user = await database.collection("users").findOne({
+            username: usernameEmail,
+        });
+        if (isUsersSchema(user)) {
+            if (await hash.compare(password, user.passwordHash)) {
+                req.session.loggedInUserId = user._id.toHexString();
+                res.send();
+                return;
+            }
+        }
+        throw new StatusError(401, "Incorrect login data");
     });
 };

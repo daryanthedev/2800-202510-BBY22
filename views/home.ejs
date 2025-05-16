@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('partials/header') %>
+        <title>QuietQuest</title>
+    </head>
+
+    <body class="bg-quietquest-green font-afacad pb-20">
+        <!-- Add bottom padding so bottom nav doesn't cover content -->
+
+        <!-- Desktop Top Navbar -->
+        <nav
+            class="hidden md:block fixed top-0 left-0 right-0 bg-[var(--color-quietquest-blue)] text-[var(--color-quietquest-cream)] z-50 transition-all duration-300"
+        >
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <img src="/quietQuestIcons/Logo Wide.svg" alt="Quiet Quest Logo" class="h-10 w-auto object-contain" />
+                    </div>
+
+                    <!-- Desktop Navigation -->
+                    <div class="flex items-center space-x-6">
+                        <a href="#" class="flex items-center space-x-2 hover:text-[var(--color-quietquest-gold)] transition-colors">
+                            <img src="/quietQuestIcons/home.svg" alt="home" class="h-5 w-5" />
+                            <span>Home</span>
+                        </a>
+                        <a href="/shop" class="flex items-center space-x-1 hover:text-[var(--color-quietquest-gold)] transition-colors">
+                            <img src="/quietQuestIcons/store.svg" alt="store" class="h-5 w-5" />
+                            <span>Shop</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 hover:text-[var(--color-quietquest-gold)] transition-colors">
+                            <img src="/quietQuestIcons/bookmark.svg" alt="bookmark" class="h-5 w-5" />
+                            <span>Journal</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 hover:text-[var(--color-quietquest-gold)] transition-colors">
+                            <img src="/quietQuestIcons/user-circle.svg" alt="profile" class="h-5 w-5" />
+                            <span>Profile</span>
+                        </a>
+                        <a href="/logout" class="hover:text-[var(--color-quietquest-gold)] transition-colors">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="pt-8 md:pt-20 px-4">
+            <!-- Streaks Button -->
+            <div class="mb-6">
+                <button
+                    id="open-streaks"
+                    class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] font-bold px-4 py-2 rounded-full shadow flex items-center space-x-2"
+                >
+                    <span>🔥</span>
+                    <span>Streaks</span>
+                </button>
+            </div>
+
+            <!-- Streaks Modal -->
+            <div id="streaks-modal" class="fixed inset-0 bg-[var(--color-quietquest-gold)] bg-opacity-100 z-50 hidden">
+                <div class="p-4">
+                    <!-- Go Back Button -->
+                    <button id="close-streaks" class="text-[var(--color-quietquest-dark)] font-bold text-lg flex items-center space-x-2">
+                        <span>🔙</span>
+                        <span>Go Back</span>
+                    </button>
+
+                    <!-- Content -->
+                    <div class="mt-10 text-center text-[var(--color-quietquest-dark)] text-3xl font-bold">🔥 Your Streaks!</div>
+                </div>
+            </div>
+
+            <!-- Monster Info Section -->
+            <div id="monster-section" class="contains-monster-info flex flex-col items-center space-y-4 mb-10">
+                <!-- White Circle -->
+                <div class="w-32 h-32 rounded-full bg-white"></div>
+
+                <!-- Monster Name -->
+                <div class="w-48 h-10 bg-white rounded shadow flex items-center justify-center font-bold">Monster Name</div>
+
+                <!-- Points -->
+                <div class="text-lg font-semibold">Points: 123</div>
+
+                <!-- Fight Button -->
+                <button
+                    id="fight-button"
+                    class="bg-[var(--color-quietquest-blue)] text-[var(--color-quietquest-cream)] px-6 py-2 rounded shadow"
+                >
+                    Fight
+                </button>
+
+                <!-- Health Bar (hidden by default) -->
+                <div id="health-bar" class="w-48 h-4 bg-red-500 rounded hidden"></div>
+
+                <!-- Battle Menu (hidden by default) -->
+                <div id="battle-menu" class="flex flex-col items-center space-y-2 mt-4 hidden">
+                    <button
+                        id="attack-button"
+                        class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] px-6 py-2 rounded shadow"
+                    >
+                        Attack
+                    </button>
+                    <button
+                        id="items-button"
+                        class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] px-6 py-2 rounded shadow"
+                    >
+                        Items
+                    </button>
+                    <button id="go-back-button" class="bg-gray-300 text-black px-6 py-2 rounded shadow">Go Back</button>
+                </div>
+
+                <!-- Attack Menu -->
+                <div id="attack-menu" class="hidden">
+                    <a id="attack-go-back" class="go-back-button text-left text-sm text-blue-600 font-bold">← Go Back</a>
+                    <div class="mt-2">Attack menu goes here...</div>
+                </div>
+
+                <!-- Items Menu -->
+                <div id="items-menu" class="hidden">
+                    <a id="items-go-back" class="go-back-button text-left text-sm text-blue-600 font-bold">← Go Back</a>
+                    <div class="mt-2">Items menu goes here...</div>
+                </div>
+            </div>
+
+            <!-- Goals Section (will be hidden during battle) -->
+            <div id="goals-section" class="goals space-y-4">
+                <!-- Goals Header -->
+                <div class="flex justify-between items-center">
+                    <p class="text-xl font-bold">Goals</p>
+                    <button class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] px-4 py-1 rounded shadow">
+                        Filter
+                    </button>
+                </div>
+
+                <!-- Goal Items -->
+                <div class="space-y-2">
+                    <p>🎯 Goal 1: Practice mindfulness</p>
+                    <p>🎯 Goal 2: Journal for 5 minutes</p>
+                    <p>🎯 Goal 3: Take a short walk</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Mobile Bottom Navbar -->
+        <nav
+            class="block md:hidden fixed bottom-0 left-0 right-0 bg-[var(--color-quietquest-blue)] text-[var(--color-quietquest-cream)] z-50 py-2"
+        >
+            <div class="container mx-auto px-4">
+                <div class="flex justify-around items-center">
+                    <a href="#" class="flex flex-col items-center p-2 text-sm">
+                        <img src="/quietQuestIcons/home.svg" alt="home" class="h-6 w-6" />
+                    </a>
+                    <a href="#" class="flex flex-col items-center p-2 text-sm">
+                        <img src="/quietQuestIcons/store.svg" alt="store" class="h-6 w-6" />
+                    </a>
+                    <a href="#" class="flex flex-col items-center p-2 text-sm">
+                        <img src="/quietQuestIcons/bookmark.svg" alt="journal" class="h-6 w-6" />
+                    </a>
+                    <a href="#" class="flex flex-col items-center p-2 text-sm">
+                        <img src="/quietQuestIcons/user-circle.svg" alt="profile" class="h-6 w-6" />
+                    </a>
+                    <a href="/logout" class="text-sm">Logout</a>
+                </div>
+            </div>
+        </nav>
+        <script src="/js/battle.js"></script>
+    </body>
+</html>
