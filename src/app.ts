@@ -1,8 +1,11 @@
 import express, { Response } from "express";
 import "dotenv/config"; // Load .env file
 
-import sessionMiddleware from "./utils/sessionMiddleware.js";
+import sessionMiddleware from "./middleware/session.js";
 import database from "./utils/databaseConnection.js";
+import AI_CLIENT from "./utils/aiClient.js";
+import loadRoutes from "./utils/loadRoutes.js";
+import StatusError from "./utils/statusError.js";
 
 if (process.env.MONGODB_DBNAME === undefined) {
     throw new Error("MONGODB_DBNAME environment variable not defined.");
@@ -10,11 +13,11 @@ if (process.env.MONGODB_DBNAME === undefined) {
 
 const MONGODB_DATABASE = database.db(process.env.MONGODB_DBNAME);
 
-// Add custom types to the session object
+// Use declaration merging to include custom session properties.
 declare module "express-session" {
     interface SessionData {
-        views: number;
         loggedInUserId: string;
+        monsterHealth: number;
     }
 }
 
@@ -36,17 +39,37 @@ APP.use(express.json({ type: "application/json" }));
 APP.use(sessionMiddleware());
 
 // Use the Typescript that was compiled to JS in the dist folder
-APP.all("/{*a}", express.static(DIST_PUBLIC_ROOT));
+APP.use(express.static(DIST_PUBLIC_ROOT));
 
-await (await import("./api/index.js")).default(APP, MONGODB_DATABASE);
-await (await import("./routes/index.js")).default(APP, MONGODB_DATABASE);
+// Register API and route handlers (dynamically)
+await Promise.all([loadRoutes("./src/api", APP, MONGODB_DATABASE, AI_CLIENT), loadRoutes("./src/routes", APP, MONGODB_DATABASE)]);
 
 // Use static middleware to serve static files from the public folder
 APP.use(express.static(PUBLIC_ROOT));
 
 // Serve a 404 page for any other routes
-APP.use((_, res: Response) => {
-    res.status(404).send("404");
+APP.use(() => {
+    throw new StatusError(404, "Looks like this path leads to a dead end... even the goblins are confused", true);
+});
+
+// Handle errors
+APP.use((err: Error | StatusError, _req: unknown, res: Response, _next: unknown) => {
+    let sErr: StatusError;
+    if (err instanceof StatusError) {
+        sErr = err;
+    } else {
+        sErr = new StatusError(500, "An unexpected error occurred", true);
+        console.error(err);
+    }
+    if (sErr.html) {
+        res.status(sErr.status).render("error", {
+            errorCode: sErr.status,
+            errorName: sErr.name,
+            errorMessage: sErr.message,
+        });
+    } else {
+        res.status(sErr.status).send(sErr.message);
+    }
 });
 
 APP.listen(PORT, () => {

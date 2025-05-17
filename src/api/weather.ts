@@ -1,16 +1,20 @@
 import { Express, Request, Response } from "express";
+import StatusError from "../utils/statusError.js";
 
 if (process.env.OPEN_WEATHER_MAP_API_KEY === undefined) {
     throw new Error("OPEN_WEATHER_MAP_API_KEY environment variable not defined.");
 }
 const OPEN_WEATHER_MAP_API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
+const WEATHER_API_ENABLED = process.env.WEATHER_API_ENABLED === "true";
 
+// Data required to request weather information.
 interface LocationData {
     longitude: number;
     latitude: number;
     units: "metric" | "imperial" | undefined;
 }
 
+// Shape of the weather data returned by the OpenWeatherMap API.
 interface WeatherData {
     name: string;
     main: {
@@ -24,6 +28,7 @@ interface WeatherData {
     ];
 }
 
+// Shape of the weather response sent to the client.
 interface WeatherResponse {
     location: string;
     temp: number;
@@ -33,6 +38,11 @@ interface WeatherResponse {
     };
 }
 
+/**
+ * Type guard to check if an object is LocationData.
+ * @param {unknown} data
+ * @returns {data is LocationData}
+ */
 function isLocationData(data: unknown): data is LocationData {
     if (typeof data !== "object" || data === null) {
         return false;
@@ -46,6 +56,11 @@ function isLocationData(data: unknown): data is LocationData {
     );
 }
 
+/**
+ * Type guard to check if an object is WeatherData.
+ * @param {unknown} data
+ * @returns {data is WeatherData}
+ */
 function isWeatherData(data: unknown): data is WeatherData {
     if (
         typeof data === "object" &&
@@ -76,37 +91,37 @@ function isWeatherData(data: unknown): data is WeatherData {
     }
 }
 
+/**
+ * Registers the /api/weather endpoint to provide weather data to the client.
+ * @param {Express} app - The Express application instance.
+ */
 export default (app: Express) => {
     app.post("/api/weather", async (req: Request, res: Response) => {
-        if (isLocationData(req.body)) {
-            req.body.units ??= "metric";
-            const { longitude, latitude, units } = req.body;
-            const WEATHER_RESPONSE = await fetch(
-                `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${latitude.toString()}&lon=${longitude.toString()}&appid=${OPEN_WEATHER_MAP_API_KEY}`,
-            );
-            WEATHER_RESPONSE.json()
-                .then(weatherData => {
-                    if (isWeatherData(weatherData)) {
-                        const response: WeatherResponse = {
-                            location: weatherData.name,
-                            temp: weatherData.main.temp,
-                            weather: {
-                                main: weatherData.weather[0].main,
-                                description: weatherData.weather[0].description,
-                            },
-                        };
-                        res.type("application/json").send(JSON.stringify(response));
-                    } else {
-                        res.status(500).send("Internal server error.");
-                        console.error("Error: Unexpected response from OpenWeatherMap.");
-                    }
-                })
-                .catch(() => {
-                    res.status(500).send("Internal server error.");
-                    console.error("Error: Unexpected response from OpenWeatherMap.");
-                });
+        if (!WEATHER_API_ENABLED) {
+            throw new StatusError(503, "Weather API is disabled");
+        }
+        if (!isLocationData(req.body)) {
+            throw new StatusError(400, "Invalid data");
+        }
+
+        req.body.units ??= "metric";
+        const { longitude, latitude, units } = req.body;
+        const WEATHER_RESPONSE = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${latitude.toString()}&lon=${longitude.toString()}&appid=${OPEN_WEATHER_MAP_API_KEY}`,
+        );
+        const weatherData = (await WEATHER_RESPONSE.json()) as unknown;
+        if (isWeatherData(weatherData)) {
+            const response: WeatherResponse = {
+                location: weatherData.name,
+                temp: weatherData.main.temp,
+                weather: {
+                    main: weatherData.weather[0].main,
+                    description: weatherData.weather[0].description,
+                },
+            };
+            res.json(response);
         } else {
-            res.status(400).send("Invalid data.");
+            throw new Error("Unexpected response from OpenWeatherMap");
         }
     });
 };
