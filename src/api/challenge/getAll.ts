@@ -1,8 +1,10 @@
 import { Express, Request, Response } from "express";
-import { Db } from "mongodb";
+import { Db, WithId, ObjectId } from "mongodb";
 import StatusError from "../../utils/statusError.js";
 import { getUserChallenges } from "../../utils/challengeUtils.js";
 import { GoogleGenAI } from "@google/genai";
+import { UsersSchema } from "../../schema.js";
+import getCurrentUser from "../../utils/getCurrentUser.js";
 
 /**
  * Registers the /api/challenge/getAll endpoint to provide the daily challenges.
@@ -16,7 +18,14 @@ export default (app: Express, database: Db, ai: GoogleGenAI) => {
             throw new StatusError(401, "Please authenticate first");
         }
 
-        const userChallenges = await getUserChallenges(req, database, ai);
+        let user: WithId<UsersSchema>;
+        try {
+            user = await getCurrentUser(database, new ObjectId(req.session.loggedInUserId));
+        } catch(_) {
+            throw new StatusError(500, "Error finding user in database");
+        }
+
+        const userChallenges = await getUserChallenges(user, database, ai);
         res.json(userChallenges);
     });
 };

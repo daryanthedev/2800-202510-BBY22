@@ -1,8 +1,10 @@
 import { Express, Request, Response } from "express";
-import { Db } from "mongodb";
+import { Db, ObjectId, WithId } from "mongodb";
 import StatusError from "../../utils/statusError.js";
 import { completeChallenge } from "../../utils/challengeUtils.js";
 import { GoogleGenAI } from "@google/genai";
+import getCurrentUser from "../../utils/getCurrentUser.js";
+import { UsersSchema } from "../../schema.js";
 
 // Data taken in by this api endpoint.
 interface ChallengeCompleteData {
@@ -38,9 +40,16 @@ export default (app: Express, database: Db, ai: GoogleGenAI) => {
             throw new StatusError(400, "Challenge ID is required");
         }
 
+        let user: WithId<UsersSchema>;
+        try {
+            user = await getCurrentUser(database, new ObjectId(req.session.loggedInUserId));
+        } catch(_) {
+            throw new StatusError(500, "Error finding user in database");
+        }
+
         const { challengeId } = req.body;
 
-        const challengeCompleteData = await completeChallenge(req, database, challengeId, ai);
+        const challengeCompleteData = await completeChallenge(user, database, challengeId, ai);
         res.json(challengeCompleteData);
     });
 };
