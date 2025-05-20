@@ -1,4 +1,4 @@
-import { Db, ObjectId } from "mongodb";
+import { Db, ObjectId, WithId } from "mongodb";
 import { Request } from "express";
 import { isUsersSchema } from "../schema.js";
 
@@ -18,7 +18,7 @@ interface ItemInfo {
  * @returns {Promise<ItemInfo>} The item's information.
  * @throws Error if the item's price is not a number.
  */
-async function getItem(itemName: string, database: Db): Promise<ItemInfo> {
+async function getItem(itemName: string, database: Db): Promise<WithId<ItemInfo>> {
     // Get the item from the database by querying for the items name
     const item = await database.collection("items").findOne({
         name: itemName,
@@ -50,6 +50,7 @@ async function getItem(itemName: string, database: Db): Promise<ItemInfo> {
 
     // Return the item info
     return {
+        _id: item._id,
         price: item.price,
         name: item.name,
         image: item.image,
@@ -86,7 +87,7 @@ async function buyItem(req: Request, database: Db, itemName: string): Promise<un
     }
 
     // Add the item to the user's inventory
-    user.inventory.push(itemName);
+    user.inventory.push(item._id.toHexString());
 
     // Update users database with the new inventory and update their points
     await database.collection("users").updateOne(
