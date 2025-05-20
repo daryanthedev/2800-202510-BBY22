@@ -61,7 +61,7 @@ export default (app: Express, database: Db) => {
                 email,
                 passwordHash,
                 lastStreakDate: null,
-                enemyHealth: 100,
+                enemy: null,
                 points: 0,
                 enemyHealthModifier: 0,
                 inventory: [],

@@ -23,7 +23,11 @@ interface UsersSchema {
     passwordHash: string;
     lastStreakDate: Date | null;
     points: number;
-    enemyHealth: number;
+    enemy: {
+        name: string;
+        image: string;
+        health: number;
+    } | null;
     enemyHealthModifier: number;
     inventory: string[];
     challengeStatuses: ChallengeStatus[];
@@ -79,12 +83,20 @@ function isUsersSchema(data: unknown): data is UsersSchema {
     }
 
     const obj = data as Record<string, unknown>;
+    if (typeof obj.enemy !== "object") {
+        return false;
+    }
+    if (obj.enemy !== null) {
+        const enemy = obj.enemy as Record<string, unknown>;
+        if (typeof enemy.name !== "string" || typeof enemy.image !== "string" || typeof enemy.health !== "number") {
+            return false;
+        }
+    }
     return (
         typeof obj.username === "string" &&
         typeof obj.email === "string" &&
         typeof obj.passwordHash === "string" &&
         typeof obj.lastStreakDate === "object" &&
-        typeof obj.enemyHealth === "number" &&
         typeof obj.points === "number" &&
         typeof obj.enemyHealthModifier === "number" &&
         typeof obj.inventory === "object" &&

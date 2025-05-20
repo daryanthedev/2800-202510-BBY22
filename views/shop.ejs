@@ -57,7 +57,7 @@
             <div class="relative bg-quietquest-blue/70 rounded-2xl shadow-lg p-5 flex flex-col items-center">
                 <!-- Image -->
                 <div class="bg-quietquest-cream/50 rounded-full p-4 mb-3">
-                    <img src="<%= item.imageUrl %>" alt="<%= item.name %>" class="w-16 h-16 object-cover" />
+                    <img src="<%= item.image %>" alt="<%= item.name %>" class="w-16 h-16 object-cover" />
                 </div>
                 <!-- Name & Description -->
                 <h2 class="text-white font-semibold text-center mb-1"><%= item.name %></h2>
@@ -68,7 +68,7 @@
 
                 <!-- CSS-only Confirmation Dialog -->
                 <form action="/api/shop/buy" method="POST" class="w-full">
-                    <input type="hidden" name="itemName" value="<%= item.name %>" />
+                    <input type="hidden" name="itemId" value="<%= item._id %>" />
                     <input id="confirm-<%= idx %>" type="checkbox" class="peer hidden" />
 
                     <label
