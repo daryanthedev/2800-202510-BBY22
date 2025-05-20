@@ -2,6 +2,7 @@ import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
 import { buyItem } from "../utils/storeUtils.js";
 import validateSession from "../middleware/validateSession.js";
+import StatusError from "../utils/statusError.js";
 
 interface Item {
     _id: string;
