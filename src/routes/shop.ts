@@ -29,7 +29,7 @@ export default (app: Express, database: Db) => {
             throw new StatusError(401, "Please authenticate first");
         }
         const { itemId } = req.body as { itemId?: string };
-        if (!itemId) {
+        if (itemId === undefined) {
             res.redirect("/shop");
             return;
         }
