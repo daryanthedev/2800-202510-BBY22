@@ -18,7 +18,7 @@ export default (app: Express, database: Db, ai: GoogleGenAI) => {
             let user: WithId<UsersSchema>;
             try {
                 user = await getCurrentUser(database, new ObjectId(req.session.loggedInUserId));
-            } catch(_) {
+            } catch (_) {
                 throw new StatusError(500);
             }
             const challenges = await getUserChallenges(user, database, ai);

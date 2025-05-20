@@ -48,7 +48,7 @@ export default (app: Express, database: Db) => {
             res.redirect(`/shop?success=${encodeURIComponent(itemName)}`);
             return;
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : String(err); 
+            const message = err instanceof Error ? err.message : String(err);
             res.redirect(`/shop?error=${encodeURIComponent(message)}`);
             return;
         }

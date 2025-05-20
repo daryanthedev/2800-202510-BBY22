@@ -50,7 +50,9 @@
                 </div>
 
                 <!-- Points -->
-                <div class="text-lg text-quietquest-dark font-semibold">Points: <span class="user-points-display"><%= user.points %></span></div>
+                <div class="text-lg text-quietquest-dark font-semibold">
+                    Points: <span class="user-points-display"><%= user.points %></span>
+                </div>
 
                 <!-- Fight Button -->
                 <button
@@ -113,7 +115,8 @@
                     >
                         <span class="challenge-name"><%= challenge.name %></span>
                         <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"
-                            ><%= challenge.pointReward %> pts</span
+                            ><%= challenge.pointReward %>
+                            pts</span
                         >
                     </div>
                     <% } else { %>
@@ -123,7 +126,8 @@
                     >
                         <span class="challenge-name line-through"><%= challenge.name %></span>
                         <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow"
-                            ><%= challenge.pointReward %> pts</span
+                            ><%= challenge.pointReward %>
+                            pts</span
                         >
                     </div>
                     <% } %>
