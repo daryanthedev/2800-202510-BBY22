@@ -1,26 +1,18 @@
 import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
-import { buyItem } from "../utils/storeUtils.js";
+import { buyItem, ItemInfo } from "../utils/storeUtils.js";
 import validateSession from "../middleware/validateSession.js";
 import StatusError from "../utils/statusError.js";
-
-interface Item {
-    _id: string;
-    name: string;
-    description: string;
-    imageUrl?: string;
-    price: number;
-}
 
 export default (app: Express, database: Db) => {
     // GET /shop → render shop.ejs with all items + notifications
     app.get("/shop", validateSession, async (req: Request, res: Response) => {
-        const rawItems = await database.collection<Item>("items").find({}).toArray();
+        const rawItems = await database.collection<ItemInfo>("items").find({}).toArray();
         const items = rawItems.map(i => ({
             _id: i._id.toString(),
             name: i.name,
             description: i.description,
-            imageUrl: i.imageUrl ?? "/images/placeholder.png",
+            image: i.image,
             price: i.price,
         }));
 

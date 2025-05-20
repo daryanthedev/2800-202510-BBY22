@@ -7,6 +7,7 @@ import { isUsersSchema } from "../schema.js";
  */
 interface ItemInfo {
     name: string;
+    description: string;
     price: number;
     image: string;
 }
@@ -44,6 +45,13 @@ async function getItem(itemName: string, database: Db): Promise<WithId<ItemInfo>
         throw new Error("Item name must not be blank");
     }
 
+    if (typeof item.description !== "string") {
+        throw new Error("Items must have a description");
+    }
+    if (item.description.trim() === "") {
+        throw new Error("Item description must not be blank");
+    }
+
     if (typeof item.image !== "string") {
         throw new Error("Item must have an image");
     }
@@ -52,6 +60,7 @@ async function getItem(itemName: string, database: Db): Promise<WithId<ItemInfo>
     return {
         _id: item._id,
         price: item.price,
+        description: item.description,
         name: item.name,
         image: item.image,
     };
@@ -104,3 +113,4 @@ async function buyItem(req: Request, database: Db, itemName: string): Promise<un
 }
 
 export { buyItem };
+export type { ItemInfo };
