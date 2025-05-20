@@ -14,15 +14,15 @@ interface ItemInfo {
 
 /**
  * Retrieves the price of an item from the database by its name.
- * @param {string} itemName - The name of the item to look up.
+ * @param {ObjectId} itemId - The ID of the item to look up.
  * @param {Db} database - The MongoDB database instance.
  * @returns {Promise<ItemInfo>} The item's information.
  * @throws Error if the item's price is not a number.
  */
-async function getItem(itemName: string, database: Db): Promise<WithId<ItemInfo>> {
+async function getItem(itemId: ObjectId, database: Db): Promise<WithId<ItemInfo>> {
     // Get the item from the database by querying for the items name
     const item = await database.collection("items").findOne({
-        name: itemName,
+        _id: itemId,
     });
 
     // Check if item is null
@@ -71,10 +71,10 @@ async function getItem(itemName: string, database: Db): Promise<WithId<ItemInfo>
  * Updates the user's inventory and deducts the item's price from their points.
  * @param {Request} req - The Express request object containing the session user ID.
  * @param {Db} database - The MongoDB database instance.
- * @param {string} itemName - The name of the item to give to the user.
- * @returns {Promise<undefined>} void or throws an error if the operation fails.
+ * @param {ObjectId} itemId - The ID of the item to the user is buying.
+ * @returns {Promise<ItemInfo>} The ItemInfo of the item that was bought.
  */
-async function buyItem(req: Request, database: Db, itemName: string): Promise<undefined> {
+async function buyItem(req: Request, database: Db, itemId: ObjectId): Promise<ItemInfo> {
     // Get the user's information from the user's ID
     const user = await database.collection("users").findOne({
         _id: new ObjectId(req.session.loggedInUserId),
@@ -88,7 +88,7 @@ async function buyItem(req: Request, database: Db, itemName: string): Promise<un
         throw new Error("User data is not valid");
     }
 
-    const item = await getItem(itemName, database);
+    const item = await getItem(itemId, database);
 
     // If the user cannot afford the item, throw an error
     if (user.points < item.price) {
@@ -110,7 +110,9 @@ async function buyItem(req: Request, database: Db, itemName: string): Promise<un
             },
         },
     );
+
+    return item;
 }
 
-export { buyItem };
+export { buyItem, getItem };
 export type { ItemInfo };

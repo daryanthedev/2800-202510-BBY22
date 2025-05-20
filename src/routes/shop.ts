@@ -1,5 +1,5 @@
 import { Express, Request, Response } from "express";
-import { Db } from "mongodb";
+import { Db, ObjectId } from "mongodb";
 import { buyItem, ItemInfo } from "../utils/storeUtils.js";
 import validateSession from "../middleware/validateSession.js";
 import StatusError from "../utils/statusError.js";
@@ -28,16 +28,16 @@ export default (app: Express, database: Db) => {
         if (req.session.loggedInUserId === undefined) {
             throw new StatusError(401, "Please authenticate first");
         }
-        const { itemName } = req.body as { itemName?: string };
-        if (!itemName) {
+        const { itemId } = req.body as { itemId?: string };
+        if (!itemId) {
             res.redirect("/shop");
             return;
         }
 
         try {
-            await buyItem(req, database, itemName);
+            const item = await buyItem(req, database, new ObjectId(itemId));
             // on success, show success message
-            res.redirect(`/shop?success=${encodeURIComponent(itemName)}`);
+            res.redirect(`/shop?success=${encodeURIComponent(item.name)}`);
             return;
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : String(err);

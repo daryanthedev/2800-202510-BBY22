@@ -68,7 +68,7 @@
 
                 <!-- CSS-only Confirmation Dialog -->
                 <form action="/api/shop/buy" method="POST" class="w-full">
-                    <input type="hidden" name="itemName" value="<%= item.name %>" />
+                    <input type="hidden" name="itemId" value="<%= item._id %>" />
                     <input id="confirm-<%= idx %>" type="checkbox" class="peer hidden" />
 
                     <label
