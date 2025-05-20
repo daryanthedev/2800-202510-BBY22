@@ -2,6 +2,7 @@ import { Express, Request, Response } from "express";
 import { Db } from "mongodb";
 import { buyItem } from "../utils/storeUtils.js";
 import validateSession from "../middleware/validateSession.js";
+import StatusError from "../utils/statusError.js";
 
 interface Item {
     _id: string;
@@ -47,7 +48,7 @@ export default (app: Express, database: Db) => {
             res.redirect(`/shop?success=${encodeURIComponent(itemName)}`);
             return;
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : String(err); 
+            const message = err instanceof Error ? err.message : String(err);
             res.redirect(`/shop?error=${encodeURIComponent(message)}`);
             return;
         }
