@@ -8,6 +8,7 @@ import { isUsersSchema } from "../schema.js";
 interface ItemInfo {
     name: string;
     price: number;
+    image: string;
 }
 
 /**
@@ -43,10 +44,15 @@ async function getItem(itemName: string, database: Db): Promise<ItemInfo> {
         throw new Error("Item name must not be blank");
     }
 
+    if (typeof item.image !== "string") {
+        throw new Error("Item must have an image");
+    }
+
     // Return the item info
     return {
-        name: item.name,
         price: item.price,
+        name: item.name,
+        image: item.image,
     };
 }
 
