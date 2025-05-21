@@ -5,53 +5,45 @@ import bcrypt from "bcrypt";
 import { isPassword, Password } from "../../schema.js";
 import StatusError from "../../utils/statusError.js";
 
-interface SetPasswordData {
+interface DeleteAccountData {
     password: Password;
-    passwordNew: Password;
-    passwordNewValidate: Password;
 }
 
 /**
- * Type guard to check if an object is SetPasswordData.
+ * Type guard to check if an object is DeleteAccountData.
  * @param {unknown} data
  * @returns {data is SetPasswordData}
  */
-function isSetPasswordData(data: unknown): data is SetPasswordData {
+function isDeleteAccountData(data: unknown): data is DeleteAccountData {
     if (typeof data !== "object" || data === null) return false;
     const obj = data as Record<string, unknown>;
 
     return (
         typeof obj.password === "string" &&
-        typeof obj.passwordNew === "string" &&
-        typeof obj.passwordNewValidate === "string" &&
-        isPassword(obj.password) &&
-        isPassword(obj.passwordNew) &&
-        isPassword(obj.passwordNewValidate)
+        isPassword(obj.password)
     );
 }
 
 /**
- * Registers the /api/account/setPassword endpoint to update a user's password.
+ * Registers the /api/account/deleteAccount endpoint to delete a user's account.
  * @param {Express} app - The Express application instance.
  * @param {Db} database - The MongoDB database instance.
  */
 export default (app: Express, database: Db) => {
-    app.post("/api/account/setPassword", async (req: Request, res: Response) => {
+    app.post("/api/account/deleteAccount", async (req: Request, res: Response) => {
         const { loggedInUserId } = req.session;
         if (!loggedInUserId) {
             throw new StatusError(401, "Please authenticate first");
         }
 
         const data = req.body;
-        if (!isSetPasswordData(data)) {
+        if (!isDeleteAccountData(data)) {
             throw new StatusError(400, "Invalid data");
         }
 
-        const { password, passwordNew, passwordNewValidate } = data;
-        if (passwordNew !== passwordNewValidate) {
-            throw new StatusError(400, "New password and confirmation password do not match");
-        }
+        const { password } = data;
 
+        // Fetch only the hashed password field
         const user = await database
             .collection<{ password: string }>("users")
             .findOne(
@@ -71,20 +63,15 @@ export default (app: Express, database: Db) => {
 
         const passwordMatches = await bcrypt.compare(password, user.password);
         if (!passwordMatches) {
-            throw new StatusError(401, "Current password is incorrect");
+            throw new StatusError(401, "Password is incorrect");
         }
 
-        const newHashedPassword = await bcrypt.hash(passwordNew, 10);
-        await database.collection("users").updateOne(
-            { 
-                _id: new ObjectId(loggedInUserId) 
-            },
-            { 
-                $set: { 
-                    "password": newHashedPassword 
-                } 
-            }
-        );
+        await database.collection("users").deleteOne({
+            _id: new ObjectId(loggedInUserId)
+        });
+
+        // destroy the session by clearing the userID
+        req.session.loggedInUserId = undefined;
 
         res.send();
     });
