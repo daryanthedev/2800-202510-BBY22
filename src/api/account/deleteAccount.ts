@@ -15,13 +15,10 @@ interface DeleteAccountData {
  * @returns {data is SetPasswordData}
  */
 function isDeleteAccountData(data: unknown): data is DeleteAccountData {
-    if (typeof data !== "object" || data === null) return false;
+    if (typeof data !== "object" || data === null) {return false;}
     const obj = data as Record<string, unknown>;
 
-    return (
-        typeof obj.password === "string" &&
-        isPassword(obj.password)
-    );
+    return typeof obj.password === "string" && isPassword(obj.password);
 }
 
 /**
@@ -44,18 +41,16 @@ export default (app: Express, database: Db) => {
         const { password } = data;
 
         // Fetch only the hashed password field
-        const user = await database
-            .collection<{ password: string }>("users")
-            .findOne(
-                { 
-                    _id: new ObjectId(loggedInUserId) 
+        const user = await database.collection<{ password: string }>("users").findOne(
+            {
+                _id: new ObjectId(loggedInUserId),
+            },
+            {
+                projection: {
+                    password: 1,
                 },
-                { 
-                    projection: { 
-                        password: 1 
-                    } 
-                }
-            );
+            },
+        );
 
         if (!user) {
             throw new StatusError(404, "User not found");
@@ -67,7 +62,7 @@ export default (app: Express, database: Db) => {
         }
 
         await database.collection("users").deleteOne({
-            _id: new ObjectId(loggedInUserId)
+            _id: new ObjectId(loggedInUserId),
         });
 
         // destroy the session by clearing the userID

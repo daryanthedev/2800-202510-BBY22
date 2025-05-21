@@ -17,7 +17,7 @@ interface SetPasswordData {
  * @returns {data is SetPasswordData}
  */
 function isSetPasswordData(data: unknown): data is SetPasswordData {
-    if (typeof data !== "object" || data === null) return false;
+    if (typeof data !== "object" || data === null) {return false;}
     const obj = data as Record<string, unknown>;
 
     return (
@@ -52,18 +52,16 @@ export default (app: Express, database: Db) => {
             throw new StatusError(400, "New password and confirmation password do not match");
         }
 
-        const user = await database
-            .collection<{ password: string }>("users")
-            .findOne(
-                { 
-                    _id: new ObjectId(loggedInUserId) 
+        const user = await database.collection<{ password: string }>("users").findOne(
+            {
+                _id: new ObjectId(loggedInUserId),
+            },
+            {
+                projection: {
+                    password: 1,
                 },
-                { 
-                    projection: { 
-                        password: 1 
-                    } 
-                }
-            );
+            },
+        );
 
         if (!user) {
             throw new StatusError(404, "User not found");
@@ -76,14 +74,14 @@ export default (app: Express, database: Db) => {
 
         const newHashedPassword = await bcrypt.hash(passwordNew, 10);
         await database.collection("users").updateOne(
-            { 
-                _id: new ObjectId(loggedInUserId) 
+            {
+                _id: new ObjectId(loggedInUserId),
             },
-            { 
-                $set: { 
-                    "password": newHashedPassword 
-                } 
-            }
+            {
+                $set: {
+                    password: newHashedPassword,
+                },
+            },
         );
 
         res.send();
