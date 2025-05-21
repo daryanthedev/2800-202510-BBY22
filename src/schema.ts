@@ -31,6 +31,8 @@ interface UsersSchema {
     enemyHealthModifier: number;
     inventory: string[];
     challengeStatuses: ChallengeStatus[];
+    CompletedTasks: string[];
+    CompletedTasksCount: number;
 }
 
 /**
