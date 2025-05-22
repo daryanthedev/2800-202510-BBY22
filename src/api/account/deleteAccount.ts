@@ -15,7 +15,9 @@ interface DeleteAccountData {
  * @returns {data is SetPasswordData}
  */
 function isDeleteAccountData(data: unknown): data is DeleteAccountData {
-    if (typeof data !== "object" || data === null) {return false;}
+    if (typeof data !== "object" || data === null) {
+        return false;
+    }
     const obj = data as Record<string, unknown>;
 
     return typeof obj.password === "string" && isPassword(obj.password);
@@ -33,7 +35,7 @@ export default (app: Express, database: Db) => {
             throw new StatusError(401, "Please authenticate first");
         }
 
-        const data = req.body;
+        const data: unknown = req.body;
         if (!isDeleteAccountData(data)) {
             throw new StatusError(400, "Invalid data");
         }
