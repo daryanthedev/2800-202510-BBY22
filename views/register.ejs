@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <%- include('partials/header') %>
+
+<head>
+    <%- include('partials/header') %>
         <title>QuietQuest - Register</title>
         <style>
             .input-error {
@@ -51,9 +52,9 @@
                 <a href="/login" class="hover:underline">&larr; Back to Login</a>
             </div>
 
-            <!-- Heading -->
-            <img src="/quietQuestIcons/Logo Wide.svg" alt="QuietQuest logo" class="mx-auto mb-2" />
-            <h1 class="text-quietquest-cream font-combo mt-1 text-center">Register your account</h1>
+        <!-- Heading -->
+        <img src="/quietQuestIcons/Logo Wide.svg" alt="QuietQuest logo" class="mx-auto mb-2" />
+        <h1 class="text-quietquest-cream font-combo mt-1 text-center">Register your account</h1>
 
             <!-- Register Form -->
             <form id="registerForm" class="space-y-5" novalidate>
@@ -82,20 +83,19 @@
                     class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-white transition"
                 />
 
-                <div class="flex flex-col gap-3">
-                    <button
-                        type="submit"
-                        class="w-full py-3 rounded-full bg-quietquest-green hover:bg-quietquest-dark-gold text-quietquest-dark mt-10 font-semibold transition"
-                    >
-                        Register
-                    </button>
-                </div>
-            </form>
-        </div>
+            <div class="flex flex-col gap-3">
+                <button type="submit"
+                    class="w-full py-3 rounded-full bg-quietquest-green hover:bg-quietquest-dark-gold text-quietquest-dark mt-10 font-semibold transition">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
 
-        <script type="module">
-            import formSend from "/js/formSend.js";
-            formSend("/api/auth/register", document.getElementById("registerForm"), "/login");
-        </script>
-    </body>
+    <script type="module">
+        import formSend from "/js/formSend.js";
+        formSend("/api/auth/register", document.getElementById("registerForm"), "/login");
+    </script>
+</body>
+
 </html>

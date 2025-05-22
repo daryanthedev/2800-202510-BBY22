@@ -10,6 +10,7 @@ export default (app: Express, database: Db) => {
     // 1) VIEW PROFILE
     //
     app.get("/profile", async (req: Request, res: Response) => {
+
         // a) Authentication guard
         if (!req.session.loggedInUserId) {
             throw new StatusError(401, "Please log in first");
