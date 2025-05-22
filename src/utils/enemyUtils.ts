@@ -67,6 +67,8 @@ async function createNewEnemy(database: Db, health: number): Promise<EnemyInfo> 
     }
     const enemyTemplate = result[0];
 
+    console.log("EnemyTemplate: ");
+    console.log(enemyTemplate);
     return {
         ...enemyTemplate,
         health,
@@ -104,7 +106,6 @@ async function damageEnemy(req: Request, database: Db, damage: number | undefine
     if (damage <= 0) {
         throw new Error("Damage must be greater than 0");
     }
-
     user.enemy ??= await createNewEnemy(database, DEFAULT_MONSTER_HP + user.enemyHealthModifier);
     // Cap the damage to the user's points
     if (user.points < damage) {
@@ -124,7 +125,7 @@ async function damageEnemy(req: Request, database: Db, damage: number | undefine
         user.enemyHealthModifier += 10;
 
         // If the enemy is dead, create a new one
-        const enemy = createNewEnemy(database, DEFAULT_MONSTER_HP + user.enemyHealthModifier);
+        const enemy = await createNewEnemy(database, DEFAULT_MONSTER_HP + user.enemyHealthModifier);
         await database.collection("users").updateOne(
             {
                 _id: new ObjectId(req.session.loggedInUserId),
@@ -157,5 +158,5 @@ async function damageEnemy(req: Request, database: Db, damage: number | undefine
     return user.enemy;
 }
 
-export { getEnemyInfo, damageEnemy };
+export { getEnemyInfo, damageEnemy, createNewEnemy };
 export type { EnemyInfo };
