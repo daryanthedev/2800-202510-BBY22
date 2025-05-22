@@ -1,9 +1,8 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-    <!-- pulls in your meta tags + Tailwind CSS build -->
-    <%- include('partials/header') %>
+    <head>
+        <!-- pulls in your meta tags + Tailwind CSS build -->
+        <%- include('partials/header') %>
         <title>QuietQuest — Login</title>
         <style>
             .input-error {
@@ -86,24 +85,25 @@
                     Login
                 </button>
 
-            <!-- OR Divider -->
-            <div class="flex items-center gap-4 text-quietquest-cream">
-                <hr class="flex-grow border-quietquest-cream" />
-                <span class="text-sm">OR</span>
-                <hr class="flex-grow border-quietquest-cream" />
-            </div>
+                <!-- OR Divider -->
+                <div class="flex items-center gap-4 text-quietquest-cream">
+                    <hr class="flex-grow border-quietquest-cream" />
+                    <span class="text-sm">OR</span>
+                    <hr class="flex-grow border-quietquest-cream" />
+                </div>
 
-            <!-- Register Button -->
-            <a href="/register"
-                class="block text-center w-full py-3 rounded-full bg-white hover:bg-gray-100 text-quietquest-dark border border-gray-300 font-semibold transition">
-                Register
-            </a>
-        </form>
-    </div>
-    <script type="module">
-        import formSend from "/js/formSend.js";
-        formSend("/api/auth/login", document.getElementById("loginForm"), "/");
-    </script>
-</body>
-
+                <!-- Register Button -->
+                <a
+                    href="/register"
+                    class="block text-center w-full py-3 rounded-full bg-white hover:bg-gray-100 text-quietquest-dark border border-gray-300 font-semibold transition"
+                >
+                    Register
+                </a>
+            </form>
+        </div>
+        <script type="module">
+            import formSend from "/js/formSend.js";
+            formSend("/api/auth/login", document.getElementById("loginForm"), "/");
+        </script>
+    </body>
 </html>
