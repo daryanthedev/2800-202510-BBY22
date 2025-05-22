@@ -54,14 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Attack & Items Navigation
-    attackButton?.addEventListener("click", async () => {
-        const damage = userPoints.textContent ?? "0";
-        const damageNumber = parseInt(damage);
-        await attackEnemy(damageNumber);
-        location.reload();
- 
+attackButton?.addEventListener("click", async () => {
+    const damage = userPoints.textContent ?? "0";
+    const damageNumber = parseInt(damage);
+    await attackEnemy(damageNumber);
+    location.reload();
+});
 
-    itemsButton?.addEventListener("click", () => {
+itemsButton?.addEventListener("click", () => {
         battleMenu?.classList.add("hidden");
         itemsMenu?.classList.remove("hidden");
     });
