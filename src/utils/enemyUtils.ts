@@ -67,8 +67,6 @@ async function createNewEnemy(database: Db, health: number): Promise<EnemyInfo> 
     }
     const enemyTemplate = result[0];
 
-    console.log("EnemyTemplate: ");
-    console.log(enemyTemplate);
     return {
         ...enemyTemplate,
         health,
@@ -88,7 +86,6 @@ async function createNewEnemy(database: Db, health: number): Promise<EnemyInfo> 
  * @throws Will throw an error if the user's points, enemy health, or enemy health modifier are not numbers.
  */
 async function damageEnemy(req: Request, database: Db, damage: number | undefined): Promise<EnemyInfo> {
-
     // Create variable with all of user's data within it
     const user = await database.collection("users").findOne({
         _id: new ObjectId(req.session.loggedInUserId),

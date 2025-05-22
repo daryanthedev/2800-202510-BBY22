@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function attackEnemy(damageValue: number | undefined){
 
-
         const response = await fetch("/api/enemy/damage", {
             method: "POST",
             headers: {
@@ -59,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const damage = userPoints.textContent ?? "0";
         const damageNumber = parseInt(damage);
         await attackEnemy(damageNumber);
+        location.reload();
     });
 
     itemsButton?.addEventListener("click", () => {
