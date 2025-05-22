@@ -68,7 +68,7 @@ export default (app: Express, database: Db) => {
                 challengeStatuses: [],
                 CompletedTasks: [],
                 CompletedTasksCount: 0,
-                bio: "", 
+                bio: "",
             } satisfies UsersSchema);
             res.send();
         } else {
