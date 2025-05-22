@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         healthBar?.classList.remove("hidden");
         goalsSection?.classList.add("hidden");
     });
-
+ 
     if(userPoints === null){
         throw new Error("user's points cannot be Null");
     }
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const damageNumber = parseInt(damage);
         await attackEnemy(damageNumber);
         location.reload();
-    });
+ 
 
     itemsButton?.addEventListener("click", () => {
         battleMenu?.classList.add("hidden");

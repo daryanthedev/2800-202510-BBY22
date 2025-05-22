@@ -23,6 +23,7 @@ interface UsersSchema {
     passwordHash: string;
     lastStreakDate: Date | null;
     points: number;
+    bio: string;
     enemy: {
         name: string;
         image: string;
@@ -31,6 +32,8 @@ interface UsersSchema {
     enemyHealthModifier: number;
     inventory: string[];
     challengeStatuses: ChallengeStatus[];
+    CompletedTasks: string[];
+    CompletedTasksCount: number;
 }
 
 /**

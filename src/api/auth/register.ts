@@ -66,6 +66,9 @@ export default (app: Express, database: Db) => {
                 enemyHealthModifier: 0,
                 inventory: [],
                 challengeStatuses: [],
+                CompletedTasks: [],
+                CompletedTasksCount: 0,
+                bio: "",
             } satisfies UsersSchema);
             res.send();
         } else {
