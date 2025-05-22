@@ -1,20 +1,24 @@
-// src/routes/profile.ts
 import { Express, Request, Response } from "express";
 import { Db, ObjectId } from "mongodb";
+import getCurrentUser from "../utils/getCurrentUser.js";
+import { UsersSchema } from "../schema.js";
 
 export default (app: Express, db: Db) => {
     app.get("/profile", async (req: Request, res: Response) => {
-        const userId = req.session.loggedInUserId;
-        if (!userId) {
-            return res.redirect("/login");
-        }
+        // 1) fetch user
+        const user = (await getCurrentUser(db, new ObjectId(req.session.loggedInUserId))) as UsersSchema & { _id: ObjectId };
 
-        const user = await db.collection("users").findOne({ _id: new ObjectId(userId) });
+        // 2) if they’ve completed tasks, load those challenges
+        const completedIds = (user.CompletedTasks || []).map(id => new ObjectId(id));
+        const completedTasks = completedIds.length
+            ? await db
+                .collection("challenges")
+                .find({ _id: { $in: completedIds } })
+                .project({ name: 1 }) // only need the name
+                .toArray()
+            : [];
 
-        if (!user) {
-            return res.redirect("/login");
-        }
-
-        res.render("profile", { user });
+        // 3) render, passing both user and the full task docs
+        res.render("profile", { user, completedTasks });
     });
 };
