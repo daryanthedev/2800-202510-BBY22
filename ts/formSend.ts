@@ -1,4 +1,40 @@
 /**
+ * Validates form inputs from login and register and marks invalid fields.
+ * @param {HTMLFormElement} formElem - The form element to validate.
+ * @returns {boolean} - True if all validations pass, false otherwise.
+ */
+function validateForm(formElem: HTMLFormElement): boolean {
+    let isValid = true;
+    const inputs = formElem.querySelectorAll<HTMLInputElement>('input[required]');
+    const validationMessage = document.getElementById('validationHeaderMessage');
+
+    inputs.forEach(input => {
+        input.classList.remove('input-error');
+
+        if (!input.value.trim()) {
+            input.classList.add('input-error');
+            isValid = false;
+
+            if (validationMessage) validationMessage.style.display = 'block';
+
+        }
+
+        if (input.type === 'email' && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
+            input.classList.add('input-error');
+            isValid = false;
+
+            if (validationMessage) validationMessage.style.display = 'block';
+
+        }
+    });
+
+        if (isValid && validationMessage) {
+            validationMessage.style.display = 'none';
+        }
+
+    return isValid;
+}
+/**
  * Sends form data to the specified URL using POST and handles redirect or reload.
  * @param {string} url - The endpoint to send data to.
  * @param {FormData} data - The form data to send.
@@ -36,8 +72,11 @@ function formSend(url: string, formElem: HTMLFormElement, redirectPath: string |
     formElem.addEventListener("submit", (event: SubmitEvent) => {
         event.preventDefault();
 
-        const data = new FormData(formElem);
-        void send(url, data, redirectPath);
+        // Validate before sending
+        if (validateForm(formElem)) {
+            const data = new FormData(formElem);
+            void send(url, data, redirectPath);
+        }
     });
 }
 
