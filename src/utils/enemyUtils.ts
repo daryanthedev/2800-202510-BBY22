@@ -115,8 +115,10 @@ async function damageEnemy(req: Request, database: Db, damage: number | undefine
         damage = user.enemy.health;
     }
     // Check the enemies new HP
-    const newEnemyHealth = user.enemyHealth - damage;
+    const newEnemyHealth = user.enemy.health - damage;
     const newUserPoints = user.points - damage;
+
+    console.log(newEnemyHealth);
 
     if (newEnemyHealth <= 0) {
         user.enemyHealthModifier += 10;
@@ -145,7 +147,7 @@ async function damageEnemy(req: Request, database: Db, damage: number | undefine
             },
             {
                 $set: {
-                    enemy: user.enemy,
+                    "enemy.health": newEnemyHealth,
                     points: newUserPoints,
                 },
             },
