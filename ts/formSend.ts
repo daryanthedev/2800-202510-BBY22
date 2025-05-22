@@ -5,32 +5,34 @@
  */
 function validateForm(formElem: HTMLFormElement): boolean {
     let isValid = true;
-    const inputs = formElem.querySelectorAll<HTMLInputElement>('input[required]');
-    const validationMessage = document.getElementById('validationHeaderMessage');
+    const inputs = formElem.querySelectorAll<HTMLInputElement>("input[required]");
+    const validationMessage = document.getElementById("validationHeaderMessage");
+
+    if (!validationMessage) {
+        console.debug("Validation message element not found - continuing without it");
+    }
 
     inputs.forEach(input => {
-        input.classList.remove('input-error');
+        input.classList.remove("input-error");
 
         if (!input.value.trim()) {
-            input.classList.add('input-error');
+            input.classList.add("input-error");
             isValid = false;
 
-            if (validationMessage) validationMessage.style.display = 'block';
-
+            if (validationMessage) {
+                validationMessage.style.display = "block";
+            }
         }
 
-        if (input.type === 'email' && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
-            input.classList.add('input-error');
+        if (input.type === "email" && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
+            input.classList.add("input-error");
             isValid = false;
 
-            if (validationMessage) validationMessage.style.display = 'block';
-
+            if (validationMessage) {
+                validationMessage.style.display = "block";
+            }
         }
     });
-
-        if (isValid && validationMessage) {
-            validationMessage.style.display = 'none';
-        }
 
     return isValid;
 }

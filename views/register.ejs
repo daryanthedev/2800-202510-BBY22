@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-    <%- include('partials/header') %>
+    <head>
+        <%- include('partials/header') %>
         <title>QuietQuest - Register</title>
         <style>
             .input-error {
@@ -11,7 +10,6 @@
             }
 
             @keyframes shake {
-
                 0%,
                 100% {
                     transform: translateX(0);
@@ -42,50 +40,62 @@
                 animation: fadeIn 0.3s ease-out;
             }
         </style>
-</head>
+    </head>
 
-<body class="bg-quietquest-gold font-afacad flex items-center justify-center min-h-screen px-4">
-    <div id="validationHeaderMessage" class="validation-header-message">
-        <span class="font-medium">*</span> Required fields missing
-    </div>
-    <!-- Register Box -->
-    <div class="bg-[#426f8a] text-white w-full max-w-md rounded-2xl shadow-lg p-8 space-y-6">
-        <!-- Back Link -->
-        <div class="text-sm text-white">
-            <a href="/login" class="hover:underline">&larr; Back to Login</a>
+    <body class="bg-quietquest-gold font-afacad flex items-center justify-center min-h-screen px-4">
+        <div id="validationHeaderMessage" class="validation-header-message"><span class="font-medium">*</span> Required fields missing</div>
+        <!-- Register Box -->
+        <div class="bg-[#426f8a] text-white w-full max-w-md rounded-2xl shadow-lg p-8 space-y-6">
+            <!-- Back Link -->
+            <div class="text-sm text-white">
+                <a href="/login" class="hover:underline">&larr; Back to Login</a>
+            </div>
+
+            <!-- Heading -->
+            <img src="/quietQuestIcons/Logo Wide.svg" alt="QuietQuest logo" class="mx-auto mb-2" />
+            <h1 class="text-quietquest-cream font-combo mt-1 text-center">Register your account</h1>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="space-y-5" novalidate>
+                <label for="username" class="block text-sm font-medium text-quietquest-cream font-combo mb-1"> Username * </label>
+                <input
+                    name="username"
+                    type="text"
+                    placeholder="Username"
+                    required
+                    class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-white transition"
+                />
+                <label for="email" class="block text-sm font-medium text-quietquest-cream font-combo mb-1"> Email * </label>
+                <input
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    required
+                    class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-white transition"
+                />
+                <label for="password" class="block text-sm font-medium text-quietquest-cream font-combo mb-1"> Password * </label>
+                <input
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    required
+                    class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-white transition"
+                />
+
+                <div class="flex flex-col gap-3">
+                    <button
+                        type="submit"
+                        class="w-full py-3 rounded-full bg-quietquest-green hover:bg-quietquest-dark-gold text-quietquest-dark mt-10 font-semibold transition"
+                    >
+                        Register
+                    </button>
+                </div>
+            </form>
         </div>
 
-        <!-- Heading -->
-        <img src="/quietQuestIcons/Logo Wide.svg" alt="QuietQuest logo" class="mx-auto mb-2" />
-        <h1 class="text-quietquest-cream font-combo mt-1 text-center">Register your account</h1>
-
-        <!-- Register Form -->
-        <form id="registerForm" class="space-y-5" novalidate>
-            <label for="username" class="block text-sm font-medium text-quietquest-cream font-combo mb-1"> Username *
-            </label>
-            <input name="username" type="text" placeholder="Username" required
-                class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-white transition" />
-            <label for="email" class="block text-sm font-medium text-quietquest-cream font-combo mb-1"> Email * </label>
-            <input name="email" type="email" placeholder="Email" required
-                class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-white transition" />
-            <label for="password" class="block text-sm font-medium text-quietquest-cream font-combo mb-1"> Password *
-            </label>
-            <input name="password" type="password" placeholder="Password" required
-                class="w-full px-5 py-3 rounded-full bg-quietquest-cream placeholder-gray-400 text-quietquest-dark focus:outline-none focus:ring-2 focus:ring-white transition" />
-
-            <div class="flex flex-col gap-3">
-                <button type="submit"
-                    class="w-full py-3 rounded-full bg-quietquest-green hover:bg-quietquest-dark-gold text-quietquest-dark mt-10 font-semibold transition">
-                    Register
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <script type="module">
-        import formSend from "/js/formSend.js";
-        formSend("/api/auth/register", document.getElementById("registerForm"), "/login");
-    </script>
-</body>
-
+        <script type="module">
+            import formSend from "/js/formSend.js";
+            formSend("/api/auth/register", document.getElementById("registerForm"), "/login");
+        </script>
+    </body>
 </html>
