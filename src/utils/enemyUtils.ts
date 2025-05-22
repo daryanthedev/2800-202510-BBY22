@@ -85,10 +85,7 @@ async function createNewEnemy(database: Db, health: number): Promise<EnemyInfo> 
  * @returns {Promise<EnemyInfo>} A promise that resolves to the updated enemy information.
  * @throws Will throw an error if the user's points, enemy health, or enemy health modifier are not numbers.
  */
-async function damageEnemy(req: Request, database: Db, damage: number): Promise<EnemyInfo> {
-    if (damage <= 0) {
-        throw new Error("Damage must be greater than 0");
-    }
+async function damageEnemy(req: Request, database: Db, damage: number | undefined): Promise<EnemyInfo> {
 
     // Create variable with all of user's data within it
     const user = await database.collection("users").findOne({
@@ -102,9 +99,13 @@ async function damageEnemy(req: Request, database: Db, damage: number): Promise<
     if (!isUsersSchema(user)) {
         throw new Error("User data is not valid");
     }
+    damage ??= user.points;
+
+    if (damage <= 0) {
+        throw new Error("Damage must be greater than 0");
+    }
 
     user.enemy ??= await createNewEnemy(database, DEFAULT_MONSTER_HP + user.enemyHealthModifier);
-
     // Cap the damage to the user's points
     if (user.points < damage) {
         damage = user.points;
@@ -113,7 +114,6 @@ async function damageEnemy(req: Request, database: Db, damage: number): Promise<
     if (user.enemy.health < damage) {
         damage = user.enemy.health;
     }
-
     // Check the enemies new HP
     const newEnemyHealth = user.enemyHealth - damage;
     const newUserPoints = user.points - damage;
