@@ -9,7 +9,7 @@ export default (app: Express, db: Db) => {
         const user = (await getCurrentUser(db, new ObjectId(req.session.loggedInUserId))) as UsersSchema & { _id: ObjectId };
 
         // 2) if they’ve completed tasks, load those challenges
-        const completedIds = (user.CompletedTasks || []).map(id => new ObjectId(id));
+        const completedIds = user.CompletedTasks.map(id => new ObjectId(id));
         const completedTasks = completedIds.length
             ? await db
                 .collection("challenges")

@@ -13,7 +13,11 @@ interface ChallengeCompleteData {
 
 // Type guard for request payload
 function isChallengeCompleteData(data: unknown): data is ChallengeCompleteData {
-    return typeof data === "object" && data !== null && typeof (data as any).challengeId === "string";
+    if (typeof data !== "object" || data === null) {
+        return false;
+    }
+    const obj = data as Record<string, unknown>;
+    return typeof obj.challengeId === "string";
 }
 
 // Register the /api/challenge/complete route
@@ -43,15 +47,9 @@ export default (app: Express, database: Db, ai: GoogleGenAI) => {
         const challengeCompleteData = await completeChallenge(user, database, challengeId, ai);
 
         // Persist to MongoDB
-        console.log(`→ [complete.ts] marking complete for user ${user._id.toHexString()}, challenge ${challengeId}`);
-        const result = await database.collection("users").updateOne(
-            { _id: user._id },
-            {
-                $addToSet: { CompletedTasks: challengeId },
-                $inc: { CompletedTasksCount: 1 },
-            },
-        );
-        console.log(`→ [complete.ts] updateOne matched: ${result.matchedCount}`);
+        await database
+            .collection("users")
+            .updateOne({ _id: user._id }, { $addToSet: { CompletedTasks: challengeId }, $inc: { CompletedTasksCount: 1 } });
 
         // Respond with data
         res.json(challengeCompleteData);
