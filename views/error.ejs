@@ -16,12 +16,7 @@
     <body class="bg-quietquest-green text-quietquest-dark font-afacad min-h-screen flex items-center justify-center">
         <div class="bg-quietquest-cream text-center rounded-2xl shadow-lg shadow-quietquest-blue/20 px-10 py-12 w-full max-w-md">
             <div class="mb-4">
-                <img 
-                    id="random-monster" 
-                    class="monster-icon" 
-                    alt="Random monster"
-                    src="/monsterIcons/ghoster.svg" 
-                />
+                <img id="random-monster" class="monster-icon" alt="Random monster" src="/monsterIcons/ghoster.svg" />
             </div>
 
             <span class="text-5xl font-bold text-quietquest-blue mb-2 block"><%= errorCode %></span>
@@ -41,17 +36,11 @@
         </div>
 
         <script>
-            const monsters = [
-                'ghoster.svg',
-                'judgmentaleye.svg',
-                'mrburnout.svg',
-                'overthinker.svg',
-                'socialbattery.svg'
-            ];
-            
+            const monsters = ["ghoster.svg", "judgmentaleye.svg", "mrburnout.svg", "overthinker.svg", "socialbattery.svg"];
+
             const randomMonster = monsters[Math.floor(Math.random() * monsters.length)];
-            
-            document.getElementById('random-monster').src = `/monsterIcons/${randomMonster}`;
+
+            document.getElementById("random-monster").src = `/monsterIcons/${randomMonster}`;
         </script>
     </body>
 </html>

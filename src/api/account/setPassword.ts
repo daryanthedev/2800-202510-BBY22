@@ -17,7 +17,9 @@ interface SetPasswordData {
  * @returns {data is SetPasswordData}
  */
 function isSetPasswordData(data: unknown): data is SetPasswordData {
-    if (typeof data !== "object" || data === null) {return false;}
+    if (typeof data !== "object" || data === null) {
+        return false;
+    }
     const obj = data as Record<string, unknown>;
 
     return (
@@ -42,7 +44,7 @@ export default (app: Express, database: Db) => {
             throw new StatusError(401, "Please authenticate first");
         }
 
-        const data = req.body;
+        const data: unknown = req.body;
         if (!isSetPasswordData(data)) {
             throw new StatusError(400, "Invalid data");
         }

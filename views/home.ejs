@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="bg-quietquest-green">
-
-<head>
-    <%- include('partials/header') %>
+    <head>
+        <%- include('partials/header') %>
         <title>QuietQuest</title>
-</head>
+    </head>
 
-<body class="bg-quietquest-green font-afacad pb-20">
-    <%- include('partials/topNavbar') %>
+    <body class="bg-quietquest-green font-afacad pb-20">
+        <%- include('partials/topNavbar') %>
 
         <!-- Spot where modal is dynamically created -->
         <div id="modal-container"></div>
@@ -15,8 +14,10 @@
         <main class="pt-8 md:pt-20 px-4">
             <!-- THIS needs to change to a widget -->
             <div class="mb-6">
-                <button id="open-streaks"
-                    class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] font-bold px-4 py-2 rounded-full shadow flex items-center space-x-2">
+                <button
+                    id="open-streaks"
+                    class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] font-bold px-4 py-2 rounded-full shadow flex items-center space-x-2"
+                >
                     <span>🔥</span>
                     <span>120</span>
                 </button>
@@ -25,45 +26,41 @@
             <!-- THIS DIV (streaks-modal) NEEDS TO GO! NO LONGER USED -->
             <div id="streaks-modal" class="fixed inset-0 bg-[var(--color-quietquest-gold)] bg-opacity-100 z-50 hidden">
                 <div class="p-4">
-                    <button id="close-streaks"
-                        class="text-[var(--color-quietquest-dark)] font-bold text-lg flex items-center space-x-2">
+                    <button id="close-streaks" class="text-[var(--color-quietquest-dark)] font-bold text-lg flex items-center space-x-2">
                         <span>🔙</span>
                         <span>Go Back</span>
                     </button>
-                    <div class="mt-10 text-center text-[var(--color-quietquest-dark)] text-3xl font-bold">🔥 Your
-                        Streaks!</div>
+                    <div class="mt-10 text-center text-[var(--color-quietquest-dark)] text-3xl font-bold">🔥 Your Streaks!</div>
                 </div>
             </div>
 
             <!-- Monster Info Section (THIS SECTION NEEDS TO HAVE THE MONSTER DATA) -->
             <div id="monster-section" class="contains-monster-info flex flex-col items-center space-y-4 mb-10">
-
                 <!-- The monster will be in this circle -->
                 <div class="w-58 h-58 mb-16 rounded-full bg-quietquest-cream"></div>
 
                 <!-- The monster NAME will be here (it will fill in "No encounters so far...") -->
-                <div class="inline-block bg-quietquest-cream
-   px-6 py-3 mb-5 relative rounded-2xl">
+                <div class="inline-block bg-quietquest-cream px-6 py-3 mb-5 relative rounded-2xl">
                     <div class="text-quietquest-dark text-xl tracking-wide text-center">No encounters so far...</div>
                 </div>
 
                 <!-- Don't need to touch, already done -->
                 <div class="text-lg text-quietquest-dark font-semibold">
-                    Points: <span class="user-points-display">
-                        <%= user.points %>
-                    </span>
+                    Points: <span class="user-points-display"> <%= user.points %> </span>
                 </div>
 
                 <!-- Don't need to touch, already done -->
-                <button id="fight-button" class="bg-quietquest-blue text-quietquest-cream px-8 py-3
-                rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform">
+                <button
+                    id="fight-button"
+                    class="bg-quietquest-blue text-quietquest-cream px-8 py-3 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform"
+                >
                     <span class="text-xl tracking-wider">Fight</span>
                 </button>
 
                 <!-- Health Bar with Heart Icon (THIS NEEDS TO DISPLAY THE MONSTER'S HEALTH) -->
                 <div id="health-bar" class="flex items-center space-x-2 hidden px-6 py-6">
                     <!-- Heart Icon, don't need to touch -->
-                    <img src="/monsterIcons/heart.svg" alt="Health" class="w-6 h-6">
+                    <img src="/monsterIcons/heart.svg" alt="Health" class="w-6 h-6" />
 
                     <!-- Health Bar Container -->
                     <div class="relative w-64 h-6 bg-gray-200 rounded-full overflow-hidden">
@@ -81,34 +78,37 @@
                 <div id="battle-menu" class="flex flex-col items-center space-y-3 mt-4 hidden">
                     <div class="flex space-x-4">
                         <!-- Attack Button with Internal Damage Text, NEEDS TO DO DAMAGE BASED OFF POINTS ACCUMULATED -->
-                        <button id="attack-button"
-                            class="relative bg-[var(--color-quietquest-blue)] text-[var(--color-quietquest-cream)] 
-                        px-6 py-3 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transformtransition-all w-32">
+                        <button
+                            id="attack-button"
+                            class="relative bg-[var(--color-quietquest-blue)] text-[var(--color-quietquest-cream)] px-6 py-3 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transformtransition-all w-32"
+                        >
                             <div class="font-medium tracking-wider">Attack</div>
                             <div class="text-[10px] leading-tight mt-0.5 font-medium group-hover:text-quietquest-dark">
-                                (Damage = Your Points)</div>
+                                (Damage = Your Points)
+                            </div>
                         </button>
 
                         <!-- Items Button, NEEDS TO SHOW SHOP -->
-                        <button id="items-button"
-                            class="bg-[var(--color-quietquest-blue)] text-[var(--color-quietquest-cream)] 
-                        px-6 py-3 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform transition-all w-32 font-medium tracking-wider">
+                        <button
+                            id="items-button"
+                            class="bg-[var(--color-quietquest-blue)] text-[var(--color-quietquest-cream)] px-6 py-3 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform transition-all w-32 font-medium tracking-wider"
+                        >
                             Items
                         </button>
                     </div>
 
                     <!-- Don't need to touch, already works (Go Back Button) -->
-                    <button id="go-back-button"
-                        class="bg-quietquest-cream text-quietquest-dark 
-                    px-6 py-2 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform transition-all w-full max-w-[272px]">
+                    <button
+                        id="go-back-button"
+                        class="bg-quietquest-cream text-quietquest-dark px-6 py-2 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform transition-all w-full max-w-[272px]"
+                    >
                         GO BACK
                     </button>
                 </div>
 
                 <!-- Attack Menu, DELETE THIS, NO LONGER USED -->
                 <div id="attack-menu" class="hidden">
-                    <a id="attack-go-back" class="go-back-button text-left text-sm text-blue-600 font-bold">← Go
-                        Back</a>
+                    <a id="attack-go-back" class="go-back-button text-left text-sm text-blue-600 font-bold">← Go Back</a>
                     <div class="mt-2">Attack menu goes here...</div>
                 </div>
 
@@ -125,8 +125,7 @@
                 <div class="flex justify-between items-center">
                     <p class="text-xl text-quietquest-dark font-bold">Goals</p>
                     <!-- THIS NEEDS TO CHANGE FROM BUTTON TO DIV AND THE "0" NEEDS TO DYNAMICALLY CHANGE ACCORDING TO IF YOU COMPLETED x OUT OF 3 TASKS -->
-                    <button
-                        class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] px-4 py-1 rounded shadow">
+                    <button class="bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] px-4 py-1 rounded shadow">
                         0/3 Completed
                     </button>
                 </div>
@@ -134,52 +133,48 @@
                 <!-- Goal Items, THIS IS DIV DONE, NO CHANGES NEEDED -->
                 <div id="goal-container" class="flex flex-col space-y-4">
                     <% challenges.forEach(challenge=> { %>
-                        <% if (!challenge.completed) { %>
-                            <div id="challenge-<%= challenge._id %>"
-                                class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform">
-                                <span class="challenge-name">
-                                    <%= challenge.name %>
-                                </span>
-                                <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow">
-                                    <%= challenge.pointReward %>
-                                        pts
-                                </span>
-                            </div>
-                            <% } else { %>
-                                <div id="challenge-<%= challenge._id %>"
-                                    class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer opacity-60 hover:scale-[1.01] transition-transform">
-                                    <span class="challenge-name line-through">
-                                        <%= challenge.name %>
-                                    </span>
-                                    <span
-                                        class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow">
-                                        <%= challenge.pointReward %>
-                                            pts
-                                    </span>
-                                </div>
-                                <% } %>
-                                    <% }); %>
+                    <% if (!challenge.completed) { %>
+                    <div
+                        id="challenge-<%= challenge._id %>"
+                        class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer hover:scale-[1.01] transition-transform"
+                    >
+                        <span class="challenge-name"> <%= challenge.name %> </span>
+                        <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow">
+                            <%= challenge.pointReward %> pts
+                        </span>
+                    </div>
+                    <% } else { %>
+                    <div
+                        id="challenge-<%= challenge._id %>"
+                        class="flex justify-between items-center bg-[var(--color-quietquest-gold)] text-[var(--color-quietquest-dark)] text-lg px-6 py-4 rounded-2xl shadow cursor-pointer opacity-60 hover:scale-[1.01] transition-transform"
+                    >
+                        <span class="challenge-name line-through"> <%= challenge.name %> </span>
+                        <span class="bg-[var(--color-quietquest-cream)] text-sm px-3 py-1 rounded-full shadow">
+                            <%= challenge.pointReward %> pts
+                        </span>
+                    </div>
+                    <% } %>
+                    <% }); %>
                 </div>
             </div>
         </main>
         <%- include('partials/bottomNavbar') %>
-            <script src="/js/battle.js"></script>
-            <script type="module">
-                import initializeChallenges from "/js/challenges.js";
+        <script src="/js/battle.js"></script>
+        <script type="module">
+            import initializeChallenges from "/js/challenges.js";
 
-                const challenges = JSON.parse(`<%- JSON.stringify(challenges) %>`);
-                // Add div property to each challenge object
-                challenges.forEach(challenge => {
-                    challenge.div = document.getElementById(`challenge-${challenge._id}`);
-                    challenge.nameSpan = challenge.div.querySelector(".challenge-name");
-                });
+            const challenges = JSON.parse(`<%- JSON.stringify(challenges) %>`);
+            // Add div property to each challenge object
+            challenges.forEach(challenge => {
+                challenge.div = document.getElementById(`challenge-${challenge._id}`);
+                challenge.nameSpan = challenge.div.querySelector(".challenge-name");
+            });
 
-                // Get the spot where modals will be created
-                const modalContainer = document.getElementById("modal-container");
+            // Get the spot where modals will be created
+            const modalContainer = document.getElementById("modal-container");
 
-                // Set up event listeners for challenge divs
-                initializeChallenges(challenges, modalContainer);
-            </script>
-</body>
-
+            // Set up event listeners for challenge divs
+            initializeChallenges(challenges, modalContainer);
+        </script>
+    </body>
 </html>
