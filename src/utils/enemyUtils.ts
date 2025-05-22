@@ -85,11 +85,7 @@ async function createNewEnemy(database: Db, health: number): Promise<EnemyInfo> 
  * @returns {Promise<EnemyInfo>} A promise that resolves to the updated enemy information.
  * @throws Will throw an error if the user's points, enemy health, or enemy health modifier are not numbers.
  */
-async function damageEnemy(req: Request, database: Db, damage: number): Promise<EnemyInfo> {
-    if (damage <= 0) {
-        throw new Error("Damage must be greater than 0");
-    }
-
+async function damageEnemy(req: Request, database: Db, damage: number | undefined): Promise<EnemyInfo> {
     // Create variable with all of user's data within it
     const user = await database.collection("users").findOne({
         _id: new ObjectId(req.session.loggedInUserId),
@@ -102,9 +98,12 @@ async function damageEnemy(req: Request, database: Db, damage: number): Promise<
     if (!isUsersSchema(user)) {
         throw new Error("User data is not valid");
     }
+    damage ??= user.points;
 
+    if (damage <= 0) {
+        throw new Error("Damage must be greater than 0");
+    }
     user.enemy ??= await createNewEnemy(database, DEFAULT_MONSTER_HP + user.enemyHealthModifier);
-
     // Cap the damage to the user's points
     if (user.points < damage) {
         damage = user.points;
@@ -113,16 +112,17 @@ async function damageEnemy(req: Request, database: Db, damage: number): Promise<
     if (user.enemy.health < damage) {
         damage = user.enemy.health;
     }
-
     // Check the enemies new HP
-    const newEnemyHealth = user.enemyHealth - damage;
+    const newEnemyHealth = user.enemy.health - damage;
     const newUserPoints = user.points - damage;
+
+    console.log(newEnemyHealth);
 
     if (newEnemyHealth <= 0) {
         user.enemyHealthModifier += 10;
 
         // If the enemy is dead, create a new one
-        const enemy = createNewEnemy(database, DEFAULT_MONSTER_HP + user.enemyHealthModifier);
+        const enemy = await createNewEnemy(database, DEFAULT_MONSTER_HP + user.enemyHealthModifier);
         await database.collection("users").updateOne(
             {
                 _id: new ObjectId(req.session.loggedInUserId),
@@ -145,7 +145,7 @@ async function damageEnemy(req: Request, database: Db, damage: number): Promise<
             },
             {
                 $set: {
-                    enemy: user.enemy,
+                    "enemy.health": newEnemyHealth,
                     points: newUserPoints,
                 },
             },
@@ -155,5 +155,5 @@ async function damageEnemy(req: Request, database: Db, damage: number): Promise<
     return user.enemy;
 }
 
-export { getEnemyInfo, damageEnemy };
+export { getEnemyInfo, damageEnemy, createNewEnemy };
 export type { EnemyInfo };

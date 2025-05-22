@@ -14,6 +14,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const itemsGoBack = document.getElementById("items-go-back");
     const battleGoBack = document.getElementById("go-back-button") as HTMLButtonElement | null;
 
+    const userPoints = document.getElementById("usersPoints");
+
+    interface Enemy {
+        name: string;
+        image: string;
+    }
+
+    interface EnemyInfo extends Enemy {
+        health: number;
+    }
+
     // Fight Button
     fightButton?.addEventListener("click", () => {
         fightButton.classList.add("hidden");
@@ -21,11 +32,34 @@ document.addEventListener("DOMContentLoaded", () => {
         healthBar?.classList.remove("hidden");
         goalsSection?.classList.add("hidden");
     });
+ 
+    if(userPoints === null){
+        throw new Error("user's points cannot be Null");
+    }
 
-    // Attack & Items Navigation (ATTACK DOESNT DO ANYTHING)
-    attackButton?.addEventListener("click", () => {
-        //this is where the attack logic would go
-    });
+    async function attackEnemy(damageValue: number | undefined){
+
+        const response = await fetch("/api/enemy/damage", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ damage: damageValue }),
+        });
+        if(response.ok){
+            return await response.json() as EnemyInfo;
+        }else {
+            alert("Error completing the attack");
+        }
+    }
+
+    // Attack & Items Navigation
+    attackButton?.addEventListener("click", async () => {
+        const damage = userPoints.textContent ?? "0";
+        const damageNumber = parseInt(damage);
+        await attackEnemy(damageNumber);
+        location.reload();
+ 
 
     itemsButton?.addEventListener("click", () => {
         battleMenu?.classList.add("hidden");
