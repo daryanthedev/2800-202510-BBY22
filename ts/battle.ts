@@ -22,10 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
         goalsSection?.classList.add("hidden");
     });
 
-    // Attack & Items Navigation
-    attackButton?.addEventListener("click", () => {
-        battleMenu?.classList.add("hidden");
-        attackMenu?.classList.remove("hidden");
+    // Attack & Items Navigation (ATTACK DOESNT DO ANYTHING)    
+    attackButton?.addEventListener("click", () => { 
     });
 
     itemsButton?.addEventListener("click", () => {
