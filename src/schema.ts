@@ -23,6 +23,7 @@ interface UsersSchema {
     passwordHash: string;
     lastStreakDate: Date | null;
     points: number;
+    bio: string;
     enemy: {
         name: string;
         image: string;
